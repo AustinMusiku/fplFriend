@@ -26,6 +26,11 @@ html {
   color: var(--clr-light);
 }
 
+body {
+  width: 100vw;
+  overflow-x: hidden;
+}
+
 /* LAYOUTS */
 .grid {
   display: grid;
@@ -169,6 +174,25 @@ footer {
     padding-bottom: 3em;
   }
 }
+table {
+  border: 1px solid #f1f1f1;
+  overflow-x: scroll;
+}
+table * {
+  font-family: "Poppins", sans-serif;
+}
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+table th {
+  text-align: left;
+}
+table th,
+table td {
+  padding: 0.25em 0.5em;
+  min-width: 100px;
+}
+
 /* IMPORTS */
 /* TYPOGRAPHY */
 * {

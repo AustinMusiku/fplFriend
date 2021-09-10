@@ -1,5 +1,10 @@
 @import 'variables';
 
+body{
+    width: 100vw;
+    overflow-x: hidden;
+}
+
 /* LAYOUTS */
 .grid{
     display: grid;

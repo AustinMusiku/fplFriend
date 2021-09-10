@@ -39,7 +39,16 @@
 
             <div class="section-body">
                 <p class="para">The table below is arranged in from highest to lowest with the most favourable option at the top. The aggregated data takes into consideration player current form, player influence, player threat, player creativity, player's upcoming fixture difficulty rating, and points per game. The afore-mentioned fields then help us come up with an index to predict the players likely performace</p>
-                <div class="table-holder"></div>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>threat</th>
+                        <th>creativity</th>
+                        <th>ppg</th>
+                        <th>fdr</th>
+                        <th>captaincy</th>
+                    </tr>
+                </table>
             </div>
         </div>
     </section>
@@ -614,11 +623,12 @@
         "penalties_text": ""
     }]
 
-    let loadOnFirePlayers = async () => {
+    let initHomepage = async () => {
         try{
             const players = await getAllPlayers();
             let sorted = players.sort((a,b) => (b.form) - (a.form)).slice(0, 6);
             let count = 1;
+            // on fire players
             sorted.forEach( async (player) => {
                     let playerEvents = await getPlayerEventsById(player.id);
                     let prevVal = playerEvents.history[playerEvents.history.length-1].value/10;
@@ -665,51 +675,74 @@
                     card.classList.add('card');
                     cards.appendChild(card);
             });
+
+            // captains table
+            let captains = players.sort((a,b) => b.now_cost - a.now_cost).slice(0, 10);
+            
+            let computedCaptains = captains.map(async (captain) => {
+                try {
+                    let captainEvents = await getPlayerEventsById(captain.id);
+                    captain.fdr = captainEvents.fixtures[0].difficulty;
+                    captain.captaincy = (parseInt(captain.form) + parseInt(captain.points_per_game) + parseInt(captain.threat) + parseInt(captain.creativity))/4 + (5 - parseInt(captain.fdr));
+                    console.log(captain.web_name, captain.captaincy)
+                } catch (err) {
+                    console.log(err)
+                }
+            })
+            
+            captains.forEach(async captain => {
+                let rowfields = `
+                    <td>${captain.web_name}</td>
+                    <td>${captain.threat}</td>
+                    <td>${captain.creativity}</td>
+                    <td>${captain.points_per_game}</td>
+                    <td>${captain.fdr}</td>
+                    <td>${captain.captaincy}</td>
+                `
+                let row = document.createElement('tr');
+                row.innerHTML = rowfields;
+                document.querySelector('table').appendChild(row);
+            })
+
         }catch(err){
             console.error(err);
         }
     }
-
-    let tabulate = (data, columns) => {
-        const table = d3.select('.table-holder').append('table')
-        const thead = table.append('thead')
-        const	tbody = table.append('tbody');
-
-        // append the header row
-        thead.append('tr')
-            .selectAll('th')
-            .data(columns).enter()
-            .append('th')
-            .text(column => column );
-
-        // create a row for each object in the data
-        var rows = tbody.selectAll('tr')
-            .data(data)
-            .enter()
-            .append('tr');
-
-        // create a cell in each row for each column
-        var cells = rows.selectAll('td')
-            .data(row => {
-                return columns.map( column => { return {column: column, value: row[column]}; });
-            })
-            .enter()
-            .append('td')
-            .text( d => d.value );
-
-        return table;
-    }
-
-    let captains;
-    let grti = getAllPlayers()
-        .then(players => {
-            captains = players.sort((a,b) => (b.form) - (a.form)).slice(0, 6);
-            tabulate(captains, ['web_name', 'form', 'ict_index', ])
-        })
-        .catch(err => {
-            console.log(err);
-        })
-        
-    loadOnFirePlayers();
+    
+    initHomepage();
     </script>
 </html>
+
+
+
+<!--
+// let tabulate = (data, columns) => {
+//     const table = d3.select('.table-holder').append('table')
+//     const thead = table.append('thead')
+//     const	tbody = table.append('tbody');
+
+//     // append the header row
+//     thead.append('tr')
+//         .selectAll('th')
+//         .data(columns).enter()
+//         .append('th')
+//         .text(column => column );
+
+//     // create a row for each object in the data
+//     var rows = tbody.selectAll('tr')
+//         .data(data)
+//         .enter()
+//         .append('tr');
+
+//     // create a cell in each row for each column
+//     var cells = rows.selectAll('td')
+//         .data(row => {
+//             return columns.map( column => { return {column: column, value: row[column]}; });
+//         })
+//         .enter()
+//         .append('td')
+//         .text( d => d.value );
+
+//     return table;
+// }
+-->
