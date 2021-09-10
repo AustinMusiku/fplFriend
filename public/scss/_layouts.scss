@@ -1,0 +1,174 @@
+@import 'variables';
+
+/* LAYOUTS */
+.grid{
+    display: grid;
+    grid-template-columns: 1fr repeat(2, minmax(0, 30em)) 1fr;
+
+    .container{
+        grid-column: 2/4;
+    }
+}
+
+.cards{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1em;
+
+    .card{
+        position: relative;
+        padding: 2.5em;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25em;
+        border: 1px solid $clr-light;
+        z-index: 1;
+
+        &::after{
+            position: absolute;
+            content: '';
+            width: 1%;  
+            height: 100%;
+            left: 0;
+            bottom: 0;
+            background-color: $clr-accent1;
+            opacity: 0;
+        }
+
+        // .card-heading{ position: relative; }
+        // .card-heading::after{ 
+        //     position: absolute;
+        //     content: attr(data-pos);
+        //     left: -20%;
+        //     top: -75%;
+        //     font-size: $fs-heading;
+        //     color: $clr-light;
+        //     font-family: $ff-heading;
+        //     // -webkit-text-stroke: 1px $clr-light;
+        //     z-index: 0;
+        // }
+
+        .card-body{
+            display: flex;
+            flex-direction: column;
+            gap: 1em;
+
+            .card-body-top,
+            .card-body-bottom{
+                z-index: 2;
+            }
+
+            .card-body-top{
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+
+                .card-stat2{
+                    display: flex;
+                    gap: .15em;
+                    align-items: center;
+
+                    .price-indicator{
+                        width: 0; 
+                        height: 0; 
+                        border-left: 5px solid transparent;
+                        border-right: 5px solid transparent;
+
+                        &.rise{
+                            border-bottom: 5px solid #0f0;
+                        }
+                        &.equal{
+                            border: 5px solid $clr-light; 
+                        }
+                        &.fall{
+                            border-top: 5px solid #f00;
+                        }
+                    }
+                }
+            }
+            .card-body-bottom{
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: .5em;
+
+                & *{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: baseline;
+                    gap: .15em;
+                }
+            }
+        }
+    }
+}
+
+.table{
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    border: 1px solid $clr-light;
+    overflow-x: scroll;
+    
+    .table-row{
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        border-top: 1px solid $clr-light;
+        
+        &.label{
+            background-color: $clr-light;
+        }
+        &>.right{
+            text-align: right;
+        }
+        & p{
+            padding: .25em;
+            border-left: 1px solid $clr-light;
+        }
+    }
+}
+
+section{
+    position: relative;
+    padding: 8em 0 5em;
+}
+footer{
+    padding: 5em 0;
+}
+
+
+@media screen and (max-width: 768px){
+
+    .cards{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1em;
+
+        .card{
+            padding: 1.5em 1em;
+
+            .card-body{
+                gap: 1em;
+
+                .card-body-bottom{
+                    gap: .25em;
+    
+                    .card-stat{
+                        display: flex;
+                        flex-direction: row;
+                        align-items: baseline;
+                        gap: .25em;
+                    }
+                }
+            }
+        }
+    }
+    
+    header,
+    section,
+    footer{
+        padding-left: 1.5em;
+        padding-right: 1.5em;
+    }
+    section{
+        padding-top: 3em;
+        padding-bottom: 3em;
+    }
+}

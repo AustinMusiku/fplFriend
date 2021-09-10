@@ -1,0 +1,34 @@
+@import 'variables';
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist&display=swap');
+
+// RESETS
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    width: 100vw;
+    overflow-x: hidden;
+}
+
+/* LANDING */
+header{
+}
+
+
+.landing{
+    .container{
+        display: flex;
+        align-items: center;
+        height: 100vh;
+    }
+}
+.landing-text{
+    max-width: 500px;
+}
+.landing-text h1{
+    color: var(--clr-light);
+}

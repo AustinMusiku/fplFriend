@@ -1,0 +1,125 @@
+/* IMPORTS */
+@import 'variables';
+
+/* TYPOGRAPHY */
+*{
+    color: $clr-accent2;
+}
+.section-heading{
+    position: relative;
+    margin-bottom: 1em;
+    font-size: $fs-heading;
+    font-weight: $fw-normal;
+    font-family: $ff-heading;
+    color: $clr-dark;
+    line-height: 1;
+}
+.section-heading::after{
+    position: absolute;
+    content: attr(data-attribute);
+    left: 0;
+    bottom: -10%;
+    font-size: 2.4em;
+    color: transparent;
+    -webkit-text-stroke: 1px $clr-dark;
+    opacity: .25;
+}
+.super-heading{
+    font-size: $fs-super-heading;
+    font-weight: $fw-bold;
+    font-family: $ff-heading;
+    color: $clr-dark;
+    line-height: 1;
+}
+.heading{
+    font-size: $fs-heading;
+    font-weight: $fw-bold;
+    font-family: $ff-heading;
+    color: $clr-dark;
+    line-height: 1;
+}
+.sub-heading{
+    font-size: $fs-sub-heading;
+    font-weight: $fw-bold;
+    font-family: $ff-heading;
+    color: $clr-dark;
+    line-height: 1.2;
+}
+.mini-heading{
+    font-size: $fs-title;
+    font-weight: $fw-bold;
+    font-family: $ff-heading;
+    color: $clr-accent2;
+    line-height: 1.3;
+    letter-spacing: .5px;
+}
+.caption{
+    font-size: $fs-caption;
+    font-family: $ff-body;
+    color: $clr-dark;
+    font-weight: 100;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+p,a{
+    font-size: $fs-body;
+    font-weight: $fw-normal;
+    font-family: $ff-body;
+    line-height: 1.6;
+}
+.mini-txt{
+    font-size: $fs-caption;
+    font-weight: $fw-normal;
+    font-family: $ff-body;
+    line-height: 1.6;
+}
+.para{
+    margin-bottom: 2em;
+}
+
+.light-bg{
+    background-color: $clr-light;
+}
+.accent-bg{
+    background-color: $clr-accent1;
+}
+.dark-bg{
+    background-color: $clr-dark;
+}
+
+.light-font{
+    color: $clr-light;
+}
+.accent-font{
+    color: $clr-accent1;
+}
+.dark-font{
+    color: $clr-dark;
+}
+
+
+.accent-section{
+    background-color: $clr-accent1;
+    
+    &*{
+        color: $clr-accent2;
+    }
+}
+.dark-section{
+    background-color: $clr-accent2;
+    
+    &*{
+        color: $clr-light;
+    }
+}
+
+
+
+@media screen and (max-width: 768px){
+    .section-heading::after{
+        left: 5%;
+        bottom: 20%;
+        font-size: 1.3em;
+        opacity: .1;
+    }
+}

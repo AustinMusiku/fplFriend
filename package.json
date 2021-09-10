@@ -1,0 +1,35 @@
+{
+  "name": "fplfriend",
+  "version": "1.0.0",
+  "description": "A handy guide to fpl team management",
+  "main": "index.js",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node index",
+    "dev": "cross-env NODE_ENV=development nodemon index",
+    "watch-sass": "sass public/scss/style.scss public/css/style.css --watch",
+    "compile-sass": "sass public/scss/style.scss public/css/style.css",
+    "build": "npm-run-all compile-sass start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MusikuAustin/fplFriend.git"
+  },
+  "author": "Austin Musiku",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MusikuAustin/fplFriend/issues"
+  },
+  "homepage": "https://github.com/MusikuAustin/fplFriend#readme",
+  "dependencies": {
+    "axios": "^0.21.2",
+    "cross-env": "^7.0.3",
+    "dotenv": "^10.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "node-cache": "^5.1.2",
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}

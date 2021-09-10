@@ -1,0 +1,33 @@
+$fs-super-heading: 6em;
+$fs-heading: 3em;
+$fs-sub-heading: 2.4em;
+$fs-title: 1.2em;
+$fs-body: 1em;
+$fs-caption: .8em;
+
+$fw-bold: 600;
+$fw-normal: 400;
+$fw-light: 200;
+
+$ff-heading: 'Urbanist', sans-serif;
+$ff-body: 'Poppins', sans-serif;
+
+$clr-dark: #1d1d1d;
+$clr-light: #f1f1f1;
+$clr-accent1: #f09292;
+$clr-accent2: #3a4257;
+
+$marquee-content-width: 100vw;
+$marquee-elements-displayed: 2;
+$marquee-element-width: calc($marquee-content-width/$marquee-elements-displayed);
+$marquee-animation-duration: calc($marquee-elements*3s);
+
+
+@media screen and (max-width: 768px){
+    $fs-super-heading: 4em;
+    $fs-heading: 2.4em;
+    $fs-sub-heading: 2em;
+    $fs-title: 1.2em;
+    $fs-body: 1em;
+    $fs-caption: .8em;
+}
