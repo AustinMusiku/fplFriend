@@ -175,6 +175,7 @@ footer {
   }
 }
 table {
+  width: 100%;
   border: 1px solid #f1f1f1;
   overflow-x: scroll;
 }
@@ -190,7 +191,7 @@ table th {
 table th,
 table td {
   padding: 0.25em 0.5em;
-  min-width: 100px;
+  min-width: 50px;
 }
 
 /* IMPORTS */

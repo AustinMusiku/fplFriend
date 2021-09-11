@@ -1,6 +1,7 @@
 @import 'variables';
 
 table{
+    width: 100%;
     border: 1px solid $clr-light;
     overflow-x: scroll;
 
@@ -19,6 +20,6 @@ table{
     th,
     td{
         padding: .25em .5em;
-        min-width: 100px;
+        min-width: 50px;
     }
 }
