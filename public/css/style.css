@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space Grotesk&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Urbanist&display=swap");
 * {
   margin: 0;
@@ -93,7 +93,7 @@ body {
   border-bottom: 5px solid #0f0;
 }
 .cards .card .card-body .card-body-top .card-stat2 .price-indicator.equal {
-  border: 5px solid #f1f1f1;
+  display: none;
 }
 .cards .card .card-body .card-body-top .card-stat2 .price-indicator.fall {
   border-top: 5px solid #f00;
@@ -180,7 +180,7 @@ table {
   overflow-x: scroll;
 }
 table * {
-  font-family: "Poppins", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 table tr:nth-child(odd) {
   background-color: #f1f1f1;
@@ -192,6 +192,21 @@ table th,
 table td {
   padding: 0.25em 0.5em;
   min-width: 50px;
+}
+
+svg .tick {
+  stroke: transparent;
+  -webkit-text-stroke: 1px #f1f1f1;
+}
+svg g {
+  fill: 1px #f1f1f1;
+}
+
+circle .circle-tooltip {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  background-color: black;
 }
 
 /* IMPORTS */
@@ -246,7 +261,7 @@ table td {
 }
 
 .mini-heading {
-  font-size: 1.2em;
+  font-size: 1.25em;
   font-weight: 600;
   font-family: "Urbanist", sans-serif;
   color: #3a4257;
@@ -256,7 +271,7 @@ table td {
 
 .caption {
   font-size: 0.8em;
-  font-family: "Poppins", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   color: #1d1d1d;
   font-weight: 100;
   letter-spacing: 1px;
@@ -264,16 +279,16 @@ table td {
 }
 
 p, a {
-  font-size: 1em;
+  font-size: 1.125em;
   font-weight: 400;
-  font-family: "Poppins", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   line-height: 1.6;
 }
 
 .mini-txt {
   font-size: 0.8em;
   font-weight: 400;
-  font-family: "Poppins", sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   line-height: 1.6;
 }
 

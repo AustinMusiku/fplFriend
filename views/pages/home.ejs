@@ -622,8 +622,10 @@
 
     let initHomepage = async () => {
         try{
+            let container = document.querySelector('.container');
+
             const players = await getAllPlayers();
-            let sorted = players.sort((a,b) => (b.form) - (a.form)).slice(0, 6);
+            let sorted = players.sort((a,b) => (b.event_points) - (a.event_points)).slice(0, 6);
             let count = 1;
             // on fire players
             sorted.forEach( async (player) => {
@@ -672,7 +674,9 @@
                     cards.appendChild(card);
             });
 
-            // captains table
+            //
+            // CAPTAINS TABLE
+            //
             let captains = players.filter(captain => captain.now_cost > 70);
 
             let computedCaptains = captains.map(async captain => {  
@@ -687,7 +691,10 @@
 
             Promise.all(computedCaptains)
                 .then(captains => {
-                    let sortedCaptains = captains.sort((a,b) => (b.captaincy) - (a.captaincy)).filter(captain => captain.chance_of_playing_next_round != 0).slice(0, 15)
+                    let sortedCaptains = captains
+                        .sort((a,b) => (b.captaincy) - (a.captaincy))
+                        .filter(captain => captain.chance_of_playing_next_round != 0)
+                        .slice(0, 15)
 
                     sortedCaptains.forEach(captain => {
                         console.log(`${captain.web_name} -> ${captain.captaincy}`)
@@ -700,6 +707,104 @@
                         row.innerHTML = rowfields;
                         document.querySelector('table').appendChild(row);
                     })
+                })
+
+
+            //
+            //
+            // differetials scatter plot
+            // 
+            // set the dimensions and margins of the graph
+            var margin = {top: 10, right: 10, bottom: 30, left: 20},
+                width = container.scrollWidth - margin.left - margin.right,
+                height = 500 - margin.top - margin.bottom;
+            
+            // append the svg object to the body of the page
+            var svg = d3.select("#differentials-graph")
+              .append("svg")
+                .attr("height", height + margin.top + margin.bottom)
+                .attr("width", width + margin.left + margin.right)
+              .append("g")
+                .attr("transform",
+                      "translate(" + margin.left + "," + margin.top + ")");
+
+            // X label
+            // svg.append('text')
+            //     .attr('x', width/2 + 100)
+            //     .attr('y', height - 15 + 150)
+            //     .attr('text-anchor', 'middle')
+            //     .style('font-family', 'Helvetica')
+            //     .style('font-size', 12)
+            //     .text('Independant');
+            
+            // Y label
+            // svg.append('text')
+            //     .attr('text-anchor', 'middle')
+            //     .attr('transform', 'translate(60,' + height + ')rotate(-90)')
+            //     .style('font-family', 'Helvetica')
+            //     .style('font-size', 12)
+            //     .text('Dependant');
+
+            // compute differentials
+            let differentials = players.sort((a,b) => b.now_cost - a.now_cost).filter(differential => differential.now_cost < 90 && differential.now_cost > 65 && differential.selected_by_percent < 20);
+
+            let computedDifferentials =  differentials.map(async differential => {
+                let differentialEvents = await getPlayerEventsById(differential.id);
+
+                return {
+                    name: differential.web_name,
+                    ownership: differential.selected_by_percent,
+                    potential: (parseInt(differential.form)*0.2 + parseInt(differential.points_per_game)*0.5 + parseInt(differential.ict_index)*0.3)*0.4 + (5 - parseInt(differentialEvents.fixtures[0].difficulty)*0.6)
+                }
+            })
+            
+            //Read the data
+            Promise.all(computedDifferentials)
+                .then(differentials => {
+                    console.log(differentials)
+                    
+                    // Add X axis
+                    let x = d3.scaleLinear()
+                                .domain([2, 11])
+                                .range([ 0, width ]);
+                                svg.append("g")
+                                .attr("transform", "translate(0," + height + ")")
+                                .attr('stroke', '$clr-light')
+                                .call(d3.axisBottom(x));
+                        
+                    // Add Y axis
+                    let y = d3.scaleLinear()
+                        .domain([20, 0])
+                        .range([ height, 0]);
+                        svg.append("g")
+                        .call(d3.axisLeft(y));
+
+                    // Add dots
+                    svg.append('g')
+                        .selectAll("dot")
+                        .data(differentials)
+                        .enter()
+                        .append("circle")
+                            .attr("cx", d => x(d.potential) )
+                            .attr("cy", d => y(d.ownership) )
+                            .attr('data-name', d => `${d.name}`)
+                            .attr("r", 2)
+                            .style("fill", "#f09292")
+
+                    // Add labels
+                    svg.append("g")
+                        .selectAll("text")
+                        .data(differentials)
+                        .enter()
+                        .append("text")
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", 10)
+                            .attr("dy", "0.35em")
+                            .attr("transform", "translateX(-50%)")
+                            .attr("x", d => x(d.potential))
+                            .attr("y", d => y(d.ownership)+7)
+                            .text(d => d.name);
+
                 })
 
         }catch(err){

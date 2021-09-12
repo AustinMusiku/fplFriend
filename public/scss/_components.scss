@@ -23,3 +23,35 @@ table{
         min-width: 50px;
     }
 }
+
+svg{
+    .tick{
+        stroke: transparent;
+        -webkit-text-stroke: 1px  $clr-light;
+    }
+    g{
+        fill: 1px $clr-light;
+    }
+
+    
+}
+
+circle {
+    .circle-tooltip{
+        position: relative;
+        width: 10px;
+        height: 10px;
+        background-color: black;
+    }
+
+    // div::after{
+    //     position: absolute;
+    //     content: attr(data-name);
+    //     top: 0;
+    //     left: 0;
+    //     color: $clr-accent1;
+    //     font-size: $fs-body;
+    //     font-family: $ff-body;
+    //     z-index: 10000000000000;
+    // }
+}

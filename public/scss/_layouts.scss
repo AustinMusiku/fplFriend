@@ -83,7 +83,7 @@ body{
                             border-bottom: 5px solid #0f0;
                         }
                         &.equal{
-                            border: 5px solid $clr-light; 
+                            display: none;
                         }
                         &.fall{
                             border-top: 5px solid #f00;
