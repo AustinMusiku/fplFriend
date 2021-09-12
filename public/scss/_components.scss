@@ -36,22 +36,18 @@ svg{
     
 }
 
-circle {
-    .circle-tooltip{
-        position: relative;
-        width: 10px;
-        height: 10px;
-        background-color: black;
-    }
-
-    // div::after{
-    //     position: absolute;
-    //     content: attr(data-name);
-    //     top: 0;
-    //     left: 0;
-    //     color: $clr-accent1;
-    //     font-size: $fs-body;
-    //     font-family: $ff-body;
-    //     z-index: 10000000000000;
-    // }
+.fix-1{
+    background-color: rgb(55 85 35);
+}
+.fix-2{
+    background-color: rgb(1 252 122);
+}
+.fix-3{
+background-color: $clr-light;
+}
+.fix-4{
+    background-color: rgb(255 23 81);
+}
+.fix-5{
+    background-color: rgb(128 7 45);
 }

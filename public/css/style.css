@@ -202,11 +202,24 @@ svg g {
   fill: 1px #f1f1f1;
 }
 
-circle .circle-tooltip {
-  position: relative;
-  width: 10px;
-  height: 10px;
-  background-color: black;
+.fix-1 {
+  background-color: #375523;
+}
+
+.fix-2 {
+  background-color: #01fc7a;
+}
+
+.fix-3 {
+  background-color: #f1f1f1;
+}
+
+.fix-4 {
+  background-color: #ff1751;
+}
+
+.fix-5 {
+  background-color: #80072d;
 }
 
 /* IMPORTS */
