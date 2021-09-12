@@ -1,6 +1,6 @@
 // const fetch = require('node-fetch');
 // let baseUrl = 'https://fantasy.premierleague.com/api/'
-let baseUrl = 'http://192.168.8.182:3000'
+let baseUrl = 'http://localhost:3000'
 
 const getFixtures = async () => {
     try{

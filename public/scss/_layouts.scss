@@ -136,7 +136,16 @@ section{
     padding: 8em 0 5em;
 }
 footer{
-    padding: 5em 0;
+    padding: 5em 0 2em;
+
+    .footer-body{
+        margin-bottom: .5em;
+
+        .footer-links{
+            display: flex;
+            gap: .5em;
+        }
+    }
 }
 
 

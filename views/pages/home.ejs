@@ -138,7 +138,7 @@
                     ...captain,
                     fdr: captainEvents.fixtures[0].difficulty,
                     opponent: captainEvents.fixtures[0].is_home? captainEvents.fixtures[0].team_a: captainEvents.fixtures[0].team_h,
-                    captaincy: Math.round((parseInt(captain.form)*0.2 + parseInt(captain.points_per_game)*0.5 + parseInt(captain.ict_index)*0.3)*0.4 + (5 - parseInt(captainEvents.fixtures[0].difficulty)*0.6))
+                    captaincy: ((parseInt(captain.form)*0.2 + parseInt(captain.points_per_game)*0.5 + parseInt(captain.ict_index)*0.3)*0.4 + (5 - parseInt(captainEvents.fixtures[0].difficulty)*0.6)).toFixed(2)
                 }
             })
 
@@ -199,7 +199,7 @@
             //     .text('Dependant');
 
             // compute differentials
-            let differentials = players.sort((a,b) => b.now_cost - a.now_cost).filter(differential => differential.now_cost < 90 && differential.now_cost > 65 && differential.selected_by_percent < 20);
+            let differentials = players.sort((a,b) => b.now_cost - a.now_cost).filter(differential => differential.now_cost < 90 && differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.minutes > 200);
 
             let computedDifferentials =  differentials.map(async differential => {
                 let differentialEvents = await getPlayerEventsById(differential.id);
@@ -250,7 +250,7 @@
                         .data(differentials)
                         .enter()
                         .append("text")
-                            .attr("font-family", "sans-serif")
+                            .attr("font-family", "Space Grotesk")
                             .attr("font-size", 10)
                             .attr("dy", "0.35em")
                             .attr("x", d => x(d.potential)+7)

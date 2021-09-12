@@ -138,7 +138,14 @@ section {
 }
 
 footer {
-  padding: 5em 0;
+  padding: 5em 0 2em;
+}
+footer .footer-body {
+  margin-bottom: 0.5em;
+}
+footer .footer-body .footer-links {
+  display: flex;
+  gap: 0.5em;
 }
 
 @media screen and (max-width: 768px) {
