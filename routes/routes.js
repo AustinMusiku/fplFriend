@@ -8,16 +8,17 @@ const {
     getPlayerDataById,
     getAllPlayers,
     getAllTeams,
-    getPlayersByTeam } = require('../controllers/fetchControllers')
+    getPlayersByTeam,
+    whatGameweek } = require('../controllers/fetchControllers')
 
 // GET ROUTES
-//
-router.get('/', (req, res) => {
-    res.render('pages/home')
-})
+// get pages
+router.get('/home', (req, res) => res.render('pages/home'))
+router.get('/transfers', (req, res) => res.render('pages/transfers'))
+router.get('/fixtures', (req, res) => res.render('pages/fixtures'))
 
 // get fixtures
-router.get('/fixtures', async (req, res) => { res.json(await getFixtures()) });
+router.get('/fixturesData', async (req, res) => { res.json(await getFixtures()) });
 
 // get all players
 router.get('/players', async (req, res) => { res.json(await getAllPlayers()) });
@@ -33,5 +34,8 @@ router.get('/playerEvents/:id', async (req, res) => { res.json(await getPlayerEv
 
 // get players in team X
 router.get('/playersin/:id', async (req, res) => { res.json(await getPlayersByTeam(req.params.id)) });
+
+// get current gameweek
+router.get('/whatgw', async (req, res) => { res.json(await whatGameweek()) });
 
 module.exports = router;

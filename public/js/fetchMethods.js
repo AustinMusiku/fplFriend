@@ -72,3 +72,10 @@ const getTeamById = async(teamId) => {
     let team = teams.filter(team => team.id == teamId);
     return team[0];
 }
+
+const getGw = async () => {
+    let url = `${baseUrl}/whatgw`
+    let response = await fetch(url);
+    let gw = response.json();
+    return gw;
+}

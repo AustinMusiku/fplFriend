@@ -15,6 +15,9 @@ table{
 
     th{
         text-align: left;
+        // background-color: $clr-accent2;
+        // color: $clr-light;
+        // font-weight: 100;
     }
 
     th,
@@ -37,17 +40,17 @@ svg{
 }
 
 .fix-1{
-    background-color: rgb(55 85 35);
+    background-color: rgba(55 ,85 ,35 ,0.8);
 }
 .fix-2{
-    background-color: rgb(1 252 122);
+    background-color: rgba(1 ,252 ,122 ,0.8);
 }
 .fix-3{
-background-color: $clr-light;
+    background-color: $clr-light;
 }
 .fix-4{
-    background-color: rgb(255 23 81);
+    background-color: rgba(255, 23, 81, 0.8);
 }
 .fix-5{
-    background-color: rgb(128 7 45);
+    background-color: rgba(128 ,7 ,45 ,0.8);
 }

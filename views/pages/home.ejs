@@ -63,9 +63,7 @@
 
     <%- include('../partials/footer')%>
 </body>
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="../../public/js/fetchMethods.js"></script>
-<script src="../../public/js/evaluationMethods.js"></script>
+<%- include('../partials/scripts')%>
 <script>
     let cards = document.querySelector('.cards');
     
@@ -133,12 +131,15 @@
 
             let computedCaptains = captains.map(async captain => {  
                 let captainEvents = await getPlayerEventsById(captain.id);
-                
+                let history = parseInt(captain.form)*0.3 + parseInt(captain.points_per_game)*0.3 + parseInt(captain.ict_index)*0.4;
+                let fdr = captainEvents.fixtures[0].difficulty;
+                let index = (history*0.3 + (5 - parseInt(fdr)*0.7)).toFixed(2);
+
                 return {
                     ...captain,
-                    fdr: captainEvents.fixtures[0].difficulty,
+                    fdr: fdr,
                     opponent: captainEvents.fixtures[0].is_home? captainEvents.fixtures[0].team_a: captainEvents.fixtures[0].team_h,
-                    captaincy: ((parseInt(captain.form)*0.2 + parseInt(captain.points_per_game)*0.5 + parseInt(captain.ict_index)*0.3)*0.4 + (5 - parseInt(captainEvents.fixtures[0].difficulty)*0.6)).toFixed(2)
+                    captaincy: index
                 }
             })
 
@@ -153,7 +154,7 @@
                         console.log(`${captain.web_name} -> ${captain.captaincy}`)
                         let rowfields = `
                             <td>${captain.web_name}</td>
-                            <td class="fix-${captain.fdr}">${evaluateTeam(captain.opponent)}</td>
+                            <td class="fix-${captain.fdr} caption">${evaluateTeam(captain.opponent)}</td>
                             <td>${captain.captaincy}</td>
                         `
                         let row = document.createElement('tr');
@@ -168,35 +169,34 @@
             // DIFFERENTIALS SCATTER PLOT
             // 
             // set the dimensions and margins of the graph
-            var margin = {top: 10, right: 10, bottom: 30, left: 20},
+            var margin = {top: 10, right: 10, bottom: 50, left: 20},
                 width = container.scrollWidth - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
             
             // append the svg object to the body of the page
             var svg = d3.select("#differentials-graph")
-              .append("svg")
-                .attr("height", height + margin.top + margin.bottom)
-                .attr("width", width + margin.left + margin.right)
-              .append("g")
-                .attr("transform",
-                      "translate(" + margin.left + "," + margin.top + ")");
+                .append("svg")
+                    .attr("height", height + margin.top + margin.bottom)
+                    .attr("width", width + margin.left + margin.right)
+                .append("g")
+                    .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
 
             // X label
-            // svg.append('text')
-            //     .attr('x', width/2 + 100)
-            //     .attr('y', height - 15 + 150)
-            //     .attr('text-anchor', 'middle')
-            //     .style('font-family', 'Helvetica')
-            //     .style('font-size', 12)
-            //     .text('Independant');
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'translate('+ (width-30) +',' + (height+30) + ')')
+                .style('font-family', 'Space Grotesk')
+                .style('font-size', 14)
+                .text('potential');
             
             // Y label
-            // svg.append('text')
-            //     .attr('text-anchor', 'middle')
-            //     .attr('transform', 'translate(60,' + height + ')rotate(-90)')
-            //     .style('font-family', 'Helvetica')
-            //     .style('font-size', 12)
-            //     .text('Dependant');
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'translate(0,' + height/10 + ')rotate(-90)')
+                .style('font-family', 'Space Grotesk')
+                .style('font-size', 14)
+                .text('owership (%)');
 
             // compute differentials
             let differentials = players.sort((a,b) => b.now_cost - a.now_cost).filter(differential => differential.now_cost < 90 && differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.minutes > 200);
@@ -214,20 +214,23 @@
             //Read the data
             Promise.all(computedDifferentials)
                 .then(differentials => {
-                    console.log(differentials)
+                    // sort array to pick max and min potential values
+                    let sortedDifferentials = differentials.sort((a,b) => b.potential - a.potential);
+                    let maxPotential = Math.ceil(sortedDifferentials[0].potential);
+                    let minPotential = Math.floor(sortedDifferentials[sortedDifferentials.length - 1].potential);
                     
                     // Add X axis
                     let x = d3.scaleLinear()
-                                .domain([2, 11])
+                                .domain([minPotential, maxPotential+0.5])
                                 .range([ 0, width ]);
                                 svg.append("g")
                                 .attr("transform", "translate(0," + height + ")")
-                                .attr('stroke', '$clr-light')
+                                .attr('stroke', '#f4f4f4')
                                 .call(d3.axisBottom(x));
                         
                     // Add Y axis
                     let y = d3.scaleLinear()
-                        .domain([20, 0])
+                        .domain([0, 20])
                         .range([ height, 0]);
                         svg.append("g")
                         .call(d3.axisLeft(y));

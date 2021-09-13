@@ -4,6 +4,32 @@ const urls = require('./urls');
 const { myCache } = require('./cacheControllers');
 const { promiseImpl } = require('ejs');
 
+const fetchGeneral = async () => {
+    try{
+        // fetch general
+        let response = await fetch(urls.general, {
+            headers: {
+                'User-Agent': 'ANYTHING_WILL_WORK_HERE'
+            }
+        });
+        general = await response.json();
+        myCache.set('general', general, 172800);
+        
+
+        // fetch fixtures
+        let response2 = await fetch(urls.fixtures, {
+            headers: {
+                'User-Agent': 'ANYTHING_WILL_WORK_HERE'
+            }
+        });
+        fixtures = await response2.json();
+        myCache.set('fixtures', fixtures, 172800);
+        
+    }catch(err){
+        console.log(err);
+    }
+}
+
 const getFixtures = async () => {
     try{
         let fixtures = myCache.get('fixtures');
@@ -28,10 +54,10 @@ const getFixtures = async () => {
 
 const getAllPlayers = async () => {
     try {
-        let players = myCache.get('players');
+        let general = myCache.get('general');
 
-        if(players){
-            return players;
+        if(general){
+            return general.elements;
         }else{
             let url = urls.general;
             let response = await fetch(url, {
@@ -40,8 +66,8 @@ const getAllPlayers = async () => {
                 }
             });
             let json = await response.json();
-            players = json.elements;
-            myCache.set('players', players, 172800)
+            general = json;
+            myCache.set('general', general, 172800)
             return players;
         }
     } catch (err) {
@@ -51,9 +77,10 @@ const getAllPlayers = async () => {
 
 const getAllTeams = async () => {
     try{
-        let teams = myCache.get('teams');
-        if(teams){
-            return teams;
+        let general = myCache.get('general');
+        if(general){
+            console.log(general.teams)
+            return general.teams;
         }else{
             let url = urls.general;
             let response = await fetch(url, {
@@ -61,10 +88,9 @@ const getAllTeams = async () => {
                     'User-Agent': 'XXXXXX'
                 }
             });
-            let json = await response.json();
-            teams = json.teams;
-            myCache.set('teams', teams, 172800);
-            return teams;
+            let general = await response.json();
+            myCache.set('general', general, 172800);
+            return general.teams;
         }
     }catch(err){
         throw err;
@@ -112,4 +138,24 @@ const getPlayersByTeam = async (teamId) => {
     }
 }
 
-module.exports = { getFixtures,getPlayerEventsById,getPlayerDataById,getAllPlayers,getAllTeams,getPlayersByTeam };
+const whatGameweek = async () => {
+    try{
+        let general = myCache.get('general')
+        if(general){
+            let gw = general.events.filter(gw => gw.is_current == true)
+            return gw
+        }else{
+            console.log('miss');
+        }
+    }catch(err){
+        console.log(err);
+    }
+}
+
+fetchGeneral();
+setTimeout(whatGameweek, 1000);
+
+// automatically fetch new data every two days
+// setInterval(fetchGeneral, 172800);
+
+module.exports = { getFixtures,getPlayerEventsById,getPlayerDataById,getAllPlayers,getAllTeams,getPlayersByTeam, whatGameweek };
