@@ -4,11 +4,11 @@
   "description": "A handy guide to fpl team management",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node index",
     "dev": "cross-env NODE_ENV=development nodemon index",
     "watch-sass": "sass public/scss/style.scss public/css/style.css --watch",
     "compile-sass": "sass public/scss/style.scss public/css/style.css",
-    "build": "npm start"
+    "build": "npm compile-sass",
+    "start": "cross-env NODE_ENV=production node index"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
