@@ -27,7 +27,8 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "node-cache": "^5.1.2",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "sass": "^1.40.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"
