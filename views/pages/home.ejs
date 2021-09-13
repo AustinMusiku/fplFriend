@@ -169,12 +169,12 @@
             // DIFFERENTIALS SCATTER PLOT
             // 
             // set the dimensions and margins of the graph
-            var margin = {top: 10, right: 10, bottom: 50, left: 20},
+            let margin = {top: 10, right: 10, bottom: 50, left: 20},
                 width = container.scrollWidth - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
             
             // append the svg object to the body of the page
-            var svg = d3.select("#differentials-graph")
+            let svg = d3.select("#differentials-graph")
                 .append("svg")
                     .attr("height", height + margin.top + margin.bottom)
                     .attr("width", width + margin.left + margin.right)
@@ -226,7 +226,7 @@
                                 svg.append("g")
                                 .attr("transform", "translate(0," + height + ")")
                                 .attr('stroke', '#f4f4f4')
-                                .call(d3.axisBottom(x));
+                                .call(d3.axisBottom(x).ticks(5));
                         
                     // Add Y axis
                     let y = d3.scaleLinear()
