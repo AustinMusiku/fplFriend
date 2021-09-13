@@ -20,7 +20,7 @@ $clr-accent2: #3a4257;
 $marquee-content-width: 100vw;
 $marquee-elements-displayed: 2;
 $marquee-element-width: calc($marquee-content-width/$marquee-elements-displayed);
-$marquee-animation-duration: calc($marquee-elements*3s);
+// $marquee-animation-duration: calc($marquee-elements*3s);
 
 
 @media screen and (max-width: 768px){
