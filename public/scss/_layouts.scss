@@ -134,6 +134,14 @@ body{
 section{
     position: relative;
     padding: 8em 0 5em;
+
+    .container{
+        .section-body{
+            display: flex;
+            flex-direction: column;
+            gap: 3em;
+        }
+    }
 }
 footer{
     padding: 5em 0 2em;

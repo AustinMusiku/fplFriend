@@ -23,7 +23,7 @@ table{
     th,
     td{
         padding: .25em .5em;
-        min-width: 50px;
+        max-width: 100px;
     }
 }
 
@@ -53,4 +53,33 @@ svg{
 }
 .fix-5{
     background-color: rgba(128 ,7 ,45 ,0.8);
+}
+
+@media screen and (max-width: 768px){
+    table{
+        width: 100%;
+        border: 1px solid $clr-light;
+        overflow-x: scroll;
+    
+        *{
+            font-family: $ff-body;
+        }
+    
+        tr{
+            th:nth-child(6),
+            td:nth-child(6),
+            th:nth-child(7),
+            td:nth-child(7),
+            td:nth-child(8),
+            th:nth-child(8){
+                display: none;
+            }
+        }
+    
+        th,
+        td{
+            padding: .25em .5em;
+            max-width: 100px;
+        }
+    }
 }

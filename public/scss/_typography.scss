@@ -24,6 +24,15 @@
     -webkit-text-stroke: 1px $clr-dark;
     opacity: .25;
 }
+.section-block-heading{
+    position: relative;
+    margin-bottom: 1em;
+    font-size: $fs-title;
+    font-weight: $fw-bold;
+    font-family: $ff-heading;
+    color: $clr-dark;
+    line-height: 1;
+}
 .super-heading{
     font-size: $fs-super-heading;
     font-weight: $fw-bold;

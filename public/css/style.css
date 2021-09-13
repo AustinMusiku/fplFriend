@@ -136,6 +136,11 @@ section {
   position: relative;
   padding: 8em 0 5em;
 }
+section .container .section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 3em;
+}
 
 footer {
   padding: 5em 0 2em;
@@ -198,7 +203,7 @@ table th {
 table th,
 table td {
   padding: 0.25em 0.5em;
-  min-width: 50px;
+  max-width: 100px;
 }
 
 svg .tick {
@@ -229,6 +234,29 @@ svg g {
   background-color: rgba(128, 7, 45, 0.8);
 }
 
+@media screen and (max-width: 768px) {
+  table {
+    width: 100%;
+    border: 1px solid #f1f1f1;
+    overflow-x: scroll;
+  }
+  table * {
+    font-family: "Space Grotesk", sans-serif;
+  }
+  table tr th:nth-child(6),
+table tr td:nth-child(6),
+table tr th:nth-child(7),
+table tr td:nth-child(7),
+table tr td:nth-child(8),
+table tr th:nth-child(8) {
+    display: none;
+  }
+  table th,
+table td {
+    padding: 0.25em 0.5em;
+    max-width: 100px;
+  }
+}
 /* IMPORTS */
 /* TYPOGRAPHY */
 * {
@@ -254,6 +282,16 @@ svg g {
   color: transparent;
   -webkit-text-stroke: 1px #1d1d1d;
   opacity: 0.25;
+}
+
+.section-block-heading {
+  position: relative;
+  margin-bottom: 1em;
+  font-size: 1.25em;
+  font-weight: 600;
+  font-family: "Urbanist", sans-serif;
+  color: #1d1d1d;
+  line-height: 1;
 }
 
 .super-heading {
