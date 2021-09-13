@@ -140,6 +140,16 @@ section{
             display: flex;
             flex-direction: column;
             gap: 3em;
+
+            &.row{
+                width: 100%;
+                flex-direction: row;
+                justify-content: space-between;
+
+                .section-block{
+                    width: 50%;
+                }
+            }
         }
     }
 }
@@ -192,5 +202,22 @@ footer{
     section{
         padding-top: 3em;
         padding-bottom: 3em;
+
+        .container{
+            .section-body{
+                flex-direction: column;
+                gap: 3em;
+    
+                &.row{
+                    width: 100%;
+                    flex-direction: column;
+                    justify-content: space-between;
+                }
+    
+                .section-block{
+                    width: 100%;
+                }
+            }
+        }
     }
 }

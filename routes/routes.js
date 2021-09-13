@@ -13,7 +13,7 @@ const {
 
 // GET ROUTES
 // get pages
-router.get('/home', (req, res) => res.render('pages/home'))
+router.get('/', (req, res) => res.render('pages/home'))
 router.get('/transfers', (req, res) => res.render('pages/transfers'))
 router.get('/fixtures', (req, res) => res.render('pages/fixtures'))
 

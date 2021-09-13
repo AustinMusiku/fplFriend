@@ -141,6 +141,14 @@ section .container .section-body {
   flex-direction: column;
   gap: 3em;
 }
+section .container .section-body.row {
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+}
+section .container .section-body.row .section-block {
+  width: 50%;
+}
 
 footer {
   padding: 5em 0 2em;
@@ -185,6 +193,18 @@ footer {
     padding-top: 3em;
     padding-bottom: 3em;
   }
+  section .container .section-body {
+    flex-direction: column;
+    gap: 3em;
+  }
+  section .container .section-body.row {
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  section .container .section-body .section-block {
+    width: 100%;
+  }
 }
 table {
   width: 100%;
@@ -199,6 +219,9 @@ table tr:nth-child(odd) {
 }
 table th {
   text-align: left;
+  background-color: #3a4257;
+  color: #f1f1f1;
+  font-weight: 100;
 }
 table th,
 table td {
