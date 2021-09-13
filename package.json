@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development nodemon index",
     "watch-sass": "sass public/scss/style.scss public/css/style.css --watch",
     "compile-sass": "sass public/scss/style.scss public/css/style.css",
-    "build": "npm-run-all compile-sass start"
+    "build": "npm start"
   },
   "repository": {
     "type": "git",
