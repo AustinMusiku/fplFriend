@@ -145,16 +145,16 @@ section{
                 width: 100%;
                 flex-direction: row;
                 justify-content: space-between;
+            }
 
-                .section-block{
-                    width: 50%;
-                }
+            .section-block{
+                width: 100%;
             }
         }
     }
 }
 footer{
-    padding: 5em 0 2em;
+    padding: 3em 0 2em;
 
     .footer-body{
         margin-bottom: .5em;

@@ -119,6 +119,7 @@ let cards = document.querySelector('.cards');
             svg.append('text')
                 .attr('text-anchor', 'middle')
                 .attr('transform', 'translate('+ (width-30) +',' + (height+30) + ')')
+                .attr('class','axis-label')
                 .style('font-family', 'Space Grotesk')
                 .style('font-size', 14)
                 .text('potential');
@@ -127,6 +128,7 @@ let cards = document.querySelector('.cards');
             svg.append('text')
                 .attr('text-anchor', 'middle')
                 .attr('transform', 'translate(0,' + height/10 + ')rotate(-90)')
+                .attr('class','axis-label')
                 .style('font-family', 'Space Grotesk')
                 .style('font-size', 14)
                 .text('owership (%)');
@@ -158,7 +160,6 @@ let cards = document.querySelector('.cards');
                                 .range([ 0, width ]);
                                 svg.append("g")
                                 .attr("transform", "translate(0," + height + ")")
-                                .attr('stroke', '#f4f4f4')
                                 .call(d3.axisBottom(x).ticks(5));
                         
                     // Add Y axis
@@ -188,6 +189,7 @@ let cards = document.querySelector('.cards');
                         .append("text")
                             .attr("font-family", "Space Grotesk")
                             .attr("font-size", 10)
+                            .style('fill', '#000')
                             .attr("dy", "0.35em")
                             .attr("x", d => x(d.potential)+7)
                             .attr("y", d => y(d.ownership))

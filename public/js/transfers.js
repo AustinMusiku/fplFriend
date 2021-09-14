@@ -168,7 +168,6 @@ let initHomepage = async () => {
 
         // PREMIUM 10 < X
         let premiums = players.filter(player => player.now_cost >= 100);
-        console.log(mapTableArray(premiums));
 
         let computedPremiums = mapTableArray(premiums);
 

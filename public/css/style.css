@@ -12,6 +12,10 @@ html {
 }
 
 /* LANDING */
+header {
+  background: linear-gradient(180deg, #EC1C25 50%, #D01354 100%);
+}
+
 .landing .container {
   display: flex;
   align-items: center;
@@ -26,6 +30,32 @@ html {
   color: var(--clr-light);
 }
 
+.diffs .axis-label {
+  fill: #3a4257;
+}
+.diffs .domain {
+  stroke: #3a42579c;
+}
+.diffs .tick line {
+  stroke: #3a42579c;
+}
+.diffs .tick text {
+  fill: #3a42579c;
+}
+
+footer {
+  background-color: #1d1d1d;
+}
+footer * {
+  color: #f1f1f1;
+  font-weight: 100;
+}
+
+@media screen and (min-width: 768px) {
+  .axis-label {
+    transform: translate(width30);
+  }
+}
 body {
   width: 100vw;
   overflow-x: hidden;
@@ -146,12 +176,12 @@ section .container .section-body.row {
   flex-direction: row;
   justify-content: space-between;
 }
-section .container .section-body.row .section-block {
-  width: 50%;
+section .container .section-body .section-block {
+  width: 100%;
 }
 
 footer {
-  padding: 5em 0 2em;
+  padding: 3em 0 2em;
 }
 footer .footer-body {
   margin-bottom: 0.5em;
