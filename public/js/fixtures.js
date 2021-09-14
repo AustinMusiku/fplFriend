@@ -2,23 +2,9 @@
     let initHomepage = async () => {
         try{
             let container = document.querySelector('.container');
-            let players = await getAllPlayers();
-        {
-            //
-            // SENSIBLE TRANSFERS
-            //
+            let teams = await getAllTeams();
 
-            // PREMIUM 10 < X
-            // MID-RANGE 6.6 < X < 9.9
-            // BUDGET 0 < X < 6.5
-
-            
-
-            //
-            // CAPTAINS TABLE
-            //
-        }
-            players = players.filter(player => player.now_cost > 100);
+            console.log(teams)
 
             let computedTransfers = players.map(async player => {  
                 let playerEvents = await getPlayerEventsById(player.id);

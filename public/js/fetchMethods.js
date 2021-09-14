@@ -1,7 +1,8 @@
 // const fetch = require('node-fetch');
 // let baseUrl = 'https://fantasy.premierleague.com/api/'
-// let baseUrl = 'http://192.168.8.116:3000'
-let baseUrl = 'https://fplfriend.herokuapp.com'
+let imagesUrl = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p'
+let baseUrl = 'http://localhost:3000'
+// let baseUrl = 'https://fplfriend.herokuapp.com'
 
 const getFixtures = async () => {
     try{
@@ -28,8 +29,7 @@ const getAllTeams = async () => {
     try {
         let url = `${baseUrl}/teams/`;
         let response = await fetch(url);
-        let json = await response.json();
-        let teams = json.teams;
+        let teams = await response.json();
         return teams;
     } catch (err) {
         throw err;

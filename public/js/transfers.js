@@ -10,105 +10,87 @@ let initHomepage = async () => {
         // MARKET TRENDS
         //
 
-        let transfersIn = players
-            .sort((a,b) => b.transfers_in - a.transfers_in).slice(0, 10).map(transfer => { 
+        let topTransfers = players
+            .sort((a,b) => (b.transfers_in + b.transfers_out) - (a.transfers_in + a.transfers_out))
+            .slice(0, 10)
+            .map(transfer => { 
                 return{
                     name: transfer.web_name,
-                    ins: transfer.transfers_in
-                }
-            })
-
-        let transfersOut = players
-            .sort((a,b) => b.transfers_out - a.transfers_out).slice(0, 10).map(transfer => { 
-                return{
-                    name: transfer.web_name,
+                    ins: transfer.transfers_in,
                     outs: transfer.transfers_out
                 }
             })
+        console.log(topTransfers)
+        let names = topTransfers.map(player => player.name);
 
         // transfer ins
         let margin = {top: 10, right: 10, bottom: 50, left: 60},
             width = sectionBlock.scrollWidth - margin.left - margin.right,
             height = 300 - margin.top - margin.bottom;
 
-        let svg = d3.select(".bar-ins")
+            
+        // append the svg object to the body of the page
+        let svg = d3.select(".bar-chart")
             .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
             .append("g")
-                .attr("transform",
+            .attr("transform",
                     "translate(" + margin.left + "," + margin.top + ")");
 
-        // X axis
+
+        // List of subgroups = header of the csv files = soil condition here
+        let subgroups = ['ins', 'outs'];
+
+        // List of groups = species here = value of the first column called group -> I show them on the X axis
+        let groups = names
+
+        console.log(groups)
+
+        // Add X axis
         let x = d3.scaleBand()
-            .range([ 0, width ])
-            .domain(transfersIn.map(d => d.name))
-            .padding(0.2);
-            svg.append("g")
+            .domain(groups)
+            .range([0, width])
+            .padding([0.2])
+        svg.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x))
-            .selectAll("text")
-                .attr("transform", "translate(-10,0)rotate(-45)")
-                .style("text-anchor", "end");
+            .call(d3.axisBottom(x).tickSizeOuter(0));
 
         // Add Y axis
         let y = d3.scaleLinear()
-            .domain([0, transfersIn[0].ins])
-            .range([ height, 0]);
-            svg.append("g")
+            .domain([0, topTransfers[0].ins+topTransfers[0].outs])
+            .range([ height, 0 ]);
+        svg.append("g")
             .call(d3.axisLeft(y));
 
-        // Bars
-        svg.selectAll("mybar")
-        .data(transfersIn)
+        // color palette = one color per subgroup
+        let color = d3.scaleOrdinal()
+            .domain(subgroups)
+            .range(['#1d1d1d','#f09292'])
+
+        //stack the data? --> stack per subgroup
+        let stackedData = d3.stack()
+            .keys(subgroups)
+            (topTransfers)
+
+        // Show the bars
+        svg.append("g")
+        .selectAll("g")
+        // Enter in the stack data = loop key per key = group per group
+        .data(stackedData)
         .enter()
-        .append("rect")
-            .attr("x", d => x(d.name))
-            .attr("y", d => y(d.ins))
-            .attr("width", x.bandwidth())
-            .attr("height", d => height - y(d.ins))
-            .attr("fill", "#3a4257");
+        .append("g")
+            .attr("fill", d => color(d.key))
+            .selectAll("rect")
+            // enter a second time = loop subgroup per subgroup to add all rectangles
+            .data(d => d)
+            .enter().append("rect")
+            .attr("x", d => x(d.data.name))
+            .attr("y", d => y(d[1]))
+            .attr("height", d => y(d[0]) - y(d[1]))
+            .attr("width",x.bandwidth())
 
-        //
-        // transfer outs
-        //
-        //
-        let svg2 = d3.select(".bar-outs")
-            .append("svg")
-                .attr("width", width + margin.left + margin.right)
-                .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-                .attr("transform",
-                    "translate(" + margin.left + "," + margin.top + ")");
-
-        // X axis
-        let x2 = d3.scaleBand()
-            .range([ 0, width ])
-            .domain(transfersOut.map(d => d.name))
-            .padding(0.2);
-            svg2.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x2))
-            .selectAll("text")
-                .attr("transform", "translate(-10,0)rotate(-45)")
-                .style("text-anchor", "end");
-
-        // Add Y axis
-        let y2 = d3.scaleLinear()
-            .domain([0, transfersOut[0].outs])
-            .range([ height, 0]);
-            svg2.append("g")
-            .call(d3.axisLeft(y2));
-        // Bars
-        svg2.selectAll("mybar")
-            .data(transfersOut)
-            .enter()
-            .append("rect")
-                .attr("x", d => x2(d.name))
-                .attr("y", d => y2(d.outs))
-                .attr("width", x2.bandwidth())
-                .attr("height", d => height - y2(d.outs))
-                .attr("fill", "#f09292")
+        
 
 
 
@@ -124,7 +106,7 @@ let initHomepage = async () => {
                 let fdr4 = playerEvents.fixtures[3].difficulty;
                 let fdr5 = playerEvents.fixtures[4].difficulty;
                 let fdr6 = playerEvents.fixtures[5].difficulty;
-                let avgFdr = (fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/4
+                let avgFdr = (fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6
                 let index = (history*0.3 + (5 - parseInt(avgFdr)*0.7)).toFixed(2);
     
                 return {

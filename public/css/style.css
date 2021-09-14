@@ -13,7 +13,7 @@ html {
 
 /* LANDING */
 header {
-  background: linear-gradient(180deg, #EC1C25 50%, #D01354 100%);
+  background-color: #3a4257;
 }
 
 .landing .container {
@@ -24,10 +24,6 @@ header {
 
 .landing-text {
   max-width: 500px;
-}
-
-.landing-text h1 {
-  color: var(--clr-light);
 }
 
 .diffs .axis-label {
@@ -44,10 +40,10 @@ header {
 }
 
 footer {
-  background-color: #1d1d1d;
+  background-color: #f1f1f1;
 }
 footer * {
-  color: #f1f1f1;
+  color: #3a4257;
   font-weight: 100;
 }
 
@@ -367,7 +363,6 @@ table td {
   font-size: 2.4em;
   font-weight: 600;
   font-family: "Urbanist", sans-serif;
-  color: #1d1d1d;
   line-height: 1.2;
 }
 

@@ -6,7 +6,8 @@ let cards = document.querySelector('.cards');
 
             const players = await getAllPlayers();
             let sorted = players.sort((a,b) => (b.event_points) - (a.event_points)).slice(0, 6);
-            let count = 1;
+            const gw = await getGw()
+            const currentGw = parseInt(gw[0].id);
 
             //
             //ON FIRE PLAYERS
@@ -14,7 +15,11 @@ let cards = document.querySelector('.cards');
             sorted.forEach( async (player) => {
                     let playerEvents = await getPlayerEventsById(player.id);
                     let prevVal = playerEvents.history[playerEvents.history.length-1].value/10;
-                    let playerCard = `<div class="card-heading" data-pos="${count++}">
+                    // let photo = await fetch(`${imagesUrl}${player.code}.png`);
+                    // let photoBlob = await photo.blob();
+                    // let imageObjectUrl = URL.createObjectURL(photoBlob);
+                    // console.log(imageObjectUrl);
+                    let playerCard = `  <div class="card-heading">
                                             <p class="caption">${evaluateTeam(player.team)}</p>
                                             <div class="card-stat1"> 
                                                 <p class="mini-txt accent-font">${evaluatePosition(player.element_type)}</p>
@@ -24,7 +29,7 @@ let cards = document.querySelector('.cards');
                                         <div class="card-body">
                                             <div class="card-body-top">
                                                 <div class="card-stat2"> 
-                                                    <p class="mini-heading">
+                                                    <p>
                                                         ${player.now_cost/10}
                                                         <span class="mini-txt">m</span></p>
                                                     </p>
@@ -134,7 +139,9 @@ let cards = document.querySelector('.cards');
                 .text('owership (%)');
 
             // compute differentials
-            let differentials = players.sort((a,b) => b.now_cost - a.now_cost).filter(differential => differential.now_cost < 90 && differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.minutes > 200);
+            let differentials = players
+                .sort((a,b) => b.now_cost - a.now_cost)
+                .filter(differential => differential.now_cost < 110 && differential.now_cost > 40 && differential.selected_by_percent < 20 && differential.minutes > (currentGw*90)/2);
 
             let computedDifferentials =  differentials.map(async differential => {
                 let differentialEvents = await getPlayerEventsById(differential.id);
