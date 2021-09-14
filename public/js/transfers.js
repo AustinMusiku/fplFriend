@@ -12,7 +12,7 @@ let initHomepage = async () => {
 
         let topTransfers = players
             .sort((a,b) => (b.transfers_in + b.transfers_out) - (a.transfers_in + a.transfers_out))
-            .slice(0, 10)
+            .slice(0, 20)
             .map(transfer => { 
                 return{
                     name: transfer.web_name,
@@ -24,7 +24,7 @@ let initHomepage = async () => {
         let names = topTransfers.map(player => player.name);
 
         // transfer ins
-        let margin = {top: 10, right: 10, bottom: 50, left: 60},
+        let margin = {top: 10, right: 10, bottom: 60, left: 60},
             width = sectionBlock.scrollWidth - margin.left - margin.right,
             height = 300 - margin.top - margin.bottom;
 
@@ -39,22 +39,25 @@ let initHomepage = async () => {
                     "translate(" + margin.left + "," + margin.top + ")");
 
 
-        // List of subgroups = header of the csv files = soil condition here
+        // List of subgroups
         let subgroups = ['ins', 'outs'];
 
-        // List of groups = species here = value of the first column called group -> I show them on the X axis
+        // List of groups
         let groups = names
-
-        console.log(groups)
 
         // Add X axis
         let x = d3.scaleBand()
             .domain(groups)
             .range([0, width])
-            .padding([0.2])
+            .padding([0.25])
         svg.append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x).tickSizeOuter(0));
+            .call(d3.axisBottom(x).tickSizeOuter(0))
+            .selectAll("text")	
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", "rotate(-45)");
 
         // Add Y axis
         let y = d3.scaleLinear()
@@ -68,7 +71,7 @@ let initHomepage = async () => {
             .domain(subgroups)
             .range(['#1d1d1d','#f09292'])
 
-        //stack the data? --> stack per subgroup
+        //stack the data per subgroup
         let stackedData = d3.stack()
             .keys(subgroups)
             (topTransfers)
@@ -76,24 +79,21 @@ let initHomepage = async () => {
         // Show the bars
         svg.append("g")
         .selectAll("g")
-        // Enter in the stack data = loop key per key = group per group
+        // group per group
         .data(stackedData)
         .enter()
         .append("g")
             .attr("fill", d => color(d.key))
             .selectAll("rect")
-            // enter a second time = loop subgroup per subgroup to add all rectangles
+            // loop subgroup per subgroup to add all rectangles
             .data(d => d)
             .enter().append("rect")
             .attr("x", d => x(d.data.name))
             .attr("y", d => y(d[1]))
             .attr("height", d => y(d[0]) - y(d[1]))
-            .attr("width",x.bandwidth())
+            .attr("width", x.bandwidth())
 
         
-
-
-
         // SENSIBLE TRANSFERS
 
         let mapTableArray = async (array) => {
