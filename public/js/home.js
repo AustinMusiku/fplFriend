@@ -107,7 +107,7 @@ let cards = document.querySelector('.cards');
             // DIFFERENTIALS SCATTER PLOT
             // 
             // set the dimensions and margins of the graph
-            let margin = {top: 10, right: 10, bottom: 50, left: 20},
+            let margin = {top: 10, right: 10, bottom: 50, left: 40},
                 width = container.scrollWidth - margin.left - margin.right,
                 height = 500 - margin.top - margin.bottom;
             
@@ -123,7 +123,7 @@ let cards = document.querySelector('.cards');
             // X label
             svg.append('text')
                 .attr('text-anchor', 'middle')
-                .attr('transform', 'translate('+ (width-30) +',' + (height+30) + ')')
+                .attr('transform', 'translate('+ (width/2) +',' + (height+30) + ')')
                 .attr('class','axis-label')
                 .style('font-family', 'Space Grotesk')
                 .style('font-size', 14)
@@ -132,7 +132,7 @@ let cards = document.querySelector('.cards');
             // Y label
             svg.append('text')
                 .attr('text-anchor', 'middle')
-                .attr('transform', 'translate(0,' + height/10 + ')rotate(-90)')
+                .attr('transform', 'translate(-25,' + height/2 + ')rotate(-90)')
                 .attr('class','axis-label')
                 .style('font-family', 'Space Grotesk')
                 .style('font-size', 14)
@@ -141,7 +141,7 @@ let cards = document.querySelector('.cards');
             // compute differentials
             let differentials = players
                 .sort((a,b) => b.now_cost - a.now_cost)
-                .filter(differential => differential.now_cost < 110 && differential.now_cost > 40 && differential.selected_by_percent < 20 && differential.minutes > (currentGw*90)/2);
+                .filter(differential => differential.now_cost < 110 && differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.minutes > (currentGw*90)/2);
 
             let computedDifferentials =  differentials.map(async differential => {
                 let differentialEvents = await getPlayerEventsById(differential.id);

@@ -16,15 +16,15 @@ let initHomepage = async () => {
             .map(transfer => { 
                 return{
                     name: transfer.web_name,
-                    ins: transfer.transfers_in,
-                    outs: transfer.transfers_out
+                    ins: transfer.transfers_in/1000000,
+                    outs: transfer.transfers_out/1000000
                 }
             })
         console.log(topTransfers)
         let names = topTransfers.map(player => player.name);
 
         // transfer ins
-        let margin = {top: 10, right: 10, bottom: 60, left: 60},
+        let margin = {top: 10, right: 10, bottom: 60, left: 50},
             width = sectionBlock.scrollWidth - margin.left - margin.right,
             height = 300 - margin.top - margin.bottom;
 
@@ -65,6 +65,15 @@ let initHomepage = async () => {
             .range([ height, 0 ]);
         svg.append("g")
             .call(d3.axisLeft(y));
+        
+        // Add Y label
+        svg.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('transform', 'translate( -30,'+ height/2 + ')rotate(-90)')
+            .attr('class','axis-label')
+            .style('font-family', 'Space Grotesk')
+            .style('font-size', 14)
+            .text('trasfers (millions)');
 
         // color palette = one color per subgroup
         let color = d3.scaleOrdinal()

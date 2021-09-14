@@ -12,10 +12,6 @@ html {
 }
 
 /* LANDING */
-header {
-  background-color: #3a4257;
-}
-
 .landing .container {
   display: flex;
   align-items: center;
