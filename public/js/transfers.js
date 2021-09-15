@@ -11,13 +11,14 @@ let initHomepage = async () => {
         //
 
         let topTransfers = players
-            .sort((a,b) => (b.transfers_in + b.transfers_out) - (a.transfers_in + a.transfers_out))
+            .sort((a,b) => (b.transfers_in_event + b.transfers_out_event) - (a.transfers_in_event + a.transfers_out_event))
             .slice(0, 20)
             .map(transfer => { 
                 return{
+                    id: transfer.id,
                     name: transfer.web_name,
-                    ins: transfer.transfers_in/1000000,
-                    outs: transfer.transfers_out/1000000
+                    ins: transfer.transfers_in_event/1000000,
+                    outs: transfer.transfers_out_event/1000000
                 }
             })
         console.log(topTransfers)
