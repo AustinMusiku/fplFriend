@@ -124,7 +124,7 @@ let initHomepage = async () => {
         let mapTableArray = async (array) => {
             return array.map(async player => {  
                 let playerEvents = await getPlayerEventsById(player.id);
-                let history = parseInt(player.form)*0.3 + parseInt(player.points_per_game)*0.7;
+                let history = parseInt(player.form)*1 + parseInt(player.points_per_game)*0.0;
                 let fdr1 = playerEvents.fixtures[0].difficulty;
                 let fdr2 = playerEvents.fixtures[1].difficulty;
                 let fdr3 = playerEvents.fixtures[2].difficulty;
@@ -132,7 +132,7 @@ let initHomepage = async () => {
                 let fdr5 = playerEvents.fixtures[4].difficulty;
                 let fdr6 = playerEvents.fixtures[5].difficulty;
                 let avgFdr = (fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6
-                let index = (history*0.3 + (5 - parseInt(avgFdr)*0.7)).toFixed(2);
+                let index = (history*0.2 + (5 - parseInt(avgFdr))*0.8).toFixed(2);
     
                 return {
                     ...player,
@@ -153,22 +153,26 @@ let initHomepage = async () => {
             })
         }
 
-        let rowHeads =` <th>Name</th>
-                        <th>gw${currentGw+1}</th>
-                        <th>gw${currentGw+2}</th>
-                        <th>gw${currentGw+3}</th>
-                        <th>gw${currentGw+4}</th>
-                        <th>gw${currentGw+5}</th>
-                        <th>gw${currentGw+6}</th>`
+        let rowHeads =` <th class="sticky-cell">Name</th>
+                        <thead>
+                            <th>gw${currentGw+1}</th>
+                            <th>gw${currentGw+2}</th>
+                            <th>gw${currentGw+3}</th>
+                            <th>gw${currentGw+4}</th>
+                            <th>gw${currentGw+5}</th>
+                            <th>gw${currentGw+6}</th>
+                        </thead>`
         let generateRowFields = (player) => {
             let rowfields = `
-                        <td>${player.web_name} <span class="caption">(${player.now_cost/10}m)</td>
-                        <td class="fix-${player.fdr1} caption">${evaluateTeam(player.opponent1)}</td>
-                        <td class="fix-${player.fdr2} caption">${evaluateTeam(player.opponent2)}</td>
-                        <td class="fix-${player.fdr3} caption">${evaluateTeam(player.opponent3)}</td>
-                        <td class="fix-${player.fdr4} caption">${evaluateTeam(player.opponent4)}</td>
-                        <td class="fix-${player.fdr5} caption">${evaluateTeam(player.opponent5)}</td>
-                        <td class="fix-${player.fdr6} caption">${evaluateTeam(player.opponent6)}</td>
+                        <td class="sticky-cell">${player.web_name} <span class="caption">(${player.now_cost/10}m)</td>
+                        <tbody>
+                            <td class="fix-${player.fdr1} caption">${evaluateTeam(player.opponent1)}</td>
+                            <td class="fix-${player.fdr2} caption">${evaluateTeam(player.opponent2)}</td>
+                            <td class="fix-${player.fdr3} caption">${evaluateTeam(player.opponent3)}</td>
+                            <td class="fix-${player.fdr4} caption">${evaluateTeam(player.opponent4)}</td>
+                            <td class="fix-${player.fdr5} caption">${evaluateTeam(player.opponent5)}</td>
+                            <td class="fix-${player.fdr6} caption">${evaluateTeam(player.opponent6)}</td>
+                        </tbody>
                     `
             return rowfields;
         }

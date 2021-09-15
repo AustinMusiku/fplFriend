@@ -11,7 +11,7 @@
 
 html{
     width: 100vw;
-    overflow-x: hidden;
+    overflow-x: scroll;
 }
 body{
     height: auto;
@@ -19,8 +19,8 @@ body{
 
 /* LANDING */
 header{
-    background: $clr-accent2;
-    // background: linear-gradient(190deg, $clr-accent2 -0%, $clr-accent1 100%);
+    // background: $clr-accent2;
+    background: linear-gradient(190deg, $clr-accent2 -0%, $clr-accent1 100%);
 }
 
 
