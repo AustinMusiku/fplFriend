@@ -25,9 +25,9 @@ let initHomepage = async () => {
         let names = topTransfers.map(player => player.name);
 
         // transfer ins
-        let margin = {top: 10, right: 10, bottom: 60, left: 50},
+        let margin = {top: 10, right: 10, bottom: 60, left: 40},
             width = sectionBlock.scrollWidth - margin.left - margin.right,
-            height = 300 - margin.top - margin.bottom;
+            height = 400 - margin.top - margin.bottom;
 
             
         // append the svg object to the body of the page
@@ -74,12 +74,20 @@ let initHomepage = async () => {
             .attr('class','axis-label')
             .style('font-family', 'Space Grotesk')
             .style('font-size', 14)
-            .text('trasfers (millions)');
+            .text('transfers (millions)');
+
+        const yAxisGrid = d3.axisLeft(y)
+            .tickSize(-(width))
+            .tickFormat('')
+            .ticks(10);
+        svg.append('g')
+            .attr('class', 'y axis-grid')
+            .call(yAxisGrid);
 
         // color palette = one color per subgroup
         let color = d3.scaleOrdinal()
             .domain(subgroups)
-            .range(['#1d1d1d','#f09292'])
+            .range(['#3a4257','rgba(255, 23, 81, 0.8)'])
 
         //stack the data per subgroup
         let stackedData = d3.stack()
@@ -97,12 +105,19 @@ let initHomepage = async () => {
             .selectAll("rect")
             // loop subgroup per subgroup to add all rectangles
             .data(d => d)
-            .enter().append("rect")
+            .enter()
+            .append("rect")
             .attr("x", d => x(d.data.name))
             .attr("y", d => y(d[1]))
-            .attr("height", d => y(d[0]) - y(d[1]))
+            .attr("height", 0)
             .attr("width", x.bandwidth())
 
+        svg.selectAll("rect")
+            .transition()
+            .duration(400)
+            .attr("height", d => y(d[0]) - y(d[1]))
+            .delay((d,i) => i*20)
+        
         
         // SENSIBLE TRANSFERS
 

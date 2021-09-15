@@ -87,6 +87,10 @@ svg{
             fill: $clr-accent2;
         }
     }
+
+    .axis-grid line {
+        stroke: $clr-pale;
+      }
 }
 
 .fix-1{

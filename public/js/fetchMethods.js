@@ -1,7 +1,7 @@
 // const fetch = require('node-fetch');
 // let baseUrl = 'https://fantasy.premierleague.com/api/'
 let imagesUrl = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p'
-// let baseUrl = 'http://localhost:3000'
+// let baseUrl = 'http://192.168.8.124:3000'
 let baseUrl = 'https://fplfriend.herokuapp.com'
 
 const getFixtures = async () => {

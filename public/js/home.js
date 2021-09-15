@@ -4,6 +4,13 @@ let cards = document.querySelector('.cards');
         try{
             let container = document.querySelector('.container');
 
+            const offset = el => {
+                let rect = el.getBoundingClientRect(),
+                scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+                scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+            }
+
             const players = await getAllPlayers();
             let sorted = players.sort((a,b) => (b.event_points) - (a.event_points)).slice(0, 6);
             const gw = await getGw()
@@ -89,7 +96,6 @@ let cards = document.querySelector('.cards');
                         .slice(0, 15)
 
                     sortedCaptains.forEach(captain => {
-                        console.log(`${captain.web_name} -> ${captain.captaincy}`)
                         let rowfields = `
                             <td>${captain.web_name}</td>
                             <td class="fix-${captain.fdr} caption">${evaluateTeam(captain.opponent)}</td>
@@ -182,10 +188,10 @@ let cards = document.querySelector('.cards');
                         .data(differentials)
                         .enter()
                         .append("circle")
-                            .attr("cx", d => x(d.potential) )
-                            .attr("cy", d => y(d.ownership) )
+                            .attr("cx", 0 )
+                            .attr("cy", height )
                             .attr('data-name', d => `${d.name}`)
-                            .attr("r", 2)
+                            .attr("r", 4)
                             .style("fill", "#f09292")
 
                     // Add labels
@@ -194,14 +200,36 @@ let cards = document.querySelector('.cards');
                         .data(differentials)
                         .enter()
                         .append("text")
+                            .attr('class', 'scatter-plot-labels')
                             .attr("font-family", "Space Grotesk")
                             .attr("font-size", 10)
                             .style('fill', '#000')
                             .attr("dy", "0.35em")
                             .attr("x", d => x(d.potential)+7)
                             .attr("y", d => y(d.ownership))
+                            .attr('display', 'none')
                             .text(d => d.name);
 
+                    let diffs = document.querySelector('.diffs');
+                    let diffsGraphTop = offset(diffs).top+200;
+    
+                    document.addEventListener('scroll', () => {
+                        if(scrollY > diffsGraphTop){
+                            // Animate dots and their labels
+                            svg.selectAll("circle")
+                                .transition()
+                                .duration(400)
+                                .attr("cx", d => x(d.potential) )
+                                .attr("cy", d => y(d.ownership) )
+                            .delay((d,i) => i*70)
+                            svg.selectAll('.scatter-plot-labels')
+                                .transition()
+                                .duration(400)
+                                .attr('display', 'block')
+                                .delay((d,i) => i*72)
+                        }
+                        console.log(scrollY, diffsGraphTop);
+                    })
                 })
 
         }catch(err){

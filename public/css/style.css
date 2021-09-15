@@ -11,6 +11,10 @@ html {
   overflow-x: hidden;
 }
 
+body {
+  height: auto;
+}
+
 /* LANDING */
 header {
   background: #3a4257;
@@ -290,6 +294,9 @@ svg .tick line {
 }
 svg .tick text {
   fill: #3a4257;
+}
+svg .axis-grid line {
+  stroke: #e2e2e2;
 }
 
 .fix-1 {
