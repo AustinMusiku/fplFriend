@@ -228,7 +228,6 @@ let cards = document.querySelector('.cards');
                                 .attr('display', 'block')
                                 .delay((d,i) => i*72)
                         }
-                        console.log(scrollY, diffsGraphTop);
                     })
                 })
 
