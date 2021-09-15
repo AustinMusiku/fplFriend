@@ -1,5 +1,39 @@
 @import 'variables';
 
+// button
+.btn{
+    position: relative;
+    display: inline-block;
+    margin-top: 2em;
+    padding: .75em 1.5em;
+    border: 1px solid $clr-light;
+    text-decoration: none;
+    color: $clr-light;
+    background: none;
+    z-index: 1;
+
+    &::before{
+        position: absolute;
+        content: '';
+        width: 0%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background: $clr-light;
+        transform-origin: left;
+        transition: .25s cubic-bezier(0, 0.69, 0.45, 0.94);
+        z-index: -1;
+    }
+    
+    &:hover{
+        color: $clr-accent2;
+        
+        &::before{
+            width: 100%;
+        }
+    }
+}
+
 table{
     width: 100%;
     border: 1px solid $clr-light;
@@ -36,7 +70,23 @@ svg{
         fill: 1px $clr-light;
     }
 
+    .axis-label{
+        fill: $clr-accent2;
+    }
     
+    .domain{
+        stroke: $clr-grey;
+    }
+
+    .tick{
+        line{
+            stroke: $clr-grey;
+        }
+
+        text{
+            fill: $clr-accent2;
+        }
+    }
 }
 
 .fix-1{
@@ -54,6 +104,8 @@ svg{
 .fix-5{
     background-color: rgba(128 ,7 ,45 ,0.8);
 }
+
+
 
 @media screen and (max-width: 768px){
     table{

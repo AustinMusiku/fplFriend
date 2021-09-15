@@ -12,27 +12,18 @@ html {
 }
 
 /* LANDING */
+header {
+  background: #3a4257;
+}
+
 .landing .container {
   display: flex;
   align-items: center;
-  height: 100vh;
+  height: 75vh;
 }
 
 .landing-text {
   max-width: 500px;
-}
-
-.diffs .axis-label {
-  fill: #3a4257;
-}
-.diffs .domain {
-  stroke: #3a42579c;
-}
-.diffs .tick line {
-  stroke: #3a42579c;
-}
-.diffs .tick text {
-  fill: #3a42579c;
 }
 
 footer {
@@ -228,6 +219,36 @@ footer {
     width: 100%;
   }
 }
+.btn {
+  position: relative;
+  display: inline-block;
+  margin-top: 2em;
+  padding: 0.75em 1.5em;
+  border: 1px solid #f1f1f1;
+  text-decoration: none;
+  color: #f1f1f1;
+  background: none;
+  z-index: 1;
+}
+.btn::before {
+  position: absolute;
+  content: "";
+  width: 0%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #f1f1f1;
+  transform-origin: left;
+  transition: 0.25s cubic-bezier(0, 0.69, 0.45, 0.94);
+  z-index: -1;
+}
+.btn:hover {
+  color: #3a4257;
+}
+.btn:hover::before {
+  width: 100%;
+}
+
 table {
   width: 100%;
   border: 1px solid #f1f1f1;
@@ -257,6 +278,18 @@ svg .tick {
 }
 svg g {
   fill: 1px #f1f1f1;
+}
+svg .axis-label {
+  fill: #3a4257;
+}
+svg .domain {
+  stroke: #3a42579c;
+}
+svg .tick line {
+  stroke: #3a42579c;
+}
+svg .tick text {
+  fill: #3a4257;
 }
 
 .fix-1 {
@@ -314,7 +347,7 @@ table td {
   font-size: 3em;
   font-weight: 400;
   font-family: "Urbanist", sans-serif;
-  color: #1d1d1d;
+  color: #252525;
   line-height: 1;
 }
 
@@ -325,7 +358,7 @@ table td {
   bottom: -10%;
   font-size: 2.4em;
   color: transparent;
-  -webkit-text-stroke: 1px #1d1d1d;
+  -webkit-text-stroke: 1px #252525;
   opacity: 0.25;
 }
 
@@ -335,7 +368,7 @@ table td {
   font-size: 1.25em;
   font-weight: 600;
   font-family: "Urbanist", sans-serif;
-  color: #1d1d1d;
+  color: #252525;
   line-height: 1;
 }
 
@@ -343,7 +376,7 @@ table td {
   font-size: 6em;
   font-weight: 600;
   font-family: "Urbanist", sans-serif;
-  color: #1d1d1d;
+  color: #252525;
   line-height: 1;
 }
 
@@ -351,7 +384,7 @@ table td {
   font-size: 3em;
   font-weight: 600;
   font-family: "Urbanist", sans-serif;
-  color: #1d1d1d;
+  color: #252525;
   line-height: 1;
 }
 
@@ -375,7 +408,7 @@ table td {
 .caption {
   font-size: 0.8em;
   font-family: "Space Grotesk", sans-serif;
-  color: #1d1d1d;
+  color: #252525;
   font-weight: 100;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -408,11 +441,15 @@ p, a {
 }
 
 .dark-bg {
-  background-color: #1d1d1d;
+  background-color: #252525;
 }
 
 .light-font {
   color: #f1f1f1;
+}
+
+.dark-light-font {
+  color: #e2e2e2;
 }
 
 .accent-font {
@@ -420,7 +457,7 @@ p, a {
 }
 
 .dark-font {
-  color: #1d1d1d;
+  color: #252525;
 }
 
 .accent-section {
