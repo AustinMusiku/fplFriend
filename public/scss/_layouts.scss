@@ -15,6 +15,31 @@ body{
     }
 }
 
+.captaincy-stats{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    text-align: center;
+    width: 100%;
+
+    .captain-stats,
+    .captain-stats-labels,
+    .vcaptain-stats{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        gap: 1em;
+        max-width: 33.33%;
+
+        .column-heading{
+            height: -webkit-fill-available;
+        }
+    }
+    p{
+        margin: 0;
+    }
+}
+
 .cards{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -217,6 +242,24 @@ footer{
                 .section-block{
                     width: 100%;
                 }
+            }
+        }
+    }
+
+    footer{
+        .container{
+            display: flex;
+            flex-direction: column;
+            gap: 1.5em;
+        }
+
+        .footer-body{
+            margin-bottom: .5em;
+    
+            .footer-links{
+                display: flex;
+                flex-direction: column;
+                gap: .5em;
             }
         }
     }

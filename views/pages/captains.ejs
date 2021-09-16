@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/heading')%>
+</head>
+<body>
+    <header class="">
+
+        <div class="landing grid">
+            <div class="container">
+                <div class="landing-text">
+                    <h1 class="sub-heading light-font">Who should wear the team's arm band</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="second grid">
+        <div class="container">
+            <h1 class="section-heading" data-attribute="captains">captains</h1>
+
+            <div class="section-body">
+                <p class="">The table below is arranged in from highest to lowest with the most favourable option at the top. The tabulated data takes into consideration player current form, player influence, player threat, player creativity, player's upcoming fixture difficulty rating, and points per game. The afore-mentioned fields then help us come up with an index(<strong>Captaincy</strong>) to predict the players performace in the upcoming gameweek</p>
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>fix</th>
+                        <th>Captaincy</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="third grid">
+        <div class="container">
+            <h1 class="section-heading" data-attribute="h2h">h2h</h1>
+            <div class="section-body">
+                <p>Take a deep dive into the stats and compare the two players with the highest captaincy index</p>
+                <div class="showcase">
+                    <div class="radar-container">
+                        <canvas class="radar"></canvas>
+                      </div>
+
+                    <div class="captaincy-stats">
+
+                        <div class="captain-stats"></div>
+                        <div class="captain-stats-labels">
+                            <div class="column-heading invisible"> 
+                                <p class="mini-txt accent-font">XXXXXXXXX</p>
+                                <p class="mini-heading invisible">XXXXXXXX</p>
+                            </div>
+                            
+                            <p>points</p>
+                            <p>goals</p>
+                            <p>assists</p>
+                            <p>price</p>
+                            <p>own</p>
+                        </div>
+                        <div class="vcaptain-stats"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <%- include('../partials/footer')%>
+</body>
+<%- include('../partials/scripts')%>
+<script src="../../public/js/captains.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- <script src="https://rawgit.com/tpreusse/radar-chart-d3/master/src/radar-chart.js"></script> -->
+</html>

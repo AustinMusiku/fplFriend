@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/heading')%>
+</head>
+<body>
+    <header class="">
+
+        <div class="landing grid">
+            <div class="container">
+                <div class="landing-text">
+                    <h1 class="sub-heading dark-light-font">Uncover the hidden gems</h1>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="fourth grid diffs">
+        <div class="container">
+            <h1 class="section-heading" data-attribute="differentials">differentials</h1>
+            <div class="section-body">
+                <p class="para">Looking to climb up your mini-leagues? Invest in a good pair (or more, its completely upto you) of differentials. The scatter plot indicates the distribution of assets with varying levels of ownership and expected performance metrics. Player potential Increases along the X-axis and similarly ownership (selected_by_percentage) increases along the Y-axis. Assets on the upper right quadrant of the distribution are the popular options among the more potent players. Note that the scatter plot only shows assets between 6m and 11m and below 20% ownership</p>
+                <!-- Create a div where the graph will take place -->
+                <div id="differentials-graph"></div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="grid">
+        <div class="container">
+            <h1 class="section-heading" data-attribute="best value">best value</h1>
+
+            <div class="section-body">
+                <p class="">The table below is pretty straight forward in that it represents the rankings based on points per million</p>
+                <div class="ppm-table">
+                    <table>
+                        <tr>
+                            <th>Name (price)</th>
+                            <th>Points</th>
+                            <th>Ppm</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <%- include('../partials/footer')%>
+</body>
+<%- include('../partials/scripts')%>
+<script src="../../public/js/differentials.js"></script>
+</html>

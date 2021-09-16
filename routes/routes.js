@@ -15,7 +15,8 @@ const {
 // get pages
 router.get('/', (req, res) => res.render('pages/home'))
 router.get('/transfers', (req, res) => res.render('pages/transfers'))
-router.get('/fixtures', (req, res) => res.render('pages/fixtures'))
+router.get('/captains', (req, res) => res.render('pages/captains'))
+router.get('/differentials', (req, res) => res.render('pages/differentials'))
 
 // get fixtures
 router.get('/fixturesData', async (req, res) => { res.json(await getFixtures()) });

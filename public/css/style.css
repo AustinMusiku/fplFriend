@@ -34,6 +34,10 @@ footer * {
   font-weight: 100;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 @media screen and (min-width: 768px) {
   .axis-label {
     transform: translate(width30);
@@ -51,6 +55,31 @@ body {
 }
 .grid .container {
   grid-column: 2/4;
+}
+
+.captaincy-stats {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  text-align: center;
+  width: 100%;
+}
+.captaincy-stats .captain-stats,
+.captaincy-stats .captain-stats-labels,
+.captaincy-stats .vcaptain-stats {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 1em;
+  max-width: 33.33%;
+}
+.captaincy-stats .captain-stats .column-heading,
+.captaincy-stats .captain-stats-labels .column-heading,
+.captaincy-stats .vcaptain-stats .column-heading {
+  height: -webkit-fill-available;
+}
+.captaincy-stats p {
+  margin: 0;
 }
 
 .cards {
@@ -218,6 +247,20 @@ footer {
   section .container .section-body .section-block {
     width: 100%;
   }
+
+  footer .container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+  }
+  footer .footer-body {
+    margin-bottom: 0.5em;
+  }
+  footer .footer-body .footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+  }
 }
 .btn {
   position: relative;
@@ -295,6 +338,11 @@ svg .axis-grid line {
   stroke: #e2e2e2;
 }
 
+.radar-container {
+  margin: auto;
+  max-width: 400px;
+  max-height: 400px;
+}
 .fix-1 {
   background-color: rgba(55, 85, 35, 0.8);
 }

@@ -43,6 +43,10 @@ footer{
     }
 }
 
+.invisible{
+    visibility: hidden;
+}
+
 @media screen and (min-width: 768px) {
     .axis-label{
         transform: translate(width+30)
