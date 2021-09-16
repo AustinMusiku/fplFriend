@@ -8,11 +8,7 @@
 
 html {
   width: 100vw;
-  overflow-x: scroll;
-}
-
-body {
-  height: auto;
+  overflow-x: hidden;
 }
 
 /* LANDING */

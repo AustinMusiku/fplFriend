@@ -21,7 +21,6 @@ let initHomepage = async () => {
                     outs: transfer.transfers_out_event/1000000
                 }
             })
-        console.log(topTransfers)
         let names = topTransfers.map(player => player.name);
 
         // transfer ins
@@ -114,7 +113,7 @@ let initHomepage = async () => {
 
         svg.selectAll("rect")
             .transition()
-            .duration(400)
+            .duration(800)
             .attr("height", d => y(d[0]) - y(d[1]))
             .delay((d,i) => i*20)
         
@@ -124,15 +123,14 @@ let initHomepage = async () => {
         let mapTableArray = async (array) => {
             return array.map(async player => {  
                 let playerEvents = await getPlayerEventsById(player.id);
-                let history = parseInt(player.form)*1 + parseInt(player.points_per_game)*0.0;
-                let fdr1 = playerEvents.fixtures[0].difficulty;
-                let fdr2 = playerEvents.fixtures[1].difficulty;
-                let fdr3 = playerEvents.fixtures[2].difficulty;
-                let fdr4 = playerEvents.fixtures[3].difficulty;
-                let fdr5 = playerEvents.fixtures[4].difficulty;
-                let fdr6 = playerEvents.fixtures[5].difficulty;
+                let fdr1 = parseInt(playerEvents.fixtures[0].difficulty);
+                let fdr2 = parseInt(playerEvents.fixtures[1].difficulty);
+                let fdr3 = parseInt(playerEvents.fixtures[2].difficulty);
+                let fdr4 = parseInt(playerEvents.fixtures[3].difficulty);
+                let fdr5 = parseInt(playerEvents.fixtures[4].difficulty);
+                let fdr6 = parseInt(playerEvents.fixtures[5].difficulty);
                 let avgFdr = (fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6
-                let index = (history*0.2 + (5 - parseInt(avgFdr))*0.8).toFixed(2);
+                let index = (5 - avgFdr)*20+player.bps*0.1;
     
                 return {
                     ...player,
@@ -186,8 +184,7 @@ let initHomepage = async () => {
             .then(premiumsPromises => {
                 Promise.all(premiumsPromises)
                     .then(players => {
-                        let sortedPlayers = players
-                            .sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
+                        let sortedPlayers = players.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
                         // append table headings
                         let row = document.createElement('tr');
                         row.innerHTML = rowHeads;
@@ -213,7 +210,6 @@ let initHomepage = async () => {
                 Promise.all(midRangersPromises)
                     .then(players => {
                         let sortedPlayers = players.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
-
                         // append table heading
                         let row = document.createElement('tr');
                         row.innerHTML = rowHeads;

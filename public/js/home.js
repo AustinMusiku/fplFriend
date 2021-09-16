@@ -73,6 +73,7 @@ let cards = document.querySelector('.cards');
             // CAPTAINS TABLE
             //
             let captains = players.filter(captain => captain.now_cost > 70);
+            console.log(captains.sort((a,b)=> b.bps - a.bps))
 
             let computedCaptains = captains.map(async captain => {  
                 let captainEvents = await getPlayerEventsById(captain.id);
