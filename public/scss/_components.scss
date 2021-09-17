@@ -1,5 +1,44 @@
 @import 'variables';
 
+// nav
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 12vh;
+    
+    .logo{
+        a{
+            text-decoration: none;
+            h1{
+                color: $clr-light;
+            }
+        }
+    }
+
+    .nav-links{
+        display: flex;
+        justify-content: space-between;
+        gap: 2em;
+
+        .nav-link{
+            font-weight: 100;
+            text-decoration: none;
+            color: $clr-pale;
+            transition: 0.25s;
+
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .hamburger-menu{
+        display: none;
+    }
+}
+
 // button
 .btn{
     position: relative;
@@ -34,6 +73,7 @@
     }
 }
 
+// tables
 table{
     width: 100%;
     border: 1px solid $clr-light;
@@ -59,7 +99,7 @@ table{
         max-width: 100px;
     }
 }
-
+// svgs
 svg{
     .tick{
         stroke: transparent;
@@ -91,7 +131,7 @@ svg{
         stroke: $clr-pale;
       }
 }
-
+// radar maps
 .radar-container{
     margin: auto;
     max-width: 400px;
@@ -121,6 +161,86 @@ svg{
 
 
 @media screen and (max-width: 768px){
+
+    // nav
+    nav{
+
+        .nav-links{
+            position: fixed;
+            padding: 12em 6em;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1em;
+            background-color: $clr-accent2;
+            z-index: 5;
+            transition: .25s cubic-bezier(0, 0.69, 0.45, 0.94);
+
+            &.active{
+                left: 0;
+            }
+
+            .nav-link{
+                text-align: center;
+            }
+        }
+
+        .hamburger-menu{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 40px;
+            height: 21px;
+            align-items: end;
+            z-index: 10;
+
+            .ham-layer{
+                position: absolute;
+                background-color: $clr-light;
+                height: 3px;
+                right: 0;
+
+                &.long{
+                    width: 100%;
+                    
+                    &.active{
+                        top: 50%;
+                        transform: translateY(-50%) rotate(-45deg);
+                    }
+                }
+                &.mid{ 
+                    width: 70%;
+                    top: 50%;
+                    transform: translateY(-50%);
+
+                    &.active{
+                        display: none;
+                    }
+                }
+
+                &.short{ 
+                    width: 30%;
+                    bottom: 0;
+                    transition: .25s;
+                    // transform: translateY(-50%) rotate(45deg);
+
+                    &.active{
+                        width: 100%;
+                        top: 50%;
+                        transform: translateY(-50%) rotate(45deg);
+                    }
+                }
+
+
+            }
+        }
+    }
+
     .table-container{
         width: 100%;
         overflow-x: scroll;

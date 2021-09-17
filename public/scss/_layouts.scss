@@ -132,6 +132,32 @@ body{
     }
 }
 
+/* LANDING */
+header{
+    // background: $clr-accent2;
+    background: linear-gradient(190deg, $clr-accent2 -0%, $clr-accent1 100%);
+
+    &.minor{
+        .landing{
+            .container{
+                height: 45vh;
+            }
+        }
+    }
+
+    .landing{
+        .container{
+            display: flex;
+            align-items: center;
+            height: 75vh;
+    
+            .landing-text{
+                max-width: 500px;
+            }
+        }
+    }
+}
+
 section{
     position: relative;
     padding: 8em 0 5em;

@@ -1,6 +1,8 @@
 @import 'variables';
 @import url('https://fonts.googleapis.com/css2?family=Space Grotesk&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Urbanist&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nova+Square&display=swap');
+
 
 // RESETS
 *{
@@ -12,25 +14,6 @@
 html{
     width: 100vw;
     overflow-x: hidden;
-}
-
-/* LANDING */
-header{
-    // background: $clr-accent2;
-    background: linear-gradient(190deg, $clr-accent2 -0%, $clr-accent1 100%);
-}
-
-
-.landing{
-    .container{
-        display: flex;
-        align-items: center;
-        height: 75vh;
-    }
-
-}
-.landing-text{
-    max-width: 500px;
 }
 
 
