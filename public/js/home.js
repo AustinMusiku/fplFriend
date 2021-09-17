@@ -16,17 +16,17 @@ let cards = document.querySelector('.cards');
             let sorted = players.sort((a,b) => (b.event_points) - (a.event_points)).slice(0, 6);
             const gws = await getGws()
             const gw = gws.filter(gw => gw.is_current == true);
-            const currentGw = gw[0].id;
-            const nextGw = gws.filter(gw => gw.id == currentGw+1);
+            const currentGw = gw[0];
+            const nextGw = gws.filter(gw => gw.id == currentGw.id+1)[0];
 
             //
             // DEADLINE BANNER
             //
             const gameweekContainer = document.querySelector('.gameweek-number');
             const deadline = document.querySelector('.deadline');
-            gameweekContainer.innerHTML = nextGw[0].id;
+            gameweekContainer.innerHTML = nextGw.id;
             
-            const date = new Date(nextGw[0].deadline_time);
+            const date = new Date(nextGw.deadline_time);
             const [hours, minutes] = [date.getHours(), date.getMinutes(), date.getDay(),date.getMonth()]
             const day = date.toString().substring(0,10)
             deadline.innerHTML = `${day}, ${hours}:${minutes}hrs`;
@@ -36,7 +36,7 @@ let cards = document.querySelector('.cards');
             // CHIPS BAR
             //
             const pastGameweekContainer = document.querySelector('.past-gameweek-number');
-            pastGameweekContainer.innerHTML = currentGw;
+            pastGameweekContainer.innerHTML = currentGw.id;
 
             let chips = gw[0].chip_plays.map(chip => { 
                 return{
