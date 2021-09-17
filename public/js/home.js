@@ -13,7 +13,6 @@ let cards = document.querySelector('.cards');
             }
 
             const players = await getAllPlayers();
-            let sorted = players.sort((a,b) => (b.event_points) - (a.event_points)).slice(0, 6);
             const gws = await getGws()
             const gw = gws.filter(gw => gw.is_current == true);
             const currentGw = gw[0];
@@ -124,6 +123,9 @@ let cards = document.querySelector('.cards');
             //
             //ON FIRE PLAYERS
             //
+
+            let sorted = players.sort((a,b) => (b.form) - (a.form)).slice(0, 6);
+
             sorted.forEach( async (player) => {
                     let playerEvents = await getPlayerEventsById(player.id);
                     let prevVal = playerEvents.history[playerEvents.history.length-1].value/10;
