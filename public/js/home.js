@@ -35,6 +35,9 @@ let cards = document.querySelector('.cards');
             //
             // CHIPS BAR
             //
+            const pastGameweekContainer = document.querySelector('.past-gameweek-number');
+            pastGameweekContainer.innerHTML = currentGw;
+
             let chips = gw[0].chip_plays.map(chip => { 
                 return{
                     chip_name: chip.chip_name,
