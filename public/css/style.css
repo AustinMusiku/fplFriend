@@ -409,7 +409,7 @@ svg .axis-grid line {
   nav .hamburger-menu .ham-layer {
     position: absolute;
     background-color: #f1f1f1;
-    height: 3px;
+    height: 2px;
     right: 0;
   }
   nav .hamburger-menu .ham-layer.long {
