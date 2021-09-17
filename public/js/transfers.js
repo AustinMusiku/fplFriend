@@ -111,13 +111,19 @@ let initHomepage = async () => {
             .attr("height", 0)
             .attr("width", x.bandwidth())
 
-        svg.selectAll("rect")
-            .transition()
-            .duration(800)
-            .attr("y", d => y(d[1]))
-            .attr("height", d => y(d[0]) - y(d[1]))
-            .delay((d,i) => i*50)
-        
+        // animate bar graph when in focus
+        const observer = new IntersectionObserver((entries) => {
+            if(entries[0].intersectionRatio > 0){
+                svg.selectAll("rect")
+                    .transition()
+                    .duration(800)
+                    .attr("y", d => y(d[1]))
+                    .attr("height", d => y(d[0]) - y(d[1]))
+                    .delay((d,i) => i*50)
+            }
+        })
+        const target = document.querySelector('.bar-chart');
+        observer.observe(target)
         
         // SENSIBLE TRANSFERS
 

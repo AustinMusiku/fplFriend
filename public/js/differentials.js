@@ -4,13 +4,6 @@ let cards = document.querySelector('.cards');
         try{
             let container = document.querySelector('.container');
 
-            const offset = el => {
-                let rect = el.getBoundingClientRect(),
-                scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-                scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
-            }
-
             const players = await getAllPlayers();
             let sorted = players.sort((a,b) => (b.event_points) - (a.event_points)).slice(0, 6);
             const gw = await getGw()
@@ -149,11 +142,8 @@ let cards = document.querySelector('.cards');
                             .attr('display', 'none')
                             .text(d => d.name);
 
-                    let diffs = document.querySelector('.diffs');
-                    let diffsGraphTop = offset(diffs).top+200;
-    
-                    document.addEventListener('scroll', () => {
-                        if(scrollY > diffsGraphTop){
+                    const observer = new IntersectionObserver((entries) => {
+                        if(entries[0].intersectionRatio > 0){
                             // Animate dots and their labels
                             svg.selectAll("circle")
                                 .transition()
@@ -168,6 +158,9 @@ let cards = document.querySelector('.cards');
                                 .delay((d,i) => i*72)
                         }
                     })
+
+                    const target = document.querySelector('#differentials-graph');
+                    observer.observe(target);
                 })
 
         }catch(err){
