@@ -107,15 +107,16 @@ let initHomepage = async () => {
             .enter()
             .append("rect")
             .attr("x", d => x(d.data.name))
-            .attr("y", d => y(d[1]))
+            .attr("y", d => y(0))
             .attr("height", 0)
             .attr("width", x.bandwidth())
 
         svg.selectAll("rect")
             .transition()
             .duration(800)
+            .attr("y", d => y(d[1]))
             .attr("height", d => y(d[0]) - y(d[1]))
-            .delay((d,i) => i*20)
+            .delay((d,i) => i*50)
         
         
         // SENSIBLE TRANSFERS

@@ -152,28 +152,6 @@ body {
   gap: 0.15em;
 }
 
-.table {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  border: 1px solid #f1f1f1;
-  overflow-x: scroll;
-}
-.table .table-row {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  border-top: 1px solid #f1f1f1;
-}
-.table .table-row.label {
-  background-color: #f1f1f1;
-}
-.table .table-row > .right {
-  text-align: right;
-}
-.table .table-row p {
-  padding: 0.25em;
-  border-left: 1px solid #f1f1f1;
-}
-
 section {
   position: relative;
   padding: 8em 0 5em;
@@ -196,11 +174,11 @@ footer {
   padding: 3em 0 2em;
 }
 footer .footer-body {
-  margin-bottom: 0.5em;
+  margin-bottom: 1.5em;
 }
 footer .footer-body .footer-links {
   display: flex;
-  gap: 0.5em;
+  gap: 0.75em;
 }
 
 @media screen and (max-width: 768px) {
@@ -237,7 +215,7 @@ footer {
   }
   section .container .section-body {
     flex-direction: column;
-    gap: 3em;
+    gap: 1.5em;
   }
   section .container .section-body.row {
     width: 100%;

@@ -3,6 +3,7 @@ let cards = document.querySelector('.cards');
     let initHomepage = async () => {
         try{
             let container = document.querySelector('.container');
+            let sectionBody = document.querySelector('.section-body');
 
             const offset = el => {
                 let rect = el.getBoundingClientRect(),
@@ -13,8 +14,107 @@ let cards = document.querySelector('.cards');
 
             const players = await getAllPlayers();
             let sorted = players.sort((a,b) => (b.event_points) - (a.event_points)).slice(0, 6);
-            const gw = await getGw()
-            const currentGw = parseInt(gw[0].id);
+            const gws = await getGws()
+            const gw = gws.filter(gw => gw.is_current == true);
+            const currentGw = gw[0].id;
+            const nextGw = gws.filter(gw => gw.id == currentGw+1);
+
+            //
+            // DEADLINE BANNER
+            //
+            const gameweekContainer = document.querySelector('.gameweek-number');
+            const deadline = document.querySelector('.deadline');
+            gameweekContainer.innerHTML = nextGw[0].id;
+            
+            const date = new Date(nextGw[0].deadline_time);
+            const [hours, minutes] = [date.getHours(), date.getMinutes(), date.getDay(),date.getMonth()]
+            const day = date.toString().substring(0,10)
+            deadline.innerHTML = `${day}, ${hours}:${minutes}hrs`;
+
+
+            //
+            // CHIPS BAR
+            //
+            let chips = gw[0].chip_plays.map(chip => { 
+                return{
+                    chip_name: chip.chip_name,
+                    num_played: chip.num_played/1000000
+                }
+            });
+            const chipNumbers = chips.map(chip => chip.num_played);
+            const maxChip = Math.max(...chipNumbers)
+
+            // set the dimensions and margins of the graph
+            let margin = {top: 10, right: 10, bottom: 60, left: 50},
+            width = sectionBody.scrollWidth - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
+
+            // append the svg object to the body of the page
+            let svg = d3.select(".chips-bar")
+                .append("svg")
+                    .attr("width", width + margin.left + margin.right)
+                    .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                    .attr("transform",
+                        "translate(" + margin.left + "," + margin.top + ")");
+
+            
+            // X axis
+            let x = d3.scaleBand()
+                .range([ 0, width ])
+                .domain(chips.map(d => d.chip_name))
+                .padding(0.2);
+                svg.append("g")
+                    .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x))
+                .selectAll("text")
+                    .attr("transform", "translate(-10,0)rotate(-45)")
+                    .style("text-anchor", "end");
+
+            // Add Y axis
+            let y = d3.scaleLinear()
+            .domain([0, maxChip])
+            .range([ height, 0]);
+            svg.append("g")
+                .call(d3.axisLeft(y));
+
+            // Add Y label
+            svg.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'translate( -35,'+ height/2 + ')rotate(-90)')
+                .attr('class','axis-label')
+                .style('font-family', 'Space Grotesk')
+                .style('font-size', 14)
+                .text('plays (millions)');
+
+            // Bars
+            svg.selectAll("mybar")
+                .data(chips)
+                .enter()
+                .append("rect")
+                .attr("x", d => x(d.chip_name))
+                .attr("y", d => y(0))
+                .attr("width", x.bandwidth())
+                .attr("height", d => height - y(0))
+                .attr("fill", "#3a4257")
+                
+            let barAnimation = (entries) => {
+
+                if(entries[0].intersectionRatio > 0){
+                    // animate bars
+                    svg.selectAll("rect")
+                        .transition()
+                        .duration(800)
+                        .attr("y", d => y(d.num_played))
+                        .attr("height", d => height - y(d.num_played))
+                        .delay((d,i) => i*100)
+                }else{
+                }
+            }
+
+            let observer = new IntersectionObserver(barAnimation)
+            let target = document.querySelector('.chips-bar')
+            observer.observe(target);
 
             //
             //ON FIRE PLAYERS
@@ -68,170 +168,7 @@ let cards = document.querySelector('.cards');
                     card.classList.add('card');
                     cards.appendChild(card);
             });
-
-            //
-            // CAPTAINS TABLE
-            //
-            let captains = players.filter(captain => captain.now_cost > 70);
-            console.log(captains.sort((a,b)=> b.bps - a.bps))
-
-            let computedCaptains = captains.map(async captain => {  
-                let captainEvents = await getPlayerEventsById(captain.id);
-                let history = parseInt(captain.form)*0.3 + parseInt(captain.points_per_game)*0.3 + parseInt(captain.ict_index)*0.4;
-                let fdr = captainEvents.fixtures[0].difficulty;
-                let index = (history*0.3 + (5 - parseInt(fdr)*0.7)).toFixed(2);
-
-                return {
-                    ...captain,
-                    fdr: fdr,
-                    opponent: captainEvents.fixtures[0].is_home? captainEvents.fixtures[0].team_a: captainEvents.fixtures[0].team_h,
-                    captaincy: index
-                }
-            })
-
-            Promise.all(computedCaptains)
-                .then(captains => {
-                    let sortedCaptains = captains
-                        .sort((a,b) => (b.captaincy) - (a.captaincy))
-                        .filter(captain => captain.chance_of_playing_next_round != 0)
-                        .slice(0, 15)
-
-                    sortedCaptains.forEach(captain => {
-                        let rowfields = `
-                            <td>${captain.web_name}</td>
-                            <td class="fix-${captain.fdr} caption">${evaluateTeam(captain.opponent)}</td>
-                            <td>${captain.captaincy}</td>
-                        `
-                        let row = document.createElement('tr');
-                        row.innerHTML = rowfields;
-                        document.querySelector('table').appendChild(row);
-                    })
-                })
-
-
-            //
-            //
-            // DIFFERENTIALS SCATTER PLOT
-            // 
-            // set the dimensions and margins of the graph
-            let margin = {top: 10, right: 10, bottom: 50, left: 40},
-                width = container.scrollWidth - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
             
-            // append the svg object to the body of the page
-            let svg = d3.select("#differentials-graph")
-                .append("svg")
-                    .attr("height", height + margin.top + margin.bottom)
-                    .attr("width", width + margin.left + margin.right)
-                .append("g")
-                    .attr("transform",
-                        "translate(" + margin.left + "," + margin.top + ")");
-
-            // X label
-            svg.append('text')
-                .attr('text-anchor', 'middle')
-                .attr('transform', 'translate('+ (width/2) +',' + (height+30) + ')')
-                .attr('class','axis-label')
-                .style('font-family', 'Space Grotesk')
-                .style('font-size', 14)
-                .text('potential');
-            
-            // Y label
-            svg.append('text')
-                .attr('text-anchor', 'middle')
-                .attr('transform', 'translate(-25,' + height/2 + ')rotate(-90)')
-                .attr('class','axis-label')
-                .style('font-family', 'Space Grotesk')
-                .style('font-size', 14)
-                .text('owership (%)');
-
-            // compute differentials
-            let differentials = players
-                .sort((a,b) => b.now_cost - a.now_cost)
-                .filter(differential => differential.now_cost < 110 && differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.minutes > (currentGw*90)/2);
-
-            let computedDifferentials =  differentials.map(async differential => {
-                let differentialEvents = await getPlayerEventsById(differential.id);
-
-                return {
-                    name: differential.web_name,
-                    ownership: differential.selected_by_percent,
-                    potential: (parseInt(differential.form)*0.2 + parseInt(differential.points_per_game)*0.5 + parseInt(differential.ict_index)*0.3)*0.4 + (5 - parseInt(differentialEvents.fixtures[0].difficulty)*0.6)
-                }
-            })
-            
-            //Read the data
-            Promise.all(computedDifferentials)
-                .then(differentials => {
-                    // sort array to pick max and min potential values
-                    let sortedDifferentials = differentials.sort((a,b) => b.potential - a.potential);
-                    let maxPotential = Math.ceil(sortedDifferentials[0].potential);
-                    let minPotential = Math.floor(sortedDifferentials[sortedDifferentials.length - 1].potential);
-                    
-                    // Add X axis
-                    let x = d3.scaleLinear()
-                                .domain([minPotential, maxPotential+0.5])
-                                .range([ 0, width ]);
-                                svg.append("g")
-                                .attr("transform", "translate(0," + height + ")")
-                                .call(d3.axisBottom(x).ticks(5));
-                        
-                    // Add Y axis
-                    let y = d3.scaleLinear()
-                        .domain([0, 20])
-                        .range([ height, 0]);
-                        svg.append("g")
-                        .call(d3.axisLeft(y));
-
-                    // Add dots
-                    svg.append('g')
-                        .selectAll("dot")
-                        .data(differentials)
-                        .enter()
-                        .append("circle")
-                            .attr("cx", 0 )
-                            .attr("cy", height )
-                            .attr('data-name', d => `${d.name}`)
-                            .attr("r", 4)
-                            .style("fill", "#f09292")
-
-                    // Add labels
-                    svg.append("g")
-                        .selectAll("text")
-                        .data(differentials)
-                        .enter()
-                        .append("text")
-                            .attr('class', 'scatter-plot-labels')
-                            .attr("font-family", "Space Grotesk")
-                            .attr("font-size", 10)
-                            .style('fill', '#000')
-                            .attr("dy", "0.35em")
-                            .attr("x", d => x(d.potential)+7)
-                            .attr("y", d => y(d.ownership))
-                            .attr('display', 'none')
-                            .text(d => d.name);
-
-                    let diffs = document.querySelector('.diffs');
-                    let diffsGraphTop = offset(diffs).top+200;
-    
-                    document.addEventListener('scroll', () => {
-                        if(scrollY > diffsGraphTop){
-                            // Animate dots and their labels
-                            svg.selectAll("circle")
-                                .transition()
-                                .duration(400)
-                                .attr("cx", d => x(d.potential) )
-                                .attr("cy", d => y(d.ownership) )
-                            .delay((d,i) => i*70)
-                            svg.selectAll('.scatter-plot-labels')
-                                .transition()
-                                .duration(400)
-                                .attr('display', 'block')
-                                .delay((d,i) => i*72)
-                        }
-                    })
-                })
-
         }catch(err){
             console.error(err);
         }

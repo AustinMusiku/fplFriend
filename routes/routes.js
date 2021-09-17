@@ -9,7 +9,7 @@ const {
     getAllPlayers,
     getAllTeams,
     getPlayersByTeam,
-    whatGameweek } = require('../controllers/fetchControllers')
+    gameWeeks} = require('../controllers/fetchControllers')
 
 // GET ROUTES
 // get pages
@@ -37,6 +37,6 @@ router.get('/playerEvents/:id', async (req, res) => { res.json(await getPlayerEv
 router.get('/playersin/:id', async (req, res) => { res.json(await getPlayersByTeam(req.params.id)) });
 
 // get current gameweek
-router.get('/whatgw', async (req, res) => { res.json(await whatGameweek()) });
+router.get('/gameweeks', async (req, res) => { res.json(await gameWeeks()) });
 
 module.exports = router;

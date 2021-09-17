@@ -132,30 +132,6 @@ body{
     }
 }
 
-.table{
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    border: 1px solid $clr-light;
-    overflow-x: scroll;
-    
-    .table-row{
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        border-top: 1px solid $clr-light;
-        
-        &.label{
-            background-color: $clr-light;
-        }
-        &>.right{
-            text-align: right;
-        }
-        & p{
-            padding: .25em;
-            border-left: 1px solid $clr-light;
-        }
-    }
-}
-
 section{
     position: relative;
     padding: 8em 0 5em;
@@ -182,11 +158,11 @@ footer{
     padding: 3em 0 2em;
 
     .footer-body{
-        margin-bottom: .5em;
+        margin-bottom: 1.5em;
 
         .footer-links{
             display: flex;
-            gap: .5em;
+            gap: .75em;
         }
     }
 }
@@ -231,7 +207,7 @@ footer{
         .container{
             .section-body{
                 flex-direction: column;
-                gap: 3em;
+                gap: 1.5em;
     
                 &.row{
                     width: 100%;

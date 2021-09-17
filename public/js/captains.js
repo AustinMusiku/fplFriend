@@ -115,6 +115,8 @@ let cards = document.querySelector('.cards');
                                             <p>${player.total_points}</p>
                                             <p>${player.goals_scored}</p>
                                             <p>${player.assists}</p>
+                                            <p>${player.bps}</p>
+                                            <p>${player.fdr}</p>
                                             <p>${player.now_cost/10} m</p>
                                             <p>${player.selected_by_percent}%</p>
                                             `

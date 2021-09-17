@@ -138,12 +138,12 @@ const getPlayersByTeam = async (teamId) => {
     }
 }
 
-const whatGameweek = async () => {
+const gameWeeks = async () => {
     try{
         let general = myCache.get('general')
         if(general){
-            let gw = general.events.filter(gw => gw.is_current == true)
-            return gw
+            let gws = general.events;
+            return gws
         }else{
             console.log('miss');
         }
@@ -153,9 +153,8 @@ const whatGameweek = async () => {
 }
 
 fetchGeneral();
-setTimeout(whatGameweek, 1000);
 
 // automatically fetch new data every two days
 // setInterval(fetchGeneral, 172800);
 
-module.exports = { getFixtures,getPlayerEventsById,getPlayerDataById,getAllPlayers,getAllTeams,getPlayersByTeam, whatGameweek };
+module.exports = { getFixtures,getPlayerEventsById,getPlayerDataById,getAllPlayers,getAllTeams,getPlayersByTeam, gameWeeks };
