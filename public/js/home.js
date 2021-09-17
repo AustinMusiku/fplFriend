@@ -27,8 +27,10 @@ let cards = document.querySelector('.cards');
             gameweekContainer.innerHTML = nextGw.id;
             
             const date = new Date(nextGw.deadline_time);
-            const [hours, minutes] = [date.getHours(), date.getMinutes(), date.getDay(),date.getMonth()]
+            let [hours, minutes] = [date.getHours(), date.getMinutes()];
+            minutes = minutes == '0' ? '00' : minutes;
             const day = date.toString().substring(0,10)
+            console.log(`${minutes}`);
             deadline.innerHTML = `${day}, ${hours}:${minutes}hrs`;
 
 
