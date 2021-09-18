@@ -126,9 +126,8 @@ let cards = document.querySelector('.cards');
 
             let sorted = players.sort((a,b) => (b.form) - (a.form)).slice(0, 6);
 
-            sorted.forEach( async (player) => {
-                    let playerEvents = await getPlayerEventsById(player.id);
-                    let prevVal = playerEvents.history[playerEvents.history.length-1].value/10;
+            sorted.forEach(player => {
+                    let priceChange = player.cost_change_event;
                     // let photo = await fetch(`${imagesUrl}${player.code}.png`);
                     // let photoBlob = await photo.blob();
                     // let imageObjectUrl = URL.createObjectURL(photoBlob);
@@ -147,7 +146,7 @@ let cards = document.querySelector('.cards');
                                                         ${player.now_cost/10}
                                                         <span class="mini-txt">m</span></p>
                                                     </p>
-                                                    <div class="price-indicator ${evalutePriceChange(prevVal, (player.now_cost/10))}"></div>
+                                                    <div class="price-indicator ${evalutePriceChange(priceChange)}"></div>
                                                 </div>
                                             </div>
                                             <div class="card-body-bottom">

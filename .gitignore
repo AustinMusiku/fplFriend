@@ -26,3 +26,5 @@ node_modules/
 
 # Serverless directories
 .serverless/
+
+player.json

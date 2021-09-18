@@ -87,8 +87,8 @@ const evaluateTeam = (teamId) => {
     }
 }
 
-const evalutePriceChange = (prev, pres) => {
-    if(prev < pres){ return 'rise' } 
-    if(prev == pres){ return 'equal' } 
-    if(prev > pres){ return 'fall' } 
+const evalutePriceChange = (priceChange) => {
+    if(priceChange == 1){ return 'rise' } 
+    if(priceChange == 0){ return 'equal' } 
+    if(priceChange == -1){ return 'fall' } 
 }

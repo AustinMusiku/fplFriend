@@ -51,7 +51,7 @@ let cards = document.querySelector('.cards');
             // compute differentials
             let differentials = players
                 .sort((a,b) => b.now_cost - a.now_cost)
-                .filter(differential => differential.now_cost > 60 && differential.selected_by_percent < 12 && differential.minutes > currentGw.id*30 && differential.chance_of_playing_next_round != 0);
+                .filter(differential => differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.minutes > currentGw.id*30 && differential.chance_of_playing_next_round != 0);
             
             
 
