@@ -68,7 +68,7 @@ const getAllPlayers = async () => {
             let json = await response.json();
             general = json;
             myCache.set('general', general, 172800)
-            return players;
+            return general.elements;
         }
     } catch (err) {
         throw err;

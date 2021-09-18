@@ -1,8 +1,6 @@
-// const fetch = require('node-fetch');
-// let baseUrl = 'https://fantasy.premierleague.com/api/'
 let imagesUrl = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p'
-// let baseUrl = 'http://192.168.8.139:3000'
-let baseUrl = 'https://fplfriend.herokuapp.com'
+let baseUrl = 'http://192.168.137.51:3000'
+// let baseUrl = 'https://fplfriend.herokuapp.com'
 
 const getFixtures = async () => {
     try{
@@ -75,7 +73,7 @@ const getTeamById = async(teamId) => {
 }
 
 const getGws = async () => {
-    let url = `${baseUrl}/gameweeks`
+    let url = `${baseUrl}/gameweeks/`
     let response = await fetch(url);
     let gws = response.json();
     return gws;
