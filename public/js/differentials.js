@@ -3,18 +3,15 @@ let cards = document.querySelector('.cards');
     let initHomepage = async () => {
         try{
             let container = document.querySelector('.container');
+            let nextGameweekContainer = document.querySelector('.next-gameweek-container')
 
             const players = await getAllPlayers();
             const gw = await getGw()
             const currentGw = gw[0];
-            let user = {
-                name : 'Austin',
-                age : 45
-            }
-            sessionStorage.setItem('AustinObject', JSON.stringify(user) );
-            let object = sessionStorage.getItem('AustinObject');
+
+            // set value of next gameweek text container
+            nextGameweekContainer.innerHTML = currentGw.id+1;
             
-            console.log(JSON.parse(object));
             //
             //
             // DIFFERENTIALS SCATTER PLOT
