@@ -28,9 +28,63 @@ let cards = document.querySelector('.cards');
             const date = new Date(nextGw.deadline_time);
             let [hours, minutes] = [date.getHours(), date.getMinutes()];
             minutes = minutes == '0' ? '00' : minutes;
-            const day = date.toString().substring(0,10)
-            console.log(`${minutes}`);
+            const day = date.toString().substring(0,10);
             deadline.innerHTML = `${day}, ${hours}:${minutes}hrs`;
+
+            //
+            //ON FIRE PLAYERS
+            //
+
+            let sorted = players.sort((a,b) => (b.form) - (a.form)).slice(0, 6);
+
+            sorted.forEach(player => {
+                    let priceChange = player.cost_change_event;
+                    // let photo = await fetch(`${imagesUrl}${player.code}.png`);
+                    // let photoBlob = await photo.blob();
+                    // let imageObjectUrl = URL.createObjectURL(photoBlob);
+                    // console.log(imageObjectUrl);
+                    let playerCard = `  <div class="card-heading">
+                                            <p class="caption">${evaluateTeam(player.team)}</p>
+                                            <div class="card-stat1"> 
+                                                <p class="mini-txt accent-font">${evaluatePosition(player.element_type)}</p>
+                                            </div>
+                                            <p class="mini-heading ">${player.web_name}</p>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="card-body-top">
+                                                <div class="card-stat2"> 
+                                                    <p>
+                                                        ${player.now_cost/10}
+                                                        <span class="mini-txt">m</span></p>
+                                                    </p>
+                                                    <div class="price-indicator ${evalutePriceChange(priceChange)}"></div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body-bottom">
+                                                <div class="card-stat stat1">
+                                                    <p class="">${player.total_points}<p class="mini-txt">Pts</p></p>
+                                                </div>
+                                                <div class="card-stat stat2">
+                                                    <p class="mini-txt">Form</p>
+                                                    <p class="caption">${player.form}</p>
+                                                </div>
+                                                <div class="card-stat stat3">
+                                                    <p class="mini-txt">Ict</p>
+                                                    <p class="caption">${player.ict_index}</p>
+                                                </div>
+                                                <div class="card-stat stat4">
+                                                    <p class="mini-txt">Sb</p>
+                                                    <p class="caption">${player.selected_by_percent}%</p>
+                                                </div>
+                                                
+                                            </div>
+                                        </div> `;
+
+                    let card = document.createElement('div');
+                    card.innerHTML = playerCard;
+                    card.classList.add('card');
+                    cards.appendChild(card);
+            });
 
 
             //
@@ -119,61 +173,6 @@ let cards = document.querySelector('.cards');
             let observer = new IntersectionObserver(barAnimation)
             let target = document.querySelector('.chips-bar')
             observer.observe(target);
-
-            //
-            //ON FIRE PLAYERS
-            //
-
-            let sorted = players.sort((a,b) => (b.form) - (a.form)).slice(0, 6);
-
-            sorted.forEach(player => {
-                    let priceChange = player.cost_change_event;
-                    // let photo = await fetch(`${imagesUrl}${player.code}.png`);
-                    // let photoBlob = await photo.blob();
-                    // let imageObjectUrl = URL.createObjectURL(photoBlob);
-                    // console.log(imageObjectUrl);
-                    let playerCard = `  <div class="card-heading">
-                                            <p class="caption">${evaluateTeam(player.team)}</p>
-                                            <div class="card-stat1"> 
-                                                <p class="mini-txt accent-font">${evaluatePosition(player.element_type)}</p>
-                                            </div>
-                                            <p class="mini-heading ">${player.web_name}</p>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="card-body-top">
-                                                <div class="card-stat2"> 
-                                                    <p>
-                                                        ${player.now_cost/10}
-                                                        <span class="mini-txt">m</span></p>
-                                                    </p>
-                                                    <div class="price-indicator ${evalutePriceChange(priceChange)}"></div>
-                                                </div>
-                                            </div>
-                                            <div class="card-body-bottom">
-                                                <div class="card-stat stat1">
-                                                    <p class="">${player.total_points}<p class="mini-txt">Pts</p></p>
-                                                </div>
-                                                <div class="card-stat stat2">
-                                                    <p class="mini-txt">Form</p>
-                                                    <p class="caption">${player.form}</p>
-                                                </div>
-                                                <div class="card-stat stat3">
-                                                    <p class="mini-txt">Ict</p>
-                                                    <p class="caption">${player.ict_index}</p>
-                                                </div>
-                                                <div class="card-stat stat4">
-                                                    <p class="mini-txt">Sb</p>
-                                                    <p class="caption">${player.selected_by_percent}%</p>
-                                                </div>
-                                                
-                                            </div>
-                                        </div> `;
-
-                    let card = document.createElement('div');
-                    card.innerHTML = playerCard;
-                    card.classList.add('card');
-                    cards.appendChild(card);
-            });
             
         }catch(err){
             console.error(err);

@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const ejs = require('ejs');
 const path = require('path');
+const { graphqlHTTP } = require('express-graphql')
+const { Schema } = require('./schema/schema');
 
 // config file
 dotenv.config();
@@ -14,6 +16,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname + '/public')))
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname + '/views'))
+
+// graphql endpoint
+app.use('/graphql', graphqlHTTP({
+    schema: Schema,
+    graphiql: true
+}))
 
 // routes
 const router = require('./routes/routes');
