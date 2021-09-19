@@ -129,7 +129,6 @@ const PlayerType = new GraphQLObjectType({
             },
             resolve: async (args) => {
                 let playerUpcomingFixtures = await fetchMethods.getPlayerEventsById(args.id);
-                console.log(playerUpcomingFixtures.fixtures.length)
                 return playerUpcomingFixtures.fixtures
             }
         },

@@ -20,7 +20,7 @@ app.set('views', path.join(__dirname + '/views'))
 // graphql endpoint
 app.use('/graphql', graphqlHTTP({
     schema: Schema,
-    graphiql: true
+    graphiql: process.env.NODE_ENV == 'production'? false : true
 }))
 
 // routes
