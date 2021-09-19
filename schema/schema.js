@@ -83,7 +83,7 @@ const RootQuery = new GraphQLObjectType({
             },
             resolve: async(parent, args) => {
                 let player = await fetchMethods.getPlayerDataById(args.id);
-                return player;
+                return player[0];
             }
         }
     })
