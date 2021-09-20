@@ -374,7 +374,8 @@ const RootQuery = new GraphQLObjectType({
             resolve: async (parent, args) => {
                 let gws = await fetchMethods.gameWeeks()
                 let gw = gws.filter(gw => gw.id == args.id);
-                return gw;
+                console.log(gw)
+                return gw[0];
             }
         }
     })
