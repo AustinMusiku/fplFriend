@@ -366,16 +366,29 @@ const RootQuery = new GraphQLObjectType({
         gameweek: {
             type: GameWeekType,
             description: 'One Gameweek gameweeks',
-            args:{
-                id:{
+            args: {
+                id: {
                     type: GraphQLInt
-                }
+                },
+                is_current: {
+                    type: GraphQLBoolean
+                },
+                is_next: {
+                    type: GraphQLBoolean
+                },
             },
             resolve: async (parent, args) => {
                 let gws = await fetchMethods.gameWeeks()
-                let gw = gws.filter(gw => gw.id == args.id);
-                console.log(gw)
-                return gw[0];
+                if(args.id){
+                    let gw = gws.filter(gw => gw.id == args.id);
+                    return gw[0];
+                }else if(args.is_current){
+                    let gw = gws.filter(gw => gw.is_current == args.is_current);
+                    return gw[0];
+                }else if(args.is_next){
+                    let gw = gws.filter(gw => gw.is_next == args.is_next);
+                    return gw[0];
+                }
             }
         }
     })

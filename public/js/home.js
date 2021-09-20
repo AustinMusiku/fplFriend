@@ -17,16 +17,28 @@ let cards = document.querySelector('.cards');
                   ict_index
                   selected_by_percent
                 }
-            }`
+                nextGameWeek: gameweek(is_next: true) {
+                    ...GameWeekFields
+                    deadline_time
+                }
+                currentGameWeek: gameweek(is_current: true) {
+                    ...GameWeekFields
+                    chip_plays {
+                        chip_name
+                        num_played
+                    }
+                }
+              }
+              
+              fragment GameWeekFields on Gameweek {
+                id
+              }`
             let response = await graphQlQueryFetch(query);
             let players = response.data.players;
-            console.log(players);
 
-
-            const gws = await getGws()
-            const gw = gws.filter(gw => gw.is_current == true);
-            const currentGw = gw[0];
-            const nextGw = gws.filter(gw => gw.id == currentGw.id+1)[0];
+            
+            const currentGw = response.data.currentGameWeek;
+            const nextGw = response.data.nextGameWeek;
 
             //
             // DEADLINE BANNER
@@ -103,7 +115,7 @@ let cards = document.querySelector('.cards');
             const pastGameweekContainer = document.querySelector('.past-gameweek-number');
             pastGameweekContainer.innerHTML = currentGw.id;
 
-            let chips = gw[0].chip_plays.map(chip => { 
+            let chips = currentGw.chip_plays.map(chip => { 
                 return{
                     chip_name: chip.chip_name,
                     num_played: chip.num_played/1000000

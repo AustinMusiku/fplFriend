@@ -7,7 +7,6 @@ let cards = document.querySelector('.cards');
 
             const gw = await getGw();
             const gwId = gw.id;
-            console.log(gwId)
 
             // graphql
             let graphqlQuery = `{ players { web_name selected_by_percent form bps now_cost total_points chance_of_playing_next_round minutes} }`
