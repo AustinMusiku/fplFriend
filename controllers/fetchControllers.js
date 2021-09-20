@@ -14,8 +14,8 @@ const fetchGeneral = async () => {
         });
         general = await response.json();
         myCache.set('general', general, 172800);
+        console.log('done general')
         
-
         // fetch fixtures
         let response2 = await fetch(urls.fixtures, {
             headers: {
@@ -24,9 +24,10 @@ const fetchGeneral = async () => {
         });
         fixtures = await response2.json();
         myCache.set('fixtures', fixtures, 172800);
+        console.log('done fixtures')
         
     }catch(err){
-        console.log(err);
+        throw err;
     }
 }
 
@@ -103,7 +104,7 @@ const getPlayerEventsById = async (playerId) => {
         if(player){
             return player;
         }else{
-            let url = `${urls.playerById}/${playerId}/`;
+            let url = `${urls.playerById}${playerId}/`;
             let response = await fetch(url, {
                 headers: {
                     'User-Agent': 'XXXXXX'
@@ -152,7 +153,7 @@ const gameWeeks = async () => {
     }
 }
 
-fetchGeneral();
+// fetchGeneral();
 
 // automatically fetch new data every two days
 // setInterval(fetchGeneral, 172800);

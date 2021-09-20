@@ -2,17 +2,27 @@ let cards = document.querySelector('.cards');
     
     let initHomepage = async () => {
         try{
-            let container = document.querySelector('.container');
             let sectionBody = document.querySelector('.section-body');
 
-            const offset = el => {
-                let rect = el.getBoundingClientRect(),
-                scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
-                scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
-            }
+            // graphql query
+            let query = `{
+                players {
+                  web_name
+                  now_cost
+                  team
+                  element_type
+                  cost_change_event
+                  total_points
+                  form
+                  ict_index
+                  selected_by_percent
+                }
+            }`
+            let response = await graphQlQueryFetch(query);
+            let players = response.data.players;
+            console.log(players);
 
-            const players = await getAllPlayers();
+
             const gws = await getGws()
             const gw = gws.filter(gw => gw.is_current == true);
             const currentGw = gw[0];
@@ -157,7 +167,6 @@ let cards = document.querySelector('.cards');
                 .attr("fill", "#3a4257")
                 
             let barAnimation = (entries) => {
-
                 if(entries[0].intersectionRatio > 0){
                     // animate bars
                     svg.selectAll("rect")

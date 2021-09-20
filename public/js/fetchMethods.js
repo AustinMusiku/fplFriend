@@ -1,6 +1,8 @@
 let imagesUrl = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p'
-// let baseUrl = 'http://192.168.137.51:3000'
+// let baseUrl = 'http://192.168.43.43:3000'
 let baseUrl = 'https://fplfriend.herokuapp.com'
+
+const graphQlUrl = `${baseUrl}/graphql`
 
 const getFixtures = async () => {
     try{
@@ -75,12 +77,25 @@ const getTeamById = async(teamId) => {
 const getGws = async () => {
     let url = `${baseUrl}/gameweeks/`
     let response = await fetch(url);
-    let gws = response.json();
+    let gws = await response.json();
     return gws;
 }
 
 const getGw = async () => {
     let gws = await getGws();
     const gw = gws.filter(gw => gw.is_current == true)
-    return gw;
+    return gw[0];
+}
+
+
+// graphql fetch
+const graphQlQueryFetch = async (query) => {
+    let response =  await fetch( graphQlUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        mode: 'cors',
+        body: JSON.stringify({ query: query })
+    })
+    let data = response.json()
+    return data;
 }

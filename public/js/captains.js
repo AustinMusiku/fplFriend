@@ -25,9 +25,9 @@ let cards = document.querySelector('.cards');
 
             let computedCaptains = captains.map(async captain => {  
                 let captainEvents = await getPlayerEventsById(captain.id);
-                let history = parseInt(captain.form)*0.3 + parseInt(captain.points_per_game)*0.3 + parseInt(captain.ict_index)*0.4;
+                let history = parseFloat(captain.form)*0.3 + parseFloat(captain.points_per_game)*0.3 + (parseFloat(captain.bps)/currentGw)*0.4;
                 let fdr = captainEvents.fixtures[0].difficulty;
-                let index = (history*0.3 + (5 - parseInt(fdr)*0.7)).toFixed(2);
+                let index = (history*0.3 + (5 - parseFloat(fdr)*0.7)).toFixed(2);
 
                 return {
                     ...captain,

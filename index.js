@@ -2,8 +2,9 @@ const express = require('express');
 const dotenv = require('dotenv');
 const ejs = require('ejs');
 const path = require('path');
-const { graphqlHTTP } = require('express-graphql')
+const { graphqlHTTP } = require('express-graphql');
 const { Schema } = require('./schema/schema');
+const cors = require('cors');
 
 // config file
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/public', express.static(path.join(__dirname + '/public')))
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname + '/views'))
+app.use(cors());
 
 // graphql endpoint
 app.use('/graphql', graphqlHTTP({

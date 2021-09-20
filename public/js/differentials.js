@@ -5,14 +5,16 @@ let cards = document.querySelector('.cards');
             let container = document.querySelector('.container');
             let nextGameweekContainer = document.querySelector('.next-gameweek-container')
 
-            const players = await getAllPlayers();
-            const gw = await getGw()
-            const currentGw = gw[0];
+            const gw = await getGw();
+            const gwId = gw.id;
+            console.log(gwId)
 
-            // set value of next gameweek text container
-            nextGameweekContainer.innerHTML = currentGw.id+1;
-            
-            //
+            // graphql
+            let graphqlQuery = `{ players { web_name selected_by_percent form bps now_cost total_points chance_of_playing_next_round minutes} }`
+            let graphqlResponse = await graphQlQueryFetch(graphqlQuery)
+            let players = graphqlResponse.data.players;
+
+
             //
             // DIFFERENTIALS SCATTER PLOT
             // 
@@ -51,15 +53,13 @@ let cards = document.querySelector('.cards');
             // compute differentials
             let differentials = players
                 .sort((a,b) => b.now_cost - a.now_cost)
-                .filter(differential => differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.minutes > currentGw.id*30 && differential.chance_of_playing_next_round != 0);
-            
-            
+                .filter(differential => differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.chance_of_playing_next_round != 0 && differential.minutes > gwId*45);
 
             let computedDifferentials =  differentials.map(differential => {
                 return {
                     name: differential.web_name,
                     ownership: differential.selected_by_percent,
-                    momentum: (parseInt(differential.form)*0.5 + parseInt(differential.bps)*0.5)
+                    momentum: differential.form*0.5 + differential.bps*0.5
                 }
             })
 
@@ -69,7 +69,7 @@ let cards = document.querySelector('.cards');
             
             // Add X axis
             let x = d3.scaleLinear()
-                .domain([0, maxmomentum+10])
+                .domain([0, maxmomentum+5])
                 .range([ 0, width ]);
                 svg.append("g")
                     .attr("transform", "translate(0," + height + ")")
@@ -105,8 +105,8 @@ let cards = document.querySelector('.cards');
                     .attr("font-size", 10)
                     .style('fill', '#000')
                     .attr("dy", "0.35em")
-                    .attr("x", d => x(d.momentum)+3)
-                    .attr("y", d => y(d.ownership)-4)
+                    .attr("x", d => x(d.momentum)+4)
+                    .attr("y", d => y(d.ownership))
                     .attr('display', 'none')
                     .text(d => d.name);
 
@@ -119,6 +119,7 @@ let cards = document.querySelector('.cards');
                         .attr("cx", d => x(d.momentum) )
                         .attr("cy", d => y(d.ownership) )
                     .delay((d,i) => i*70)
+                    
                     svg.selectAll('.scatter-plot-labels')
                         .transition()
                         .duration(400)

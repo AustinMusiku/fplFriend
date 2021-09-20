@@ -54,7 +54,7 @@ const PlayerType = new GraphQLObjectType({
         },
         now_cost: {
             type: GraphQLFloat,
-            resolve: player => player.now_cost/10
+            resolve: player => player.now_cost
         },
         points_per_game: {
             type: GraphQLFloat,
@@ -66,43 +66,43 @@ const PlayerType = new GraphQLObjectType({
         },
         team: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.team)
+            resolve: player => player.team
         },
         total_points: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.total_points)
+            resolve: player => player.total_points
         },
         transfers_in_event: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.transfers_in_event)
+            resolve: player => player.transfers_in_event
         },
         transfers_out_event: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.transfers_out_event)
+            resolve: player => player.transfers_out_event
         },
         minutes: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.minutes)
+            resolve: player => player.minutes
         },
         goals_scored: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.goals_scored)
+            resolve: player => player.goals_scored
         },
         assists: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.assists)
+            resolve: player => player.assists
         },
         saves: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.saves)
+            resolve: player => player.saves
         },
         bonus: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.bonus)
+            resolve: player => player.bonus
         },
         bps: {
             type: GraphQLInt,
-            resolve: player => parseInt(player.bps)
+            resolve: player => player.bps
         },
         influence: {
             type: GraphQLFloat,
