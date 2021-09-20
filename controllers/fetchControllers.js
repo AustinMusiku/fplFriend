@@ -147,6 +147,15 @@ const gameWeeks = async () => {
             return gws
         }else{
             console.log('miss');
+            let url = urls.general;
+            let response = await fetch(url, {
+                headers: {
+                    'User-Agent': 'XXXXXX'
+                }
+            })
+            let general = await response.json();
+            myCache.set('general', general, 172800)
+            return general.events;
         }
     }catch(err){
         console.log(err);
