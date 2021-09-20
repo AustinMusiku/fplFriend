@@ -120,7 +120,7 @@ const PlayerType = new GraphQLObjectType({
             type: GraphQLFloat,
             resolve: player => parseFloat(player.ict_index)
         },
-        upcomingFixtures: {
+        UpcomingFixtures: {
             type: GraphQLList(UpcomingFixtureType),
             args: {
                 id: {
@@ -148,41 +148,41 @@ const PlayerType = new GraphQLObjectType({
 })
 
 const UpcomingFixtureType = new GraphQLObjectType({
-    name: 'upcomingFixture',
+    name: 'UpcomingFixture',
     description: 'upcoming fixture',
 
     fields: () => ({
         id: {
             type: GraphQLInt,
-            resolve: upcomingFixture => upcomingFixture.id
+            resolve: UpcomingFixture => UpcomingFixture.id
         },
         event: {
             type: GraphQLInt,
-            resolve: upcomingFixture => upcomingFixture.event
+            resolve: UpcomingFixture => UpcomingFixture.event
         },
         minutes: {
             type: GraphQLInt,
-            resolve: upcomingFixture => upcomingFixture.minutes
+            resolve: UpcomingFixture => UpcomingFixture.minutes
         },
         difficulty: {
             type: GraphQLInt,
-            resolve: upcomingFixture => upcomingFixture.difficulty
+            resolve: UpcomingFixture => UpcomingFixture.difficulty
         },
         team_h: {
             type: GraphQLInt,
-            resolve: upcomingFixture => upcomingFixture.team_h
+            resolve: UpcomingFixture => UpcomingFixture.team_h
         },
         team_a: {
             type: GraphQLInt,
-            resolve: upcomingFixture => upcomingFixture.team_a
+            resolve: UpcomingFixture => UpcomingFixture.team_a
         },
         finished: {
             type: GraphQLBoolean,
-            resolve: upcomingFixture => upcomingFixture.finished
+            resolve: UpcomingFixture => UpcomingFixture.finished
         },
         is_home: {
             type: GraphQLBoolean,
-            resolve: upcomingFixture => upcomingFixture.is_home
+            resolve: UpcomingFixture => UpcomingFixture.is_home
         }
     })
 })
@@ -275,6 +275,60 @@ const PastFixtureType = new GraphQLObjectType({
     })
 })
 
+const ChipType = new GraphQLObjectType({
+    name: 'Chip',
+    description: 'Chip details',
+
+    fields: () => ({
+        chip_name: {
+            type: GraphQLString,
+            resolve: async Chip => Chip.chip_name
+        },
+        num_played : {
+            type: GraphQLInt,
+            resolve: async Chip => Chip.num_played
+        }
+    })
+})
+
+const GameWeekType = new GraphQLObjectType({
+    name: 'Gameweek',
+    description: 'Gameweek data',
+
+    fields: () => ({
+        id: {
+            type: GraphQLInt,
+            resolve: async Gameweek => Gameweek.id
+        },
+        deadline_time: {
+            type: GraphQLString,
+            resolve: async Gameweek => Gameweek.deadline_time
+        },
+        finished: {
+            type: GraphQLBoolean,
+            resolve: async Gameweek => Gameweek.finished
+        },
+        is_previous: {
+            type: GraphQLBoolean,
+            resolve: async Gameweek => Gameweek.is_previous
+        },
+        is_current: {
+            type: GraphQLBoolean,
+            resolve: async Gameweek => Gameweek.is_current
+        },
+        is_next: {
+            type: GraphQLBoolean,
+            resolve: async Gameweek => Gameweek.is_next
+        },
+        chip_plays: {
+            type: GraphQLList(ChipType),
+            resolve: async parent => {
+                return parent.chip_plays
+            }
+        }
+    })
+})
+
 const RootQuery = new GraphQLObjectType({
     name: 'RootQuery',
     description: 'Root Query',
@@ -299,6 +353,28 @@ const RootQuery = new GraphQLObjectType({
             resolve: async(parent, args) => {
                 let player = await fetchMethods.getPlayerDataById(args.id);
                 return player[0];
+            }
+        },
+        gameweeks: {
+            type: GraphQLList(GameWeekType),
+            description: 'All gameweeks',
+            resolve: async () => {
+                let gws = await fetchMethods.gameWeeks()
+                return gws;
+            } 
+        },
+        gameweek: {
+            type: GameWeekType,
+            description: 'One Gameweek gameweeks',
+            args:{
+                id:{
+                    type: GraphQLInt
+                }
+            },
+            resolve: async (parent, args) => {
+                let gws = await fetchMethods.gameWeeks()
+                let gw = gws.filter(gw => gw.id == args.id);
+                return gw;
             }
         }
     })
