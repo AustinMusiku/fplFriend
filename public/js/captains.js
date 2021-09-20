@@ -11,7 +11,7 @@ let cards = document.querySelector('.cards');
 
             const players = await getAllPlayers();
             const gw = await getGw()
-            const currentGw = parseInt(gw[0].id);
+            const currentGw = gw.id;
 
             //
             //ON FIRE PLAYERS
