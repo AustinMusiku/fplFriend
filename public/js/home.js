@@ -31,9 +31,9 @@ let cards = document.querySelector('.cards');
             //
             // DEADLINE BANNER
             //
-            const gameweekContainer = document.querySelector('.gameweek-number');
+            const nextGameweekContainer = document.querySelector('.next-gameweek-number');
             const deadline = document.querySelector('.deadline');
-            gameweekContainer.innerHTML = nextGw.id;
+            nextGameweekContainer.innerHTML = nextGw.id;
             
             const date = new Date(nextGw.deadline_time);
             let [hours, minutes] = [date.getHours(), date.getMinutes()];
