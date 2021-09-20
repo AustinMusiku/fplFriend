@@ -5,14 +5,30 @@ let cards = document.querySelector('.cards');
             let container = document.querySelector('.container');
             let nextGameweekContainer = document.querySelector('.next-gameweek-container')
 
-            const gw = await getGw();
-            const gwId = gw.id;
-
             // graphql
-            let graphqlQuery = `{ players { web_name selected_by_percent form bps now_cost total_points chance_of_playing_next_round minutes} }`
+            let graphqlQuery = `{ 
+                players { 
+                    web_name 
+                    selected_by_percent 
+                    form 
+                    bps 
+                    now_cost 
+                    total_points 
+                    chance_of_playing_next_round 
+                    minutes
+                } 
+                currentGameWeek: gameweek(is_current: true){
+                    id
+                }
+            }`
             let graphqlResponse = await graphQlQueryFetch(graphqlQuery)
             let players = graphqlResponse.data.players;
 
+            const gw = graphqlResponse.data.currentGameWeek;
+            const gwId = gw.id;
+
+            // update next gameweek container
+            nextGameweekContainer.innerHTML = gwId+1
 
             //
             // DIFFERENTIALS SCATTER PLOT
