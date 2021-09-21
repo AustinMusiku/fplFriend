@@ -7,7 +7,7 @@ let cards = document.querySelector('.cards');
 
             // graphql
             let graphqlQuery = `{ 
-                players { 
+                players(trim_extras: true, differentials: true) { 
                     web_name 
                     selected_by_percent 
                     form 
@@ -23,6 +23,7 @@ let cards = document.querySelector('.cards');
             }`
             let graphqlResponse = await graphQlQueryFetch(graphqlQuery)
             let players = graphqlResponse.data.players;
+            console.log(players)
 
             const gw = graphqlResponse.data.currentGameWeek;
             const gwId = gw.id;

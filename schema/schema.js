@@ -221,6 +221,12 @@ const RootQuery = new GraphQLObjectType({
                 },
                 by_form: {
                     type: GraphQLBoolean
+                },
+                trim_extras: {
+                    type: GraphQLBoolean
+                },
+                differentials: {
+                    type: GraphQLBoolean
                 }
             },
             resolve: async(parent, args) => {
@@ -230,6 +236,12 @@ const RootQuery = new GraphQLObjectType({
                 }
                 if(args.first){
                     players = players.slice(0, args.first)
+                }
+                if(args.trim_extras){
+                    players = players.filter(p => p.form != 0 && p.minutes > 45)
+                }
+                if(args.differentials){
+                    players = players.filter( p => p.selected_by_percent < 15)
                 }
                 return players;
             }
