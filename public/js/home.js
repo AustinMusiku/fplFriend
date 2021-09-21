@@ -6,16 +6,7 @@ let cards = document.querySelector('.cards');
 
             // graphql query
             let query = `{
-                players {
-                  web_name
-                  now_cost
-                  team
-                  element_type
-                  cost_change_event
-                  total_points
-                  form
-                  ict_index
-                  selected_by_percent
+                players { web_name now_cost team element_type cost_change_event total_points form ict_index selected_by_percent
                 }
                 nextGameWeek: gameweek(is_next: true) {
                     ...GameWeekFields

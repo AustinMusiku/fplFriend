@@ -1,19 +1,7 @@
 let imagesUrl = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p'
-// let baseUrl = 'http://192.168.43.43:3000'
+// let baseUrl = 'http://192.168.137.51:3000'
 let baseUrl = 'https://fplfriend.herokuapp.com'
-
 const graphQlUrl = `${baseUrl}/graphql`
-
-const getFixtures = async () => {
-    try{
-        let url = `${baseUrl}/fixtures`;
-        let response = await fetch(url);
-        let fixtures = await response.json();
-        return fixtures;
-    }catch(err){
-        throw err;
-    }
-}
 
 const getAllPlayers = async () => {
     try {
@@ -55,23 +43,6 @@ const getPlayerEventsById = async (playerId) => {
     }catch(err){
         throw err;
     }
-}
-
-const getPlayersByTeam = async (teamId) => {
-    try{
-        let url = `${baseUrl}/playersin/${teamId}`;
-        let response = await fetch(url);
-        let players = await response.json()
-        return players;
-    }catch(err){
-        throw err;
-    }
-}
-
-const getTeamById = async(teamId) => {
-    let teams = await getAllTeams();
-    let team = teams.filter(team => team.id == teamId);
-    return team[0];
 }
 
 const getGws = async () => {
