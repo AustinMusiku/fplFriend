@@ -5,6 +5,7 @@ const path = require('path');
 const { graphqlHTTP } = require('express-graphql');
 const { Schema } = require('./schema/schema');
 const cors = require('cors');
+const dataLoader = require('dataloader');
 
 // config file
 dotenv.config();

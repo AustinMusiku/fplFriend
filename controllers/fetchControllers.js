@@ -16,15 +16,15 @@ const fetchGeneral = async () => {
         myCache.set('general', general, 172800);
         console.log('done general')
         
-        // fetch fixtures
-        let response2 = await fetch(urls.fixtures, {
-            headers: {
-                'User-Agent': 'ANYTHING_WILL_WORK_HERE'
-            }
-        });
-        fixtures = await response2.json();
-        myCache.set('fixtures', fixtures, 172800);
-        console.log('done fixtures')
+        // // fetch fixtures
+        // let response2 = await fetch(urls.fixtures, {
+        //     headers: {
+        //         'User-Agent': 'ANYTHING_WILL_WORK_HERE'
+        //     }
+        // });
+        // fixtures = await response2.json();
+        // myCache.set('fixtures', fixtures, 172800);
+        // console.log('done fixtures')
         
     }catch(err){
         throw err;
@@ -162,7 +162,7 @@ const gameWeeks = async () => {
     }
 }
 
-// fetchGeneral();
+fetchGeneral();
 
 // automatically fetch new data every two days
 // setInterval(fetchGeneral, 172800);

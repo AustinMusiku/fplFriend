@@ -1,4 +1,3 @@
-const { graphqlHTTP } = require('express-graphql')
 const { GraphQLSchema, GraphQLObjectType, GraphQLList, GraphQLInt, GraphQLString, GraphQLFloat, GraphQLBoolean } = require('graphql')
 
 const fetchMethods = require('../controllers/fetchControllers');
@@ -8,53 +7,30 @@ const PlayerType = new GraphQLObjectType({
     description: 'a player type',
     
     fields: () => ({
-        id: {
-            type: GraphQLInt,
-            resolve: player => player.id
-        },
-        chance_of_playing_next_round: {
-            type: GraphQLInt,
-            resolve: player => player.chance_of_playing_next_round
-        },
-        cost_change_event: {
-            type: GraphQLInt,
-            resolve: player => player.cost_change_event
-        },
-        element_type: {
-            type: GraphQLInt,
-            resolve: player => player.element_type
-        },
-        event_points: {
-            type: GraphQLInt,
-            resolve: player => player.event_points
-        },
-        first_name: {
-            type: GraphQLString,
-            resolve: player => player.first_name
-        },
-        second_name: {
-            type: GraphQLString,
-            resolve: player => player.second_name
-        },
-        web_name: {
-            type: GraphQLString,
-            resolve: (player) => player.web_name
-        },
+        id: { type: GraphQLInt },
+        chance_of_playing_next_round: { type: GraphQLInt },
+        cost_change_event: { type: GraphQLInt },
+        element_type: { type: GraphQLInt },
+        event_points: { type: GraphQLInt },
+        first_name: { type: GraphQLString },
+        second_name: { type: GraphQLString },
+        web_name: { type: GraphQLString },
+        news: { type: GraphQLString },
+        news_added: { type: GraphQLString },
+        now_cost: { type: GraphQLFloat },
+        team: { type: GraphQLInt },
+        total_points: { type: GraphQLInt },
+        transfers_in_event: { type: GraphQLInt },
+        transfers_out_event: { type: GraphQLInt },
+        minutes: { type: GraphQLInt },
+        goals_scored: { type: GraphQLInt },
+        assists: { type: GraphQLInt },
+        saves: { type: GraphQLInt },
+        bonus: { type: GraphQLInt },
+        bps: { type: GraphQLInt },
         form: {
             type: GraphQLFloat,
             resolve: player => parseFloat(player.form) 
-        },
-        news: {
-            type: GraphQLString,
-            resolve: player => player.news
-        },
-        news_added: {
-            type: GraphQLString,
-            resolve: player => player.news_added
-        },
-        now_cost: {
-            type: GraphQLFloat,
-            resolve: player => player.now_cost
         },
         points_per_game: {
             type: GraphQLFloat,
@@ -63,46 +39,6 @@ const PlayerType = new GraphQLObjectType({
         selected_by_percent: {
             type: GraphQLFloat,
             resolve: player => parseFloat(player.selected_by_percent)
-        },
-        team: {
-            type: GraphQLInt,
-            resolve: player => player.team
-        },
-        total_points: {
-            type: GraphQLInt,
-            resolve: player => player.total_points
-        },
-        transfers_in_event: {
-            type: GraphQLInt,
-            resolve: player => player.transfers_in_event
-        },
-        transfers_out_event: {
-            type: GraphQLInt,
-            resolve: player => player.transfers_out_event
-        },
-        minutes: {
-            type: GraphQLInt,
-            resolve: player => player.minutes
-        },
-        goals_scored: {
-            type: GraphQLInt,
-            resolve: player => player.goals_scored
-        },
-        assists: {
-            type: GraphQLInt,
-            resolve: player => player.assists
-        },
-        saves: {
-            type: GraphQLInt,
-            resolve: player => player.saves
-        },
-        bonus: {
-            type: GraphQLInt,
-            resolve: player => player.bonus
-        },
-        bps: {
-            type: GraphQLInt,
-            resolve: player => player.bps
         },
         influence: {
             type: GraphQLFloat,
@@ -122,25 +58,15 @@ const PlayerType = new GraphQLObjectType({
         },
         UpcomingFixtures: {
             type: GraphQLList(UpcomingFixtureType),
-            args: {
-                id: {
-                    type: GraphQLInt
-                }
-            },
-            resolve: async (args) => {
-                let playerUpcomingFixtures = await fetchMethods.getPlayerEventsById(args.id);
+            resolve: async (parent) => {
+                let playerUpcomingFixtures = await fetchMethods.getPlayerEventsById(parent.id);
                 return playerUpcomingFixtures.fixtures
             }
         },
         pastFixtures: {
             type: GraphQLList(PastFixtureType),
-            args: {
-                id: {
-                    type: GraphQLInt
-                }
-            },
-            resolve: async (args) => {
-                let playerEvents = await fetchMethods.getPlayerEventsById(args.id)
+            resolve: async (parent) => {
+                let playerEvents = await fetchMethods.getPlayerEventsById(parent.id)
                 return playerEvents.history
             }
         }
@@ -152,38 +78,14 @@ const UpcomingFixtureType = new GraphQLObjectType({
     description: 'upcoming fixture',
 
     fields: () => ({
-        id: {
-            type: GraphQLInt,
-            resolve: UpcomingFixture => UpcomingFixture.id
-        },
-        event: {
-            type: GraphQLInt,
-            resolve: UpcomingFixture => UpcomingFixture.event
-        },
-        minutes: {
-            type: GraphQLInt,
-            resolve: UpcomingFixture => UpcomingFixture.minutes
-        },
-        difficulty: {
-            type: GraphQLInt,
-            resolve: UpcomingFixture => UpcomingFixture.difficulty
-        },
-        team_h: {
-            type: GraphQLInt,
-            resolve: UpcomingFixture => UpcomingFixture.team_h
-        },
-        team_a: {
-            type: GraphQLInt,
-            resolve: UpcomingFixture => UpcomingFixture.team_a
-        },
-        finished: {
-            type: GraphQLBoolean,
-            resolve: UpcomingFixture => UpcomingFixture.finished
-        },
-        is_home: {
-            type: GraphQLBoolean,
-            resolve: UpcomingFixture => UpcomingFixture.is_home
-        }
+        id: { type: GraphQLInt },
+        event: { type: GraphQLInt },
+        minutes: { type: GraphQLInt },
+        difficulty: { type: GraphQLInt },
+        team_h: { type: GraphQLInt },
+        team_a: { type: GraphQLInt },
+        finished: { type: GraphQLBoolean },
+        is_home: { type: GraphQLBoolean }
     })
 })
 
@@ -280,14 +182,8 @@ const ChipType = new GraphQLObjectType({
     description: 'Chip details',
 
     fields: () => ({
-        chip_name: {
-            type: GraphQLString,
-            resolve: async Chip => Chip.chip_name
-        },
-        num_played : {
-            type: GraphQLInt,
-            resolve: async Chip => Chip.num_played
-        }
+        chip_name: { type: GraphQLString },
+        num_played : { type: GraphQLInt }
     })
 })
 
@@ -296,30 +192,12 @@ const GameWeekType = new GraphQLObjectType({
     description: 'Gameweek data',
 
     fields: () => ({
-        id: {
-            type: GraphQLInt,
-            resolve: async Gameweek => Gameweek.id
-        },
-        deadline_time: {
-            type: GraphQLString,
-            resolve: async Gameweek => Gameweek.deadline_time
-        },
-        finished: {
-            type: GraphQLBoolean,
-            resolve: async Gameweek => Gameweek.finished
-        },
-        is_previous: {
-            type: GraphQLBoolean,
-            resolve: async Gameweek => Gameweek.is_previous
-        },
-        is_current: {
-            type: GraphQLBoolean,
-            resolve: async Gameweek => Gameweek.is_current
-        },
-        is_next: {
-            type: GraphQLBoolean,
-            resolve: async Gameweek => Gameweek.is_next
-        },
+        id: { type: GraphQLInt },
+        deadline_time: { type: GraphQLString },
+        finished: { type: GraphQLBoolean },
+        is_previous: { type: GraphQLBoolean },
+        is_current: { type: GraphQLBoolean },
+        is_next: { type: GraphQLBoolean },
         chip_plays: {
             type: GraphQLList(ChipType),
             resolve: async parent => {
@@ -337,8 +215,22 @@ const RootQuery = new GraphQLObjectType({
         players: {
             type: GraphQLList(PlayerType),
             description: 'All players',
-            resolve: async() => {
+            args: {
+                first: {
+                    type: GraphQLInt
+                },
+                by_form: {
+                    type: GraphQLBoolean
+                }
+            },
+            resolve: async(parent, args) => {
                 let players = await fetchMethods.getAllPlayers();
+                if(args.by_form){
+                    players = players.sort((a,b) => b.form - a.form)
+                }
+                if(args.first){
+                    players = players.slice(0, args.first)
+                }
                 return players;
             }
         },
@@ -365,16 +257,16 @@ const RootQuery = new GraphQLObjectType({
         },
         gameweek: {
             type: GameWeekType,
-            description: 'One Gameweek gameweeks',
+            description: 'One gameweek',
             args: {
-                id: {
-                    type: GraphQLInt
+                id: { 
+                    type: GraphQLInt 
                 },
-                is_current: {
-                    type: GraphQLBoolean
+                is_current: { 
+                    type: GraphQLBoolean 
                 },
-                is_next: {
-                    type: GraphQLBoolean
+                is_next: { 
+                    type: GraphQLBoolean 
                 },
             },
             resolve: async (parent, args) => {
