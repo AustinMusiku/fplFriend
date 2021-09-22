@@ -189,13 +189,13 @@ const RootQuery = new GraphQLObjectType({
                     players = players.slice(0, args.first)
                 }
                 if(args.trim_extras){
-                    players = players.filter(p => p.form != 0 && p.minutes > 45)
+                    players = players.filter(p => p.form != 0 && p.minutes > 45 && p.chance_of_playing_next_round != 0)
                 }
                 if(args.differentials){
-                    players = players.filter( p => p.selected_by_percent < 15)
+                    players = players.filter( p => p.selected_by_percent < 12)
                 }
                 if(args.captains){
-                    players = players.filter(p => p.now_cost > 70 && p.chance_of_playing_next_round != 75 && p.chance_of_playing_next_round != 50 && p.chance_of_playing_next_round != 25 && p.chance_of_playing_next_round != 0)
+                    players = players.filter(p => p.now_cost > 70 && p.chance_of_playing_next_round != 75 && p.chance_of_playing_next_round != 50 && p.chance_of_playing_next_round != 25)
                 }
                 return players;
             }
