@@ -252,7 +252,7 @@ const RootQuery = new GraphQLObjectType({
                     players = players.filter( p => p.selected_by_percent < 15)
                 }
                 if(args.captains){
-                    players = players.filter(p => p.now_cost > 70)
+                    players = players.filter(p => p.now_cost > 70 && p.chance_of_playing_next_round != 75 && p.chance_of_playing_next_round != 50 && p.chance_of_playing_next_round != 25 && p.chance_of_playing_next_round != 0)
                 }
                 return players;
             }
