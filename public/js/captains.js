@@ -16,6 +16,21 @@ let cards = document.querySelector('.cards');
                                 points_per_game
                                 bps
                                 chance_of_playing_next_round
+                                assists
+                                goals_scored
+                                total_points
+                                influence
+                                threat
+                                creativity
+                                selected_by_percent
+                                element_type
+
+                                UpcomingFixtures(first: 1){
+                                    difficulty
+                                    is_home
+                                    team_h
+                                    team_a
+                                }
                             }
                             gameweek(is_current: true){
                                 id
@@ -37,27 +52,17 @@ let cards = document.querySelector('.cards');
             let captains = players.filter(captain => captain.now_cost > 70);
 
             let computedCaptains = captains.map(async captain => {
-                let query = `{
-                    player(id: ${captain.id}){
-                      UpcomingFixtures(first: 1){
-                        difficulty
-                        is_home
-                        team_h
-                        team_a
-                      }
-                    }
-                  }`
-                let graphqlResponse = await graphQlQueryFetch(query);
-                let captainEvent = graphqlResponse.data.player.UpcomingFixtures[0];
-                console.log(captainEvent)
+                // let query = `{ player(id: ${captain.id}){ assists goals_scored total_points influence threat creativity selected_by_percent UpcomingFixtures(first: 1){ difficulty is_home team_h team_a } } }`
+                // let graphqlResponse = await graphQlQueryFetch(query);
+                // let captainEvent = graphqlResponse.data.player.UpcomingFixtures[0];
                 let history = parseFloat(captain.form)*0.3 + parseFloat(captain.points_per_game)*0.3 + (parseFloat(captain.bps)/gwId)*0.4;
-                let fdr = captainEvent.difficulty;
+                let fdr = captain.UpcomingFixtures[0].difficulty;
                 let index = (history*0.3 + (5 - parseFloat(fdr)*0.7)).toFixed(2);
 
                 return {
                     ...captain,
                     fdr: fdr,
-                    opponent: captainEvent.is_home? captainEvent.team_a: captainEvent.team_h,
+                    opponent: captain.UpcomingFixtures[0].is_home? captain.UpcomingFixtures[0].team_a: captain.UpcomingFixtures[0].team_h,
                     captaincy: index
                 }
             })
