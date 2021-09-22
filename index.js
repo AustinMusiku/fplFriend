@@ -8,6 +8,7 @@ const cors = require('cors');
 const dataLoader = require('dataloader');
 const morgan = require('morgan');
 const fs = require('fs');
+const fetchControllers = require('./controllers/fetchControllers'); 
 
 // config file
 dotenv.config();
@@ -30,14 +31,15 @@ app.use(morgan('tiny', { stream: logStream }));
 
 // graphql endpoint
 app.use('/graphql', graphqlHTTP(req => {
-    // const playerLoader = new dataLoader()
-    // const gameWeekLoader = new dataLoader()
+    const gameWeekLoader = new dataLoader(keys => {
+        Promise.all(keys.map(key => fetchControllers.getPlayerEventsById(key)))
+    })
 
-    // const loaders = {
-    //     player: playerLoader,
-    //     gameWeek: gameWeekLoader 
-    // }
+    const loaders = {
+        gameWeek: gameWeekLoader 
+    }
     return {
+        context: { loaders },
         schema: Schema,
         graphiql: process.env.NODE_ENV == 'production'? false : true
     }

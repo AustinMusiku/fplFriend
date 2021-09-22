@@ -63,9 +63,12 @@ const PlayerType = new GraphQLObjectType({
                     type: GraphQLInt
                 }
             },
-            resolve: async (parent, args) => {
+            resolve: async (parent, args, { loaders }) => {
                 let playerUpcomingFixtures = await fetchMethods.getPlayerEventsById(parent.id);
                 return playerUpcomingFixtures.fixtures.slice(0, args.first)
+                // let playerUpcomingFixtures = loaders.gameWeek.loadMany([parent.id]);
+                // console.log(playerUpcomingFixtures);
+                // return playerUpcomingFixtures;
             }
         },
         pastFixtures: {

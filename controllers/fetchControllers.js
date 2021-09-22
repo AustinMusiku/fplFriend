@@ -162,7 +162,7 @@ const gameWeeks = async () => {
     }
 }
 
-fetchGeneral();
+// fetchGeneral();
 
 // automatically fetch new data every two days
 // setInterval(fetchGeneral, 172800);
