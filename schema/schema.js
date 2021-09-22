@@ -66,7 +66,6 @@ const PlayerType = new GraphQLObjectType({
             resolve: async (parent, args, { loaders }) => {
                 let playerUpcomingFixtures = loaders.playerEvent.loadMany([parent.id]);
                 let fixs = await playerUpcomingFixtures;
-                console.log(fixs);
                 return fixs[0].fixtures.slice(0, args.first);
             }
         },
@@ -194,7 +193,7 @@ const RootQuery = new GraphQLObjectType({
                     players = players.filter( p => p.selected_by_percent < 12)
                 }
                 if(args.captains){
-                    players = players.filter(p => p.now_cost > 70 && p.chance_of_playing_next_round != 75 && p.chance_of_playing_next_round != 50 && p.chance_of_playing_next_round != 25)
+                    players = players.filter(p => p.now_cost > 75 && p.chance_of_playing_next_round != 75 && p.chance_of_playing_next_round != 50 && p.chance_of_playing_next_round != 25)
                 }
                 return players;
             }

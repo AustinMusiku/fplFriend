@@ -9,7 +9,6 @@ const animateHamMenu = () => {hamLayers.forEach(hamLayer => { hamLayer.classList
 // shift nav focus on scroll
 let lastScroll = 0;
 document.addEventListener('scroll', () => {
-// console.log(scrollY)
 let currentScroll = scrollY;
 if(currentScroll <= 0){ nav.classList.remove('scroll-up') }
 if(currentScroll > lastScroll && !nav.classList.contains('scroll-down')){ nav.classList.remove('scroll-up'); nav.classList.add('scroll-down')}
