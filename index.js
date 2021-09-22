@@ -6,7 +6,7 @@ const { graphqlHTTP } = require('express-graphql');
 const { Schema } = require('./schema/schema');
 const cors = require('cors');
 const dataLoader = require('dataloader');
-const morgan = require('morgan');
+// const morgan = require('morgan');
 const fs = require('fs');
 const fetchControllers = require('./controllers/fetchControllers'); 
 
