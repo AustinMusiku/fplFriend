@@ -21,9 +21,18 @@ app.set('views', path.join(__dirname + '/views'))
 app.use(cors());
 
 // graphql endpoint
-app.use('/graphql', graphqlHTTP({
-    schema: Schema,
-    graphiql: process.env.NODE_ENV == 'production'? false : true
+app.use('/graphql', graphqlHTTP(req => {
+    // const playerLoader = new dataLoader()
+    // const gameWeekLoader = new dataLoader()
+
+    // const loaders = {
+    //     player: playerLoader,
+    //     gameWeek: gameWeekLoader 
+    // }
+    return {
+        schema: Schema,
+        graphiql: process.env.NODE_ENV == 'production'? false : true
+    }
 }))
 
 // routes

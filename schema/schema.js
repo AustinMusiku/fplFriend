@@ -58,9 +58,14 @@ const PlayerType = new GraphQLObjectType({
         },
         UpcomingFixtures: {
             type: GraphQLList(UpcomingFixtureType),
-            resolve: async (parent) => {
+            args: {
+                first: {
+                    type: GraphQLInt
+                }
+            },
+            resolve: async (parent, args) => {
                 let playerUpcomingFixtures = await fetchMethods.getPlayerEventsById(parent.id);
-                return playerUpcomingFixtures.fixtures
+                return playerUpcomingFixtures.fixtures.slice(0, args.first)
             }
         },
         pastFixtures: {
@@ -227,6 +232,9 @@ const RootQuery = new GraphQLObjectType({
                 },
                 differentials: {
                     type: GraphQLBoolean
+                },
+                captains: {
+                    type: GraphQLBoolean
                 }
             },
             resolve: async(parent, args) => {
@@ -242,6 +250,9 @@ const RootQuery = new GraphQLObjectType({
                 }
                 if(args.differentials){
                     players = players.filter( p => p.selected_by_percent < 15)
+                }
+                if(args.captains){
+                    players = players.filter(p => p.now_cost > 70)
                 }
                 return players;
             }

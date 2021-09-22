@@ -23,7 +23,6 @@ let cards = document.querySelector('.cards');
             }`
             let graphqlResponse = await graphQlQueryFetch(graphqlQuery)
             let players = graphqlResponse.data.players;
-            console.log(players)
 
             const gw = graphqlResponse.data.currentGameWeek;
             const gwId = gw.id;
@@ -69,7 +68,7 @@ let cards = document.querySelector('.cards');
             // compute differentials
             let differentials = players
                 .sort((a,b) => b.now_cost - a.now_cost)
-                .filter(differential => differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.chance_of_playing_next_round != 0 && differential.minutes > gwId*45);
+                .filter(differential => differential.now_cost > 60 && differential.selected_by_percent < 20 && differential.chance_of_playing_next_round != 0 );
 
             let computedDifferentials =  differentials.map(differential => {
                 return {

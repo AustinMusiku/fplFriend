@@ -8,10 +8,24 @@ let cards = document.querySelector('.cards');
             let captainStats = document.querySelector('.captain-stats');
             let vcaptainStats = document.querySelector('.vcaptain-stats');
 
+            let query = `{players(captains:true){
+                                id
+                                web_name
+                                now_cost
+                                form
+                                points_per_game
+                                bps
+                                chance_of_playing_next_round
+                            }
+                            gameweek(is_current: true){
+                                id
+                            }
+                        }`
 
-            const players = await getAllPlayers();
-            const gw = await getGw()
-            const currentGw = gw.id;
+            let graphqlResponse = await graphQlQueryFetch(query);
+            let players = graphqlResponse.data.players;
+            console.log(players);
+            const gwId = graphqlResponse.data.gameweek.id;
 
             //
             //ON FIRE PLAYERS
@@ -21,18 +35,29 @@ let cards = document.querySelector('.cards');
             // CAPTAINS TABLE
             //
             let captains = players.filter(captain => captain.now_cost > 70);
-            console.log(captains.sort((a,b)=> b.bps - a.bps))
 
-            let computedCaptains = captains.map(async captain => {  
-                let captainEvents = await getPlayerEventsById(captain.id);
-                let history = parseFloat(captain.form)*0.3 + parseFloat(captain.points_per_game)*0.3 + (parseFloat(captain.bps)/currentGw)*0.4;
-                let fdr = captainEvents.fixtures[0].difficulty;
+            let computedCaptains = captains.map(async captain => {
+                let query = `{
+                    player(id: ${captain.id}){
+                      UpcomingFixtures(first: 1){
+                        difficulty
+                        is_home
+                        team_h
+                        team_a
+                      }
+                    }
+                  }`
+                let graphqlResponse = await graphQlQueryFetch(query);
+                let captainEvent = graphqlResponse.data.player.UpcomingFixtures[0];
+                console.log(captainEvent)
+                let history = parseFloat(captain.form)*0.3 + parseFloat(captain.points_per_game)*0.3 + (parseFloat(captain.bps)/gwId)*0.4;
+                let fdr = captainEvent.difficulty;
                 let index = (history*0.3 + (5 - parseFloat(fdr)*0.7)).toFixed(2);
 
                 return {
                     ...captain,
                     fdr: fdr,
-                    opponent: captainEvents.fixtures[0].is_home? captainEvents.fixtures[0].team_a: captainEvents.fixtures[0].team_h,
+                    opponent: captainEvent.is_home? captainEvent.team_a: captainEvent.team_h,
                     captaincy: index
                 }
             })
@@ -95,7 +120,6 @@ let cards = document.querySelector('.cards');
                     });
 
                     let count = 0;
-                    console.log(radarData);
                     topTwo.forEach( async (player) => {
                         // let photo = await fetch(`${imagesUrl}${player.code}.png`);
                         // let photoBlob = await photo.blob();
