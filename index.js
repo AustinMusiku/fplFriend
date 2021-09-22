@@ -6,6 +6,8 @@ const { graphqlHTTP } = require('express-graphql');
 const { Schema } = require('./schema/schema');
 const cors = require('cors');
 const dataLoader = require('dataloader');
+const morgan = require('morgan');
+const fs = require('fs');
 
 // config file
 dotenv.config();
@@ -19,6 +21,12 @@ app.use('/public', express.static(path.join(__dirname + '/public')))
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname + '/views'))
 app.use(cors());
+
+// setup logging write stream for morgan
+let logStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+
+app.use(morgan('tiny', { stream: logStream }));
+
 
 // graphql endpoint
 app.use('/graphql', graphqlHTTP(req => {
@@ -37,6 +45,7 @@ app.use('/graphql', graphqlHTTP(req => {
 
 // routes
 const router = require('./routes/routes');
+const { Stream } = require('stream');
 app.use('/', router);
 
 // fire app

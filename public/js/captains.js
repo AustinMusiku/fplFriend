@@ -39,7 +39,6 @@ let cards = document.querySelector('.cards');
 
             let graphqlResponse = await graphQlQueryFetch(query);
             let players = graphqlResponse.data.players;
-            console.log(players);
             const gwId = graphqlResponse.data.gameweek.id;
 
             //

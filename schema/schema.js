@@ -99,86 +99,26 @@ const PastFixtureType = new GraphQLObjectType({
     description: 'Past fixtures',
 
     fields: () => ({
-        was_home: {
-            type: GraphQLBoolean,
-            resolve: PastFixture => PastFixture.was_home
-        },
-        opponent_team: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.opponent_team
-        },
-        total_points: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.total_points
-        },
-        team_h_score: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.team_h_score
-        },
-        team_a_score: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.team_a_score
-        },
-        round: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.round
-        },
-        minutes: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.minutes
-        },
-        goals_scored: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.goals_scored
-        },
-        assists: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.assists
-        },
-        clean_sheets: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.clean_sheets
-        },
-        goals_conceded: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.goals_conceded
-        },
-        own_goals: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.own_goals
-        },
-        penalties_saved: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.penalties_saved
-        },
-        penalties_missed: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.penalties_missed
-        },
-        yellow_cards: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.yellow_cards
-        },
-        red_cards: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.red_cards
-        },
-        saves: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.saves
-        },
-        bps: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.bps
-        },
-        value: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.value
-        },
-        selected: {
-            type: GraphQLInt,
-            resolve: PastFixture => PastFixture.selected
-        },
+        was_home: { type: GraphQLBoolean },
+        opponent_team: { type: GraphQLInt },
+        total_points: { type: GraphQLInt },
+        team_h_score: { type: GraphQLInt },
+        team_a_score: { type: GraphQLInt },
+        round: { type: GraphQLInt },
+        minutes: { type: GraphQLInt },
+        goals_scored: { type: GraphQLInt },
+        assists: { type: GraphQLInt },
+        clean_sheets: { type: GraphQLInt },
+        goals_conceded: { type: GraphQLInt },
+        own_goals: { type: GraphQLInt },
+        penalties_saved: { type: GraphQLInt },
+        penalties_missed: { type: GraphQLInt },
+        yellow_cards: { type: GraphQLInt },
+        red_cards: { type: GraphQLInt },
+        saves: { type: GraphQLInt },
+        bps: { type: GraphQLInt },
+        value: { type: GraphQLInt },
+        selected: { type: GraphQLInt },
     })
 })
 
