@@ -23,10 +23,10 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname + '/views'))
 app.use(cors());
 
-// setup logging write stream for morgan
-let logStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
+// // setup logging write stream for morgan
+// let logStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 
-app.use(morgan('tiny', { stream: logStream }));
+// app.use(morgan('tiny', { stream: logStream }));
 
 
 // graphql endpoint
