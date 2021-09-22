@@ -31,14 +31,17 @@ app.use(cors());
 
 // graphql endpoint
 app.use('/graphql', graphqlHTTP(req => {
-    const gameWeekLoader = new dataLoader(keys => {
+    const playerEventLoader = new dataLoader(keys => {
         return Promise.all(keys.map(key => fetchControllers.getPlayerEventsById(key)))
     })
 
-
+    const playerLoader = new dataLoader(keys => {
+        return Promise.all(keys.map(fetchControllers.getPlayerDataById))
+    })
 
     const loaders = {
-        gameWeek: gameWeekLoader
+        playerEvent: playerEventLoader,
+        player: playerLoader
     }
     return {
         context: { loaders },

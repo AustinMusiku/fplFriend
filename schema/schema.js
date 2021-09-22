@@ -64,7 +64,7 @@ const PlayerType = new GraphQLObjectType({
                 }
             },
             resolve: async (parent, args, { loaders }) => {
-                let playerUpcomingFixtures = loaders.gameWeek.loadMany([parent.id]);
+                let playerUpcomingFixtures = loaders.playerEvent.loadMany([parent.id]);
                 let fixs = await playerUpcomingFixtures;
                 console.log(fixs);
                 return fixs[0].fixtures.slice(0, args.first);
@@ -207,8 +207,9 @@ const RootQuery = new GraphQLObjectType({
                     type: GraphQLInt
                 }
             },
-            resolve: async(parent, args) => {
-                let player = await fetchMethods.getPlayerDataById(args.id);
+            resolve: async(parent, args, { loaders }) => {
+                let loaded = loaders.player.load(args.id)
+                let player = await loaded;
                 return player[0];
             }
         },
