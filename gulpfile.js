@@ -29,3 +29,4 @@ const watchTask = () => {
 
 // default gulp
 exports.default = series( compileSass, minifyJs );
+exports.dev = series( compileSass, minifyJs, watchTask );
