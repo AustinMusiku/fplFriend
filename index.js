@@ -6,9 +6,9 @@ const { graphqlHTTP } = require('express-graphql');
 const { Schema } = require('./schema/schema');
 const cors = require('cors');
 const dataLoader = require('dataloader');
-// const morgan = require('morgan');
 const fs = require('fs');
-const fetchControllers = require('./controllers/fetchControllers'); 
+const compression = require('compression')
+const fetchControllers = require('./controllers/fetchControllers');
 
 // config file
 dotenv.config();
@@ -16,6 +16,7 @@ dotenv.config();
 const app = express()
 
 // middleware
+app.use(compression({ level: 9 }))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/dist', express.static(path.join(__dirname + '/dist')))
@@ -25,9 +26,7 @@ app.use(cors());
 
 // // setup logging write stream for morgan
 // let logStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
-
 // app.use(morgan('tiny', { stream: logStream }));
-
 
 // graphql endpoint
 app.use('/graphql', graphqlHTTP(req => {
