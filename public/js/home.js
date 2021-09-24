@@ -113,6 +113,15 @@ let initHomepage = async () => {
         svg.append("g")
             .call(d3.axisLeft(y));
 
+        // Add horizontal grid lines
+        const yAxisGrid = d3.axisLeft(y)
+            .tickSize(-(width))
+            .tickFormat('')
+            .ticks(10);
+        svg.append('g')
+            .attr('class', 'y axis-grid')
+            .call(yAxisGrid);
+
         // Add Y label
         svg.append('text')
         .attr('text-anchor', 'middle')
