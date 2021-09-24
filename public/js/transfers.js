@@ -1,19 +1,20 @@
+let sectionBlock = document.querySelector('.section-block');
+
 let initHomepage = async () => {
     try{
-        let sectionBlock = document.querySelector('.section-block');
-        let container = document.querySelector('.container');
-        let players = await getAllPlayers();
-        const gw = await getGw()
-        const currentGw = parseInt(gw[0].id);
+        // query data from graphql
+        let query = ` { mostTransfered: players(by_transfers: true){ web_name transfers_in_event transfers_out_event } premiums: players(premiums: true, first: 10){ ... playerFields } midRangers: players(mid_rangers: true, trim_extras: true){ ... playerFields } budgets: players(budgets: true, trim_extras: true, first: 20){ ... playerFields } currentGw: gameweek(is_current: true){ id } }         fragment playerFields on Player{ web_name bps now_cost UpcomingFixtures(first: 6){ difficulty is_home team_a team_h} } `
+        let graphqlResponse = await graphQlQueryFetch(query);
+        let mostTransfered = graphqlResponse.data.mostTransfered;
+        let premiums = graphqlResponse.data.premiums;
+        let midRangers = graphqlResponse.data.midRangers;
+        let budgets = graphqlResponse.data.budgets;
+        const gwId = graphqlResponse.data.currentGw.id;
 
         //
         // MARKET TRENDS
-        //
-
-        let topTransfers = players
-            .sort((a,b) => (b.transfers_in_event + b.transfers_out_event) - (a.transfers_in_event + a.transfers_out_event))
-            .slice(0, 20)
-            .map(transfer => { 
+        // map through each of the top transfered players and divide each transfer value by 1000000
+        let topTransfers = mostTransfered.map(transfer => { 
                 return{
                     id: transfer.id,
                     name: transfer.web_name,
@@ -23,7 +24,8 @@ let initHomepage = async () => {
             })
         let names = topTransfers.map(player => player.name);
 
-        // transfer ins
+        // graph
+        // define margins for chart
         let margin = {top: 10, right: 10, bottom: 60, left: 40},
             width = sectionBlock.scrollWidth - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
@@ -74,7 +76,8 @@ let initHomepage = async () => {
             .style('font-family', 'Space Grotesk')
             .style('font-size', 14)
             .text('transfers (millions)');
-
+        
+        // Add horizontal grid lines
         const yAxisGrid = d3.axisLeft(y)
             .tickSize(-(width))
             .tickFormat('')
@@ -125,20 +128,19 @@ let initHomepage = async () => {
         const target = document.querySelector('.bar-chart');
         observer.observe(target)
         
+        // 
         // SENSIBLE TRANSFERS
-
-        let mapTableArray = async (array) => {
-            return array.map(async player => {  
-                let playerEvents = await getPlayerEventsById(player.id);
-                let fdr1 = parseInt(playerEvents.fixtures[0].difficulty);
-                let fdr2 = parseInt(playerEvents.fixtures[1].difficulty);
-                let fdr3 = parseInt(playerEvents.fixtures[2].difficulty);
-                let fdr4 = parseInt(playerEvents.fixtures[3].difficulty);
-                let fdr5 = parseInt(playerEvents.fixtures[4].difficulty);
-                let fdr6 = parseInt(playerEvents.fixtures[5].difficulty);
-                let avgFdr = (fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6
+        // map through each player and calculate an index field based on six upcoming fixtures and players bps(bonus points system)
+        const computeIndices = array => {
+            return array.map(player => {
+                let fdr1 = player.UpcomingFixtures[0].difficulty;
+                let fdr2 = player.UpcomingFixtures[1].difficulty;
+                let fdr3 = player.UpcomingFixtures[2].difficulty;
+                let fdr4 = player.UpcomingFixtures[3].difficulty;
+                let fdr5 = player.UpcomingFixtures[4].difficulty;
+                let fdr6 = player.UpcomingFixtures[5].difficulty;
+                let avgFdr = (fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6;
                 let index = (5 - avgFdr)*20+player.bps*0.1;
-    
                 return {
                     ...player,
                     fdr1: fdr1,
@@ -147,27 +149,30 @@ let initHomepage = async () => {
                     fdr4: fdr4,
                     fdr5: fdr5,
                     fdr6: fdr6,
-                    opponent1: playerEvents.fixtures[0].is_home? playerEvents.fixtures[0].team_a: playerEvents.fixtures[0].team_h,
-                    opponent2: playerEvents.fixtures[1].is_home? playerEvents.fixtures[1].team_a: playerEvents.fixtures[1].team_h,
-                    opponent3: playerEvents.fixtures[2].is_home? playerEvents.fixtures[2].team_a: playerEvents.fixtures[2].team_h,
-                    opponent4: playerEvents.fixtures[3].is_home? playerEvents.fixtures[3].team_a: playerEvents.fixtures[3].team_h,
-                    opponent5: playerEvents.fixtures[4].is_home? playerEvents.fixtures[4].team_a: playerEvents.fixtures[4].team_h,
-                    opponent6: playerEvents.fixtures[5].is_home? playerEvents.fixtures[5].team_a: playerEvents.fixtures[5].team_h,
+                    opponent1: player.UpcomingFixtures[0].is_home? player.UpcomingFixtures[0].team_a: player.UpcomingFixtures[0].team_h,
+                    opponent2: player.UpcomingFixtures[1].is_home? player.UpcomingFixtures[1].team_a: player.UpcomingFixtures[1].team_h,
+                    opponent3: player.UpcomingFixtures[2].is_home? player.UpcomingFixtures[2].team_a: player.UpcomingFixtures[2].team_h,
+                    opponent4: player.UpcomingFixtures[3].is_home? player.UpcomingFixtures[3].team_a: player.UpcomingFixtures[3].team_h,
+                    opponent5: player.UpcomingFixtures[4].is_home? player.UpcomingFixtures[4].team_a: player.UpcomingFixtures[4].team_h,
+                    opponent6: player.UpcomingFixtures[5].is_home? player.UpcomingFixtures[5].team_a: player.UpcomingFixtures[5].team_h,
                     pci: index
                 }
             })
         }
 
-        let rowHeads =` <th class="sticky-cell">Name</th>
+        // table row heads
+        const rowHeads =` <th class="sticky-cell">Name</th>
                         <thead>
-                            <th>gw${currentGw+1}</th>
-                            <th>gw${currentGw+2}</th>
-                            <th>gw${currentGw+3}</th>
-                            <th>gw${currentGw+4}</th>
-                            <th>gw${currentGw+5}</th>
-                            <th>gw${currentGw+6}</th>
+                            <th>gw${gwId+1}</th>
+                            <th>gw${gwId+2}</th>
+                            <th>gw${gwId+3}</th>
+                            <th>gw${gwId+4}</th>
+                            <th>gw${gwId+5}</th>
+                            <th>gw${gwId+6}</th>
                         </thead>`
-        let generateRowFields = (player) => {
+
+        // create a row field for a player                
+        const generateRowFields = (player) => {
             let rowfields = `
                         <td class="sticky-cell">${player.web_name} <span class="caption">(${player.now_cost/10}m)</td>
                         <tbody>
@@ -182,85 +187,38 @@ let initHomepage = async () => {
             return rowfields;
         }
 
-        // PREMIUM 10 < X
-        let premiums = players.filter(player => player.now_cost >= 100);
-
-        let computedPremiums = mapTableArray(premiums);
-
-        computedPremiums
-            .then(premiumsPromises => {
-                Promise.all(premiumsPromises)
-                    .then(players => {
-                        let sortedPlayers = players.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
-                        // append table headings
-                        let row = document.createElement('tr');
-                        row.innerHTML = rowHeads;
-                        document.querySelector('.premium-table').appendChild(row);
-                        // append each player to table
-                        sortedPlayers.forEach(player => {
-                            let rowfields = generateRowFields(player);
-                            let row = document.createElement('tr');
-                            row.innerHTML = rowfields;
-                            document.querySelector('.premium-table').appendChild(row);
-                        })
-                    })
+        // generate table for each price range
+        const generateTable = (tableClassName, sortedPlayers) => {
+            // create and append table headings
+            let row = document.createElement('tr');
+            row.innerHTML = rowHeads;
+            document.querySelector(tableClassName).appendChild(row);
+            // append each player to table
+            sortedPlayers.forEach(player => {
+                let rowfields = generateRowFields(player);
+                let row = document.createElement('tr');
+                row.innerHTML = rowfields;
+                document.querySelector(tableClassName).appendChild(row);
             })
+        }
         
+        // PREMIUM 10 < X
+        let computedPremiums = computeIndices(premiums);
+        let sortedPremiums = computedPremiums.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
+        generateTable('.premium-table', sortedPremiums);
         
         // MID-RANGE 6.6 < X < 9.9
-        let midRangers = players.filter(player => player.now_cost > 66 && player.now_cost < 99);
-
-        let computedMidRange = mapTableArray(midRangers)
-
-        computedMidRange
-            .then(midRangersPromises => {
-                Promise.all(midRangersPromises)
-                    .then(players => {
-                        let sortedPlayers = players.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
-                        // append table heading
-                        let row = document.createElement('tr');
-                        row.innerHTML = rowHeads;
-                        document.querySelector('.mid-range-table').appendChild(row);
-                        // append each player to table
-                        sortedPlayers.forEach(player => {
-                            let rowfields = generateRowFields(player);
-                            let row = document.createElement('tr');
-                            row.innerHTML = rowfields;
-                            document.querySelector('.mid-range-table').appendChild(row);
-                        })
-                    })
-            })
+        let computedMidRange = computeIndices(midRangers)
+        let sortedMidRangers = computedMidRange.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
+        generateTable('.mid-range-table', sortedMidRangers)
 
         // BUDGET 0 < X < 6.5
-        let budgets = players
-            .filter(player => player.now_cost < 66)
-            .sort((a,b) => b.ict_index - a.ict_index)
-            .slice(0, 30)
-
-        let computedBudgets = mapTableArray(budgets)
-
-        computedBudgets
-            .then(budgetPromises => {
-                Promise.all(budgetPromises)
-                    .then(players => {
-                        let sortedPlayers = players.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
-                        
-                        // append table headings
-                        let row = document.createElement('tr');
-                        row.innerHTML = rowHeads;
-                        document.querySelector('.budget-table').appendChild(row);
-                        // append each player to table
-                        sortedPlayers.forEach(player => {
-                            let rowfields = generateRowFields(player);
-                            let row = document.createElement('tr');
-                            row.innerHTML = rowfields;
-                            document.querySelector('.budget-table').appendChild(row);
-                        })
-                    })
-            })
+        let computedBudgets = computeIndices(budgets);
+        let sortedBudgets = computedBudgets.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)       
+        generateTable('.budget-table', sortedBudgets)
         
-        }catch(err){
-            console.log(err);
-        }
+    }catch(err){
+        console.log(err);
+    }
 }
 initHomepage();

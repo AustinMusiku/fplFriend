@@ -10,7 +10,6 @@ let initHomepage = async () => {
         let graphqlResponse = await graphQlQueryFetch(query);
         let players = graphqlResponse.data.players;
         const gwId = graphqlResponse.data.gameweek.id;
-        console.log(players)
         //
         // CAPTAINS TABLE
         // create opponent, fdr(fixture difficulty rating), and captaincy field for each player

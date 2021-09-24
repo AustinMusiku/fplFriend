@@ -168,6 +168,9 @@ const RootQuery = new GraphQLObjectType({
                 by_form: {
                     type: GraphQLBoolean
                 },
+                by_transfers: {
+                    type: GraphQLBoolean
+                },
                 trim_extras: {
                     type: GraphQLBoolean
                 },
@@ -176,6 +179,15 @@ const RootQuery = new GraphQLObjectType({
                 },
                 captains: {
                     type: GraphQLBoolean
+                },
+                premiums: {
+                    type: GraphQLBoolean
+                },
+                mid_rangers: {
+                    type: GraphQLBoolean
+                },
+                budgets: {
+                    type: GraphQLBoolean
                 }
             },
             resolve: async(parent, args) => {
@@ -183,8 +195,10 @@ const RootQuery = new GraphQLObjectType({
                 if(args.by_form){
                     players = players.sort((a,b) => b.form - a.form)
                 }
-                if(args.first){
-                    players = players.slice(0, args.first)
+                if(args.by_transfers){
+                    players = players
+                        .sort((a,b) => (b.transfers_in_event + b.transfers_out_event) - (a.transfers_in_event + a.transfers_out_event))
+                        .slice(0, 20);
                 }
                 if(args.trim_extras){
                     players = players.filter(p => p.form != 0 && p.minutes > 45 && p.chance_of_playing_next_round != 0)
@@ -194,6 +208,20 @@ const RootQuery = new GraphQLObjectType({
                 }
                 if(args.captains){
                     players = players.filter(p => p.now_cost > 75 && p.chance_of_playing_next_round != 75 && p.chance_of_playing_next_round != 50 && p.chance_of_playing_next_round != 25)
+                }
+                if(args.premiums){
+                    players = players.filter(p => p.now_cost > 99)
+                }
+                if(args.mid_rangers){
+                    players = players.filter(p => p.now_cost < 99 && p.now_cost > 66)
+                }
+                if(args.budgets){
+                    players = players
+                        .filter(p => p.now_cost < 66)
+                        .sort((a, b) => b.form - a.form);
+                }
+                if(args.first){
+                    players = players.slice(0, args.first)
                 }
                 return players;
             }
