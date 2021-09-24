@@ -23,7 +23,7 @@ const minifyJs = () => {
 
 // watch task
 const watchTask = () => {
-    watch('./public/scss/style.css', compileSass)
+    watch('./public/scss/*.scss', compileSass)
     watch('./public/js/*.js', minifyJs)
 }
 

@@ -1,6 +1,7 @@
 let cards = document.querySelector('.cards');
 let container = document.querySelector('.container');
 let nextGameweekContainer = document.querySelector('.next-gameweek-container')
+let ppmTable = document.querySelector('.ppm-table')
     
 let initHomepage = async () => {
     try{
@@ -125,7 +126,7 @@ let initHomepage = async () => {
         })
         const target = document.querySelector('#differentials-graph');
         observer.observe(target);
-
+        document.querySelector('#differentials-graph').querySelector('.asynchronous').classList.add('invisible');
         //
         // PRICE PER MILLION TABLE
         // map through players array ad add a ppm(price per million field for all players)
@@ -138,7 +139,16 @@ let initHomepage = async () => {
         })
 
         let sortedPpm = computedPpm.sort((a,b) => (b.ppm) - (a.ppm)).slice(0, 15)
-        // apped each player to table
+        let rowHeadFields =`
+            <th>Name (price)</th>
+            <th>Points</th>
+            <th>Ppm</th>
+        `
+        // append table headings
+        let rowHeads = document.createElement('tr');
+        rowHeads.innerHTML = rowHeadFields;
+        ppmTable.append(rowHeads)
+        // append each player to table
         sortedPpm.forEach(player => {
             let rowfields = `
             <td>${player.web_name} <span class="caption">(${player.now_cost/10} m)</span></td>
@@ -149,6 +159,8 @@ let initHomepage = async () => {
             row.innerHTML = rowfields;
             document.querySelector('table').appendChild(row);
         })
+        // remove spinner
+        ppmTable.previousElementSibling.classList.add('invisible');
     }catch(err){
         console.error(err);
     }

@@ -25,7 +25,11 @@
             <div class="section-body">
                 <p class="para">Looking to climb up your mini-leagues? Invest in a good pair (or more, its completely upto you) of differentials. The scatter plot shows players with the most momentum heading into gameweek <span class="next-gameweek-container"></span>. The momentum factors in players form over the previous gameweeks</p>
                 <!-- Create a div where the graph will take place -->
-                <div id="differentials-graph"></div>
+                <div id="differentials-graph">
+                    <div class="asynchronous">
+                        <div class="loading"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -37,14 +41,11 @@
 
             <div class="section-body">
                 <p class="">The table below is pretty straight forward in that it represents the rankings based on points per million</p>
-                <div class="ppm-table">
-                    <table>
-                        <tr>
-                            <th>Name (price)</th>
-                            <th>Points</th>
-                            <th>Ppm</th>
-                        </tr>
-                    </table>
+                <div class="table-container">
+                    <div class="asynchronous">
+                        <div class="loading"></div>
+                    </div>
+                    <table class="ppm-table"></table>
                 </div>
             </div>
         </div>

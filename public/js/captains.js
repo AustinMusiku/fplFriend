@@ -2,6 +2,7 @@ let cards = document.querySelector('.cards');
 let radar = document.querySelector('.radar');
 let captainStats = document.querySelector('.captain-stats');
 let vcaptainStats = document.querySelector('.vcaptain-stats');
+let captainsTable = document.querySelector('.captains-table');
     
 let initHomepage = async () => {
     try{
@@ -23,8 +24,16 @@ let initHomepage = async () => {
             }
         })
         
-        let sortedCaptains = captains.sort((a,b) => (b.captaincy) - (a.captaincy)).slice(0, 15)
-
+        let sortedCaptains = captains.sort((a,b) => (b.captaincy) - (a.captaincy)).slice(0, 15);
+        // append row headings
+        let rowHeadFields = `
+        <th>Name</th>
+        <th>fix</th>
+        <th>Captaincy</th>
+        `
+        let rowHeads = document.createElement('tr');
+        rowHeads.innerHTML = rowHeadFields;
+        captainsTable.append(rowHeads);
         // populate captains table
         sortedCaptains.forEach(captain => {
             let rowfields = `
@@ -36,6 +45,8 @@ let initHomepage = async () => {
             row.innerHTML = rowfields;
             document.querySelector('table').appendChild(row);
         })
+        // remove spinner
+        captainsTable.previousElementSibling.classList.add('invisible');
 
         // draw radar chart
         // select top two players on the captains table 

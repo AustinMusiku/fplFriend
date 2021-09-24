@@ -33,7 +33,7 @@ let initHomepage = async () => {
             <div class="card-heading">
                 <p class="caption">${evaluateTeam(player.team)}</p>
                 <div class="card-stat1"> 
-                    <p class="mini-txt accent-font">${evaluatePosition(player.element_type)}</p>
+                    <p class="mini-txt accent">${evaluatePosition(player.element_type)}</p>
                 </div>
                 <p class="mini-heading ">${player.web_name}</p>
             </div>

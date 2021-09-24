@@ -1,4 +1,7 @@
 let sectionBlock = document.querySelector('.section-block');
+let premiumTable = document.querySelector('.premium-table');
+let midRangeTable = document.querySelector('.mid-range-table');
+let budgetTable = document.querySelector('.budget-table');
 
 let initHomepage = async () => {
     try{
@@ -127,7 +130,9 @@ let initHomepage = async () => {
         })
         const target = document.querySelector('.bar-chart');
         observer.observe(target)
-        
+        // remove spinner
+        document.querySelector('.bar-chart').querySelector('.asynchronous').classList.add('invisible');
+
         // 
         // SENSIBLE TRANSFERS
         // map through each player and calculate an index field based on six upcoming fixtures and players bps(bonus points system)
@@ -188,34 +193,36 @@ let initHomepage = async () => {
         }
 
         // generate table for each price range
-        const generateTable = (tableClassName, sortedPlayers) => {
+        const generateTable = (tableName, sortedPlayers) => {
             // create and append table headings
             let row = document.createElement('tr');
             row.innerHTML = rowHeads;
-            document.querySelector(tableClassName).appendChild(row);
+            tableName.appendChild(row);
             // append each player to table
             sortedPlayers.forEach(player => {
                 let rowfields = generateRowFields(player);
                 let row = document.createElement('tr');
                 row.innerHTML = rowfields;
-                document.querySelector(tableClassName).appendChild(row);
+                tableName.appendChild(row);
             })
+            // remove spinner
+            tableName.previousElementSibling.classList.add('invisible');
         }
         
         // PREMIUM 10 < X
         let computedPremiums = computeIndices(premiums);
         let sortedPremiums = computedPremiums.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
-        generateTable('.premium-table', sortedPremiums);
+        generateTable(premiumTable, sortedPremiums);
         
         // MID-RANGE 6.6 < X < 9.9
         let computedMidRange = computeIndices(midRangers)
         let sortedMidRangers = computedMidRange.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)
-        generateTable('.mid-range-table', sortedMidRangers)
+        generateTable(midRangeTable, sortedMidRangers)
 
         // BUDGET 0 < X < 6.5
         let computedBudgets = computeIndices(budgets);
         let sortedBudgets = computedBudgets.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)       
-        generateTable('.budget-table', sortedBudgets)
+        generateTable(budgetTable, sortedBudgets)
         
     }catch(err){
         console.log(err);

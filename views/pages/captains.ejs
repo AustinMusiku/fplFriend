@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <%- include('../partials/heading')%>
-    <title>captain | fplFriend</title>
+    <title>captains | fplFriend</title>
     <meta name="description" content="Who should wear the team's arm band">
     <meta name="keywords" content="fpl radar-plot ronaldo github captain captaincy value options">
 </head>
@@ -25,13 +25,12 @@
 
             <div class="section-body">
                 <p class="">The table below is arranged in from highest to lowest with the most favourable option at the top. The tabulated data takes into consideration player current form, player influence, player threat, player creativity, player's upcoming fixture difficulty rating, and points per game. The afore-mentioned fields then help us come up with an index(<strong>Captaincy</strong>) to predict the players performace in the upcoming gameweek</p>
-                <table>
-                    <tr>
-                        <th>Name</th>
-                        <th>fix</th>
-                        <th>Captaincy</th>
-                    </tr>
-                </table>
+                <div class="table-container">
+                    <div class="asynchronous">
+                        <div class="loading"></div>
+                    </div>
+                    <table class="captains-table"></table>
+                </div>
             </div>
         </div>
     </section>
