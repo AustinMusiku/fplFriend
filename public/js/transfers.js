@@ -89,7 +89,7 @@ let initHomepage = async () => {
         // color palette = one color per subgroup
         let color = d3.scaleOrdinal()
             .domain(subgroups)
-            .range(['#3a4257','rgba(255, 23, 81, 0.8)'])
+            .range(['rgba(1,252,122,.8)','rgba(255, 23, 81, 0.8)'])
 
         //stack the data per subgroup
         let stackedData = d3.stack()

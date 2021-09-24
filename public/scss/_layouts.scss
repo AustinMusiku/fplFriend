@@ -126,6 +126,7 @@ body{
                     display: flex;
                     flex-direction: row;
                     align-items: baseline;
+                    align-self: end;
                     gap: .15em;
                 }
             }
