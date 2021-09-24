@@ -6,20 +6,20 @@ let vcaptainStats = document.querySelector('.vcaptain-stats');
 let initHomepage = async () => {
     try{
         // query players and gameweek from graphql
-        let query = `{players(captains:true){ id web_name now_cost form points_per_game bps chance_of_playing_next_round assists goals_scored total_points influence threat creativity selected_by_percent element_type UpcomingFixtures(first: 1){ difficulty is_home team_h team_a } } gameweek(is_current: true){     id } }`
+        let query = `{players(captains:true){ id web_name now_cost minutes form points_per_game bps chance_of_playing_next_round assists goals_scored total_points influence threat creativity selected_by_percent element_type UpcomingFixtures(first: 1){ difficulty is_home team_h team_a } } }`
         let graphqlResponse = await graphQlQueryFetch(query);
         let players = graphqlResponse.data.players;
-        const gwId = graphqlResponse.data.gameweek.id;
         //
         // CAPTAINS TABLE
         // create opponent, fdr(fixture difficulty rating), and captaincy field for each player
         let captains = players.map(captain => {
-            let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/gwId)*0.4;
+            let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
             return {
                 ...captain,
+                history: history,
                 fdr: captain.UpcomingFixtures[0].difficulty,
                 opponent: captain.UpcomingFixtures[0].is_home? captain.UpcomingFixtures[0].team_a: captain.UpcomingFixtures[0].team_h,
-                captaincy: (history*0.3 + (5 - captain.UpcomingFixtures[0].difficulty*0.7)).toFixed(2)
+                captaincy: (history*0.7 + (5 - captain.UpcomingFixtures[0].difficulty*0.3)).toFixed(2)
             }
         })
         
