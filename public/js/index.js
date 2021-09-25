@@ -1,5 +1,5 @@
 let imagesUrl = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p'
-// let baseUrl = 'http://192.168.137.216:3000'
+// let baseUrl = 'http://192.168.137.1:3000'
 let baseUrl = 'https://fplfriend.herokuapp.com'
 const graphQlUrl = `${baseUrl}/graphql`;
 

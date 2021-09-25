@@ -15,16 +15,20 @@ let initHomepage = async () => {
         // create opponent, fdr(fixture difficulty rating), and captaincy field for each player
         let captains = players.map(captain => {
             let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
+            let captaincy = (history*0.55 + (5 - captain.UpcomingFixtures[0].difficulty)*0.45).toFixed(2);
+            // console.log(`${captain.web_name} -> ${captain.form}, ${captain.points_per_game}`);
+
             return {
                 ...captain,
                 history: history,
                 fdr: captain.UpcomingFixtures[0].difficulty,
                 opponent: captain.UpcomingFixtures[0].is_home? captain.UpcomingFixtures[0].team_a: captain.UpcomingFixtures[0].team_h,
-                captaincy: (history*0.7 + (5 - captain.UpcomingFixtures[0].difficulty*0.3)).toFixed(2)
+                captaincy: captaincy
             }
         })
         
         let sortedCaptains = captains.sort((a,b) => (b.captaincy) - (a.captaincy)).slice(0, 15);
+        console.log()
         // append row headings
         let rowHeadFields = `
         <th>Name</th>
