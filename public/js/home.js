@@ -4,7 +4,7 @@ let sectionBody = document.querySelector('.section-body');
 let initHomepage = async () => {
     try{
         // query players and curret ad ext gameweek from graphql
-        let query = `{ players(by_form: true, first: 6) { web_name now_cost team element_type cost_change_event total_points form ict_index selected_by_percent } nextGameWeek: gameweek(is_next: true) { ...GameWeekFields deadline_time } currentGameWeek: gameweek(is_current: true) { ...GameWeekFields chip_plays { chip_name num_played } } gameweeks(is_finished: true){ id avg_points } }  fragment GameWeekFields on Gameweek { id }`
+        let query = `{ players(by_form: true, first: 6) { web_name now_cost team element_type cost_change_event total_points form ict_index selected_by_percent } nextGameWeek: gameweek(is_next: true) { ...GameWeekFields deadline_time } currentGameWeek: gameweek(is_current: true) { ...GameWeekFields chip_plays { chip_name num_played } } gameweeks(is_finished: true){ id avg_points highest_score } }  fragment GameWeekFields on Gameweek { id }`
         let response = await graphQlQueryFetch(query);
         
         let players = response.data.players;
@@ -183,7 +183,7 @@ let initHomepage = async () => {
 
             // Add Y axis
             let y2 = d3.scaleLinear()
-                .domain([0, d3.max(finishedGws, gw => +gw.avg_points+20 )])
+                .domain([0, d3.max(finishedGws, gw => +gw.highest_score+20 )])
                 .range([ height, 0 ]);
                 svg2.append("g")
                 .call(d3.axisLeft(y2));
@@ -200,7 +200,7 @@ let initHomepage = async () => {
             // Y label
             svg2.append('text')
                 .attr('text-anchor', 'middle')
-                .attr('transform', 'translate(-25,' + height/2 + ')rotate(-90)')
+                .attr('transform', 'translate(-35,' + height/2 + ')rotate(-90)')
                 .attr('class','axis-label')
                 .style('font-family', 'Space Grotesk')
                 .style('font-size', 14)
@@ -215,33 +215,57 @@ let initHomepage = async () => {
                 .attr('class', 'y axis-grid')
                 .call(yAxisGrid2);
 
-            // Add the line
-            svg2.append("path")
+            // Add the avg points line
+            const avgPath = svg2.append("path")
                 .datum(finishedGws)
                 .attr("fill", "none")
-                .attr("stroke", "steelblue")
+                .attr("stroke", "rgba(255, 23, 81, 0.8)")
                 .attr("stroke-width", 1)
-                .transition()
-                .duration(800)
                 .attr("d", d3.line()
                     .x(gw => x2(gw.id))
                     .y(gw => y2(gw.avg_points))
                     )
-            // // animate bars upon scrollig into view
-            // let chartAnimation = (entries) => {
-            //     if(entries[0].intersectionRatio > 0){
-            //         svg2.select("path")
-            //         .transition()
-            //         .duration(800)
-            //         .attr("d", d3.line()
-            //             .x(gw => x2(gw.id))
-            //             .y(gw => y2(gw.avg_points))
-            //             )
-            //     }
-            // }
-            // let lineChartObserver = new IntersectionObserver(chartAnimation)
-            // let lineChartTarget = document.querySelector('.avg-points-chart')
-            // lineChartObserver.observe(lineChartTarget);
+            
+            // Add the highest points line
+            const highestPath = svg2.append("path")
+                .datum(finishedGws)
+                .attr("fill", "none")
+                .attr("stroke", "#3a425799")
+                .attr("stroke-width", 1)
+                .attr("d", d3.line()
+                        .x(gw => x2(gw.id))
+                        .y(gw => y2(gw.highest_score))
+                        )
+
+            // get length of average points line and highest points line  
+            const avgPathLength = avgPath.node().getTotalLength();
+            const highestPathLength = highestPath.node().getTotalLength();
+
+            // set stroke-dashoffset and stroke-dasharray for both lines
+            avgPath
+                .attr('stroke-dashoffset', avgPathLength)
+                .attr('stroke-dasharray', avgPathLength);
+
+            highestPath
+                .attr('stroke-dashoffset', highestPathLength)
+                .attr('stroke-dasharray', highestPathLength);
+
+            
+            // animate lines upon scrollig into view
+            let chartAnimation = (entries) => {
+                if(entries[0].intersectionRatio > 0){
+                    // animate avg and highest points line
+                    svg2.selectAll('path')
+                        .transition()
+                        .ease(d3.easeExpInOut)
+                        .duration(3000)
+                        .attr('stroke-dashoffset', 0)
+                
+            }
+            }
+            let lineChartObserver = new IntersectionObserver(chartAnimation)
+            let lineChartTarget = document.querySelector('.avg-points-chart')
+            lineChartObserver.observe(lineChartTarget);
 
     }catch(err){
         throw err;
