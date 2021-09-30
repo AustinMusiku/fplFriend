@@ -204,6 +204,36 @@ svg{
     max-height: 400px;
 }
 
+.line-chart-legend{
+    margin: 1em auto;
+    display: flex;
+    gap: 2em;
+    width: fit-content;
+
+    .line-1,
+    .line-2{
+        display: flex;
+        gap: .5em;
+        align-items: center;
+
+        .line{
+            width: 40px;
+            height: 1px;
+        }
+    }
+
+    .line-1{
+        .line{
+            background-color: rgba(255, 23, 81, 0.8);
+        }
+    }
+    .line-2{
+        .line{
+            background-color: $clr-accent2;
+        }
+    }
+}
+
 .fix-1, .fix-clr-1{ background-color: rgba(55 ,85 ,35 ,0.8); }
 .fix-2, .fix-clr-2{ background-color: rgba(1 ,252 ,122 ,0.8); }
 .fix-3, .fix-clr-3{ background-color: $clr-light; }
