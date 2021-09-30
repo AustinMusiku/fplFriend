@@ -15,7 +15,7 @@ let initHomepage = async () => {
         // create opponent, fdr(fixture difficulty rating), and captaincy field for each player
         let captains = players.map(captain => {
             let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
-            let captaincy = (history*0.4 + (5 - captain.UpcomingFixtures[0].difficulty)*0.6).toFixed(2);
+            let captaincy = (history*0.40 + (5 - captain.UpcomingFixtures[0].difficulty)*0.60).toFixed(2);
             // console.log(`${captain.web_name} -> ${captain.form}, ${captain.points_per_game}`);
 
             return {
