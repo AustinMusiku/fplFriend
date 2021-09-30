@@ -139,6 +139,7 @@ const GameWeekType = new GraphQLObjectType({
 
     fields: () => ({
         id: { type: GraphQLInt },
+        highest_score: { type: GraphQLInt },
         deadline_time: { type: GraphQLString },
         finished: { type: GraphQLBoolean },
         is_previous: { type: GraphQLBoolean },

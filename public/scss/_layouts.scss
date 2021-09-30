@@ -167,10 +167,11 @@ section{
     padding: 8em 0 5em;
 
     .container{
+
         .section-body{
             display: flex;
             flex-direction: column;
-            gap: 3em;
+            gap: 1em;
 
             &.row{
                 width: 100%;

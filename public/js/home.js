@@ -4,10 +4,11 @@ let sectionBody = document.querySelector('.section-body');
 let initHomepage = async () => {
     try{
         // query players and curret ad ext gameweek from graphql
-        let query = `{ players(by_form: true, first: 6) { web_name now_cost team element_type cost_change_event total_points form ict_index selected_by_percent } nextGameWeek: gameweek(is_next: true) { ...GameWeekFields deadline_time } currentGameWeek: gameweek(is_current: true) { ...GameWeekFields chip_plays { chip_name num_played } } } fragment GameWeekFields on Gameweek { id }`
+        let query = `{ players(by_form: true, first: 6) { web_name now_cost team element_type cost_change_event total_points form ict_index selected_by_percent } nextGameWeek: gameweek(is_next: true) { ...GameWeekFields deadline_time } currentGameWeek: gameweek(is_current: true) { ...GameWeekFields chip_plays { chip_name num_played } } gameweeks(is_finished: true){ id avg_points } }  fragment GameWeekFields on Gameweek { id }`
         let response = await graphQlQueryFetch(query);
         
         let players = response.data.players;
+        let finishedGws = response.data.gameweeks;
         const currentGw = response.data.currentGameWeek;
         const nextGw = response.data.nextGameWeek;
 
@@ -84,14 +85,17 @@ let initHomepage = async () => {
         const maxChip = Math.max(...chipNumbers)
 
         // set the dimensions and margins of the graph
-        let margin = {top: 10, right: 10, bottom: 60, left: 50},
+        let margin = {top: 10, right: 10, bottom: 60, left: 45},
         width = sectionBody.scrollWidth - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
         // append the svg object to the body of the page
         let svg = d3.select(".chips-bar")
-        .append("svg").attr("width", width + margin.left + margin.right).attr("height", height + margin.top + margin.bottom)
-        .append("g").attr("transform","translate(" + margin.left + "," + margin.top + ")");
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform","translate(" + margin.left + "," + margin.top + ")");
 
         
         // X axis
@@ -156,6 +160,89 @@ let initHomepage = async () => {
         let observer = new IntersectionObserver(barAnimation)
         let target = document.querySelector('.chips-bar')
         observer.observe(target);
+
+
+        //
+        // AVG POINTS CHART
+        // append the svg object to the body of the page
+        let svg2 = d3.select(".avg-points-chart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+                .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+        
+            // Add X axis
+            let x2 = d3.scaleLinear()
+                .domain([1, d3.max(finishedGws, gw => gw.id)])
+                .range([ 0, width ]);
+                svg2.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x2).ticks(finishedGws.length));
+                
+
+            // Add Y axis
+            let y2 = d3.scaleLinear()
+                .domain([0, d3.max(finishedGws, gw => +gw.avg_points+20 )])
+                .range([ height, 0 ]);
+                svg2.append("g")
+                .call(d3.axisLeft(y2));
+
+            // X label
+            svg2.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'translate('+ (width/2) +',' + (height+30) + ')')
+                .attr('class','axis-label')
+                .style('font-family', 'Space Grotesk')
+                .style('font-size', 14)
+                .text('gameweek');
+
+            // Y label
+            svg2.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('transform', 'translate(-25,' + height/2 + ')rotate(-90)')
+                .attr('class','axis-label')
+                .style('font-family', 'Space Grotesk')
+                .style('font-size', 14)
+                .text('points');
+            
+            // Add horizontal grid lines
+            const yAxisGrid2 = d3.axisLeft(y2)
+                .tickSize( -(width) )
+                .tickFormat('')
+                .ticks(10);
+            svg2.append('g')
+                .attr('class', 'y axis-grid')
+                .call(yAxisGrid2);
+
+            // Add the line
+            svg2.append("path")
+                .datum(finishedGws)
+                .attr("fill", "none")
+                .attr("stroke", "steelblue")
+                .attr("stroke-width", 1)
+                .transition()
+                .duration(800)
+                .attr("d", d3.line()
+                    .x(gw => x2(gw.id))
+                    .y(gw => y2(gw.avg_points))
+                    )
+            // // animate bars upon scrollig into view
+            // let chartAnimation = (entries) => {
+            //     if(entries[0].intersectionRatio > 0){
+            //         svg2.select("path")
+            //         .transition()
+            //         .duration(800)
+            //         .attr("d", d3.line()
+            //             .x(gw => x2(gw.id))
+            //             .y(gw => y2(gw.avg_points))
+            //             )
+            //     }
+            // }
+            // let lineChartObserver = new IntersectionObserver(chartAnimation)
+            // let lineChartTarget = document.querySelector('.avg-points-chart')
+            // lineChartObserver.observe(lineChartTarget);
+
     }catch(err){
         throw err;
     }
