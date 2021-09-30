@@ -144,6 +144,12 @@ const GameWeekType = new GraphQLObjectType({
         is_previous: { type: GraphQLBoolean },
         is_current: { type: GraphQLBoolean },
         is_next: { type: GraphQLBoolean },
+        avg_points: { 
+            type: GraphQLInt,
+            resolve: async gameweek => {
+                return gameweek.average_entry_score
+            }
+        },
         chip_plays: {
             type: GraphQLList(ChipType),
             resolve: async parent => {
@@ -243,8 +249,16 @@ const RootQuery = new GraphQLObjectType({
         gameweeks: {
             type: GraphQLList(GameWeekType),
             description: 'All gameweeks',
-            resolve: async () => {
+            args: {
+                is_finished: {
+                    type: GraphQLBoolean
+                }
+            },
+            resolve: async (parent, args) => {
                 let gws = await fetchMethods.gameWeeks()
+                if(args.is_finished){
+                    gws = gws.filter(gw => gw.finished == true);
+                }
                 return gws;
             } 
         },

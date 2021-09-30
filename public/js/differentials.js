@@ -157,6 +157,7 @@ let initHomepage = async () => {
             `
             let row = document.createElement('tr');
             row.innerHTML = rowfields;
+            row.classList.add('tall');
             document.querySelector('table').appendChild(row);
         })
         // remove spinner

@@ -103,9 +103,9 @@ nav{
         position: absolute;
         content: '';
         width: 0%;
-        height: 100%;
+        height: 101%;
         top: 0;
-        left: 0;
+        left: -0.5%;
         background: $clr-light;
         transform-origin: left;
         transition: .1s cubic-bezier(0, 0.69, 0.45, 0.94);
@@ -116,7 +116,7 @@ nav{
         color: $clr-accent2;
         
         &::before{
-            width: 100%;
+            width: 101%;
         }
     }
 }
@@ -129,27 +129,39 @@ nav{
 
     table{
         width: 100%;
-        border: 1px solid $clr-light;
         overflow-x: scroll;
+        border: 0;
+        border-collapse: collapse;
+        border-spacing: 0;
     
         *{
             font-family: $ff-body;
         }
-    
-        tr:nth-child(odd){
+
+        tr{
+            border-bottom: 1px solid $clr-light;
+
+        }
+        tr:nth-child(even){
             background-color: $clr-light;
         }
-        th{
-            text-align: left;
-            background-color: $clr-accent2;
-            color: $clr-light;
-            font-weight: 100;
-        }
-    
+        
         th,
         td{
             padding: .25em .5em;
-            max-width: 100px;
+            min-width: 100px;
+
+            &.sticky-cell{
+                background-color: white;
+                position: sticky;
+                left: 0;
+                color: $clr-dark;
+            }
+        }
+
+        th{
+            font-weight: 800;
+            text-align: left;
         }
     }
 }
@@ -192,21 +204,11 @@ svg{
     max-height: 400px;
 }
 
-.fix-1{
-    background-color: rgba(55 ,85 ,35 ,0.8);
-}
-.fix-2{
-    background-color: rgba(1 ,252 ,122 ,0.8);
-}
-.fix-3{
-    background-color: $clr-light;
-}
-.fix-4{
-    background-color: rgba(255, 23, 81, 0.8);
-}
-.fix-5{
-    background-color: rgba(128 ,7 ,45 ,0.8);
-}
+.fix-1, .fix-clr-1{ background-color: rgba(55 ,85 ,35 ,0.8); }
+.fix-2, .fix-clr-2{ background-color: rgba(1 ,252 ,122 ,0.8); }
+.fix-3, .fix-clr-3{ background-color: $clr-light; }
+.fix-4, .fix-clr-4{ background-color: rgba(255, 23, 81, 0.8); }
+.fix-5, .fix-clr-5{ background-color: rgba(128 ,7 ,45 ,0.8); }
 
 
 
@@ -299,35 +301,22 @@ svg{
         table{
             position: relative;
             width: 100%;
-            border: 1px solid $clr-light;
             overflow-x: scroll;
             max-width: 100vw;
-            border: 0;
-            border-collapse: separate;
-            border-spacing: 1px;
-            border-color: rgb(0, 0, 0);
+            border-top: 1px solid $clr-light;
         
-            *{
-                font-family: $ff-body;
-            }
-
-            th,
-            td{
-                padding: .25em .5em;
-                min-width: 65px;
-
-                &.sticky-cell{
-                    position: sticky;
-                    left: 0;
-                    background-color: $clr-light;
-                    color: $clr-dark;
+            tr{
+                th,
+                td{
+                    padding: .25em .5em;
+                    min-width: 100px;
                 }
-            }
 
-            th{
-                &.sticky-cell{
-                    background-color: $clr-accent2;
-                    color: $clr-light;
+                &.tall{
+                    th,
+                    td{
+                        padding: .5em .5em;
+                    }
                 }
             }
         }

@@ -42,7 +42,6 @@ const evaluatePosition = (positionId) => { switch (positionId) { case 1: return 
 const evaluateTeam = (teamId) => { switch (teamId) { case 1:return 'ars'; case 2:return 'avl'; case 3:return 'bre'; case 4:return 'bha'; case 5:return 'bur'; case 6:return 'che'; case 7:return 'cry'; case 8:return 'eve'; case 9:return 'lei'; case 10:return 'lee'; case 11:return 'liv'; case 12: return 'mci'; case 13: return 'mun'; case 14: return 'new'; case 15: return 'nor'; case 16: return 'sou'; case 17: return 'tot'; case 18: return 'wat'; case 19: return 'whu'; case 20: return 'wol'; default: return 'n/a'; } }
 const evalutePriceChange = (priceChange) => { if(priceChange == 1){ return 'rise' }  if(priceChange == 0){ return 'equal' }  if(priceChange == -1){ return 'fall' } }
 
-
 // Fetch methods
 // graphql fetch
 const graphQlQueryFetch = async (query) => {
