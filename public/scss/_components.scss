@@ -339,7 +339,8 @@ svg{
                 th,
                 td{
                     padding: .25em .5em;
-                    min-width: 100px;
+                    max-width: 100px;
+                    width: fit-content;
                 }
 
                 &.tall{
