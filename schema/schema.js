@@ -8,6 +8,7 @@ const PlayerType = new GraphQLObjectType({
     
     fields: () => ({
         id: { type: GraphQLInt },
+        code: { type: GraphQLInt },
         chance_of_playing_next_round: { type: GraphQLInt },
         cost_change_event: { type: GraphQLInt },
         element_type: { type: GraphQLInt },

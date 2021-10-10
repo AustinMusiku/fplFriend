@@ -1,6 +1,6 @@
 const initHomepage = async () => {
     try {
-        let playerId = player.id;
+        let playerId = renderedPlayer.id;
 
         const query = `
         {
@@ -10,6 +10,7 @@ const initHomepage = async () => {
               id
             }
             player(id: ${playerId}){
+              code
               web_name
               pastFixtures{
                 total_points
@@ -26,14 +27,28 @@ const initHomepage = async () => {
             }
           }
         `
+        // desctructure graphql responsey
         const graphQlResponse = await graphQlQueryFetch(query);
         let players = graphQlResponse.data.players;
+        let player = graphQlResponse.data.player;
         let pastFixtures = graphQlResponse.data.pastFixtures;
         let UpcomingFixtures = graphQlResponse.data.UpcomingFixtures;
 
-        console.log('players');
         playerNames = players.map(player => `${player.first_name} ${player.second_name}` )
-        console.log(players);
+
+
+        // load player img
+        let photo = await fetch(`${imagesUrl}${player.code}.png`);
+        let photoBlob = await photo.blob();
+        let imageObjectUrl = URL.createObjectURL(photoBlob);
+        console.log(imageObjectUrl.substr(26));
+
+        // blob:http://localhost:3000/d9a99c5f-bfed-4bea-aafb-fb90af04b768
+
+        let img = document.querySelector('.player-img')
+        img.setAttribute('src', `blob:${baseUrl}${imageObjectUrl.substr(26)}`);
+
+
 
         function autocomplete(inp, arr) {
             /*the autocomplete function takes two arguments,
