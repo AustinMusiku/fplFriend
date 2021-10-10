@@ -10,18 +10,41 @@
     <header class="homepage">
         <%- include('../partials/nav')%>
         <div class="landing grid">
-            <div class="container">
-                <div class="landing-text">
-                    <h1 class="sub-heading dark-light-font">For the super managers</h1>
-                    <a href="/captains" class="btn">Captain picks</a>
-                </div>
+            <div class="container" style="height: 45vh;">
+
+                <form action="#" method="POST" class="player_search" autocomplete="off">
+
+                    <div class="input-box">
+                        <div class="autocomplete">
+                            <input id="playerAutoComplete" type="text" name="playerAutoComplete" placeholder="player name">
+                            <!-- <input id="myInput" type="text" name="myCountry" placeholder="Country"> -->
+                        </div>
+
+                        <input type="submit" value="Search">
+                    </div>
+
+                </form>
+
             </div>
         </div>
     </header>
 
+    <section class="first grid">
+        <div class="container">
+            <h1 class="section-heading title"><%= player.first_name %> <%= player.second_name %></h1>
+        </div>
+    </section>
+
     <%- include('../partials/footer')%>
 </body>
+
+<% if(player){ %>
+    <script>
+        let player = <%- JSON.stringify(player) %>
+    </script>
+<% } %> 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.0.0/d3.min.js"></script>
 <%- include('../partials/commonScripts')%>
-<script src="../../dist/js/home.js"></script>
+<script src="../../dist/js/player.js"></script>
 </html>

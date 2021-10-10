@@ -4,6 +4,7 @@ const router = express.Router();
 
 const { 
     getFixtures,
+    getPlayer,
     getPlayerEventsById,
     getPlayerDataById,
     getAllPlayers,
@@ -17,12 +18,19 @@ router.get('/', (req, res) => res.render('pages/home'))
 router.get('/transfers', (req, res) => res.render('pages/transfers'))
 router.get('/captains', (req, res) => res.render('pages/captains'))
 router.get('/differentials', (req, res) => res.render('pages/differentials'))
+// get player page
+router.get('/player/:id', async (req, res) => { 
+    let player = await getPlayer(req.params.id)
+    console.log(player)
+    res.render('pages/player', {player}) 
+});
 
 // get fixtures
 router.get('/fixturesData', async (req, res) => { res.json(await getFixtures()) });
 
 // get all players
 router.get('/players', async (req, res) => { res.json(await getAllPlayers()) });
+
 
 // get all teams info
 router.get('/teams', async (req, res) => { res.json(await getAllTeams()) });

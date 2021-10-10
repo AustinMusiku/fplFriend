@@ -98,6 +98,17 @@ const getAllTeams = async () => {
     }
 }
 
+const getPlayer = async (playerId) => {
+    try{
+        let players = await getAllPlayers();
+        let player = players.filter(player => player.id == playerId)
+        let { first_name, second_name, id } = player[0];
+        return { first_name, second_name, id}
+    }catch(err){
+        throw err;
+    }
+}
+
 const getPlayerEventsById = async (playerId) => {
     try{
         let player = myCache.get(`${playerId}`);
@@ -167,4 +178,4 @@ const gameWeeks = async () => {
 // automatically fetch new data every two days
 // setInterval(fetchGeneral, 172800);
 
-module.exports = { getFixtures,getPlayerEventsById,getPlayerDataById,getAllPlayers,getAllTeams,getPlayersByTeam, gameWeeks };
+module.exports = { getFixtures, getPlayer, getPlayerEventsById, getPlayerDataById, getAllPlayers, getAllTeams, getPlayersByTeam, gameWeeks };

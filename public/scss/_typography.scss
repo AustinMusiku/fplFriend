@@ -71,6 +71,7 @@
     text-transform: uppercase;
 }
 p,a{
+    display: inline-block;
     font-size: $fs-body;
     font-weight: $fw-normal;
     font-family: $ff-body;

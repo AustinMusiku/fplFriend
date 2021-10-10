@@ -240,7 +240,63 @@ svg{
 .fix-4, .fix-clr-4{ background-color: rgba(255, 23, 81, 0.8); }
 .fix-5, .fix-clr-5{ background-color: rgba(128 ,7 ,45 ,0.8); }
 
+form{
+    width: 100%;
 
+    .input-box{
+        display: flex;
+        // justify-content: space-between;
+
+        .autocomplete {
+            position: relative;
+            width: 100%;
+
+            input {
+                padding: 10px;
+                border: 1px solid transparent;
+                background-color: $clr-light;
+            }
+            input[type=text] {
+                width: 100%;
+            }
+        }
+
+        input[type=submit] {
+            padding: 10px 20px;
+            background-color: $clr-accent2;
+            color: #fff;
+            border: none;
+        }
+    }
+}
+.autocomplete-items {
+    position: absolute;
+    border: 1px solid #d4d4d4;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 400px;
+    overflow-y: scroll;
+
+    div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+    
+        &:hover {
+            background-color: $clr-pale;
+        }
+    }
+}
+.autocomplete-active {
+    /*when navigating through the items using the arrow keys:*/
+    background-color: $clr-pale !important;
+    color: $clr-light;
+}
 
 @media screen and (max-width: 768px){
 
