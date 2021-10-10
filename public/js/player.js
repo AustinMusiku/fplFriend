@@ -46,7 +46,7 @@ const initHomepage = async () => {
         // blob:http://localhost:3000/d9a99c5f-bfed-4bea-aafb-fb90af04b768
 
         let img = document.querySelector('.player-img')
-        img.setAttribute('src', `blob:${baseUrl}${imageObjectUrl.substr(26)}`);
+        img.setAttribute('src', `${imageObjectUrl.substr(0)}`);
 
 
 
