@@ -38,17 +38,14 @@ const initHomepage = async () => {
 
 
         // load player img
-        let photo = await fetch(`${imagesUrl}${player.code}.png`, {
-            mode: 'cors'
-        });
-        let photoBlob = await photo.blob();
-        let imageObjectUrl = URL.createObjectURL(photoBlob);
-        console.log(imageObjectUrl);
-
-        // blob:http://localhost:3000/d9a99c5f-bfed-4bea-aafb-fb90af04b768
-
-        let img = document.querySelector('.player-img')
-        img.setAttribute('src', imageObjectUrl);
+        // let photo = await fetch(`${imagesUrl}${player.code}.png`, {
+        //     mode: 'cors'
+        // });
+        // let photoBlob = await photo.blob();
+        // let imageObjectUrl = URL.createObjectURL(photoBlob); // blob:http://localhost:3000/d9a99c5f-bfed-4bea-aafb-fb90af04b768
+        // // append image to document
+        // let img = document.querySelector('.player-img')
+        // img.setAttribute('src', imageObjectUrl);
 
 
 

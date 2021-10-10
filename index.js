@@ -22,7 +22,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/dist', express.static(path.join(__dirname + '/dist')))
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname + '/views'))
-app.use(cors());
+app.use(cors({
+    allowedHeaders : 'Content-Type,Authorization'
+}));
 
 // // setup logging write stream for morgan
 // let logStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });

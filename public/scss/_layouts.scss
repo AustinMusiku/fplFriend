@@ -154,6 +154,11 @@ header{
             display: flex;
             align-items: center;
             height: 75vh;
+
+            &.small{
+                height: fit-content;
+                padding: 6em 0 1.5em;
+            }
     
             .landing-text{
                 max-width: 500px;
