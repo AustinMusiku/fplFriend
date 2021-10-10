@@ -1,7 +1,9 @@
 const playerSummary = document.querySelector('.player-summary');
+let historyTable = document.querySelector('.history-table');
+let fixturesTable = document.querySelector('.fixtures-table');
 
 const playerDetailFetch = async (playerID) => {
-    const query = ` { player(id: ${playerId}) { web_name team element_type first_name second_name now_cost cost_change_event total_points event_points selected_by_percent form ict_index pastFixtures { total_points value selected was_home } UpcomingFixtures { team_h team_a is_home difficulty } } }`
+    const query = ` { player(id: ${playerId}) { web_name team element_type first_name second_name now_cost cost_change_event total_points event_points selected_by_percent form ict_index pastFixtures { total_points value selected was_home } UpcomingFixtures { team_h team_a event kickoff_time is_home difficulty } } }`
     const graphQlResponse = await graphQlQueryFetch(query);
     let player = graphQlResponse.data.player;
     let pastFixtures = graphQlResponse.data.pastFixtures;
@@ -48,11 +50,55 @@ const updatePlayerHeader = async (player) => {
 }
 
 const updateHistoryTable = async (history) => {
-    
+    // table row heads
+    const rowHeads =` <th class="sticky-cell">Name</th>
+    <thead>
+        <th>gw${gwId+1}</th>
+        <th>gw${gwId+2}</th>
+        <th>gw${gwId+3}</th>
+        <th>gw${gwId+4}</th>
+        <th>gw${gwId+5}</th>
+        <th>gw${gwId+6}</th>
+    </thead>`
+
+    // create a row field for a player                
+    const generateRowFields = (player) => {
+    let rowfields = `
+        <td class="sticky-cell">${player.web_name} <span class="mini-txt">(${player.now_cost/10}m)</td>
+        <tbody>
+            <td class="fix-${player.fdr1} caption">${evaluateTeam(player.opponent1)}</td>
+            <td class="fix-${player.fdr2} caption">${evaluateTeam(player.opponent2)}</td>
+            <td class="fix-${player.fdr3} caption">${evaluateTeam(player.opponent3)}</td>
+            <td class="fix-${player.fdr4} caption">${evaluateTeam(player.opponent4)}</td>
+            <td class="fix-${player.fdr5} caption">${evaluateTeam(player.opponent5)}</td>
+            <td class="fix-${player.fdr6} caption">${evaluateTeam(player.opponent6)}</td>
+        </tbody>
+    `
+    return rowfields;
+    }
 }
 
 const updateFixturesTable = async (fixtures) => {
+    // table row heads
+    let rowHeads = document.createElement('tr');
+    rowHeads.innerHTML = `
+                    <th>Date</th>
+                    <th>gw</th>
+                    <th>opponent</th>`
+    
+    fixturesTable.append(rowHeads)
 
+    console.log(fixtures)               
+    fixtures.forEach(fix => {
+        // create a row field for a player 
+        let rowfields = document.createElement('tr');
+        rowfields.innerHTML = `
+                        <td caption">${new Date(fix.kickoff_time).toString().substr(0, 11)}</td>
+                        <td caption">${fix.event}</td>
+                        <td class="fix-${fix.difficulty} caption">${evaluateTeam(fix.is_home ? fix.team_a : fix.team_h)} (${ fix.is_home ? 'H' : 'A' })</td>
+                      `
+        fixturesTable.append(rowfields);
+    })
 }
 
 const generateLineChart = async (array) => {
@@ -71,7 +117,7 @@ const initHomepage = async () => {
     try {
         let playerId = renderedPlayer.id || 1;
 
-        const query = ` { players { first_name second_name id } player(id: ${playerId}) { web_name team element_type first_name second_name now_cost cost_change_event total_points event_points selected_by_percent form ict_index pastFixtures { total_points value selected was_home } UpcomingFixtures { team_h team_a is_home difficulty } } }`
+        const query = ` { players { first_name second_name id } player(id: ${playerId}) { web_name team element_type first_name second_name now_cost cost_change_event total_points event_points selected_by_percent form ict_index pastFixtures { total_points value selected was_home } UpcomingFixtures { team_h team_a event kickoff_time is_home difficulty } } }`
         // desctructure graphql response
         const graphQlResponse = await graphQlQueryFetch(query);
         let players = graphQlResponse.data.players;
@@ -99,6 +145,9 @@ const initHomepage = async () => {
             if(!btn.classList.contains('primary')){
                 btn.classList.add('primary')
                 fixturesBtn.classList.remove('primary')
+
+                fixturesTable.classList.add('invisible')
+                historyTable.classList.remove('invisible')
             }
         })
         
@@ -108,11 +157,15 @@ const initHomepage = async () => {
             if(!btn.classList.contains('primary')){
                 btn.classList.add('primary')
                 historyBtn.classList.remove('primary')
+
+                historyTable.classList.add('invisible')
+                fixturesTable.classList.remove('invisible')
             }
         })
         // history table
 
         // fixtures table
+        updateFixturesTable(fixtures)
 
         //
         // update player charts

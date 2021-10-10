@@ -92,7 +92,8 @@ const UpcomingFixtureType = new GraphQLObjectType({
         team_h: { type: GraphQLInt },
         team_a: { type: GraphQLInt },
         finished: { type: GraphQLBoolean },
-        is_home: { type: GraphQLBoolean }
+        is_home: { type: GraphQLBoolean },
+        kickoff_time: { type: GraphQLString }
     })
 })
 
