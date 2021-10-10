@@ -1,6 +1,6 @@
 let imagesUrl = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p'
-let baseUrl = 'http://192.168.8.139:3000'
-// let baseUrl = 'https://fplfriend.herokuapp.com'
+// let baseUrl = 'http://192.168.8.139:3000'
+let baseUrl = 'https://fplfriend.herokuapp.com'
 const graphQlUrl = `${baseUrl}/graphql`;
 
 const hamMenu = document.querySelector('.hamburger-menu');

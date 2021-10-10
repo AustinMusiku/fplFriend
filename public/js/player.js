@@ -72,7 +72,7 @@ const updateHistoryTable = history => {
         let rowfields = document.createElement('tr');
         rowfields.innerHTML = `
             <td>${hist.round}</td>
-            <td class="caption">${evaluateTeam(hist.opponent_team)} <span>${hist.team_h_score}</span> - <span>${hist.team_a_score}</span></td>
+            <td class="caption">${evaluateTeam(hist.opponent_team)}(${hist.was_home ? "H" : "A"})  <span class="${hist.was_home ? "accent-font" : ""}">${hist.team_h_score}</span> - <span class="${!hist.was_home ? "accent-font" : ""}" >${hist.team_a_score}</span></td>
             <td>${hist.total_points}</td>
             <td>${hist.minutes}</td>
         `
