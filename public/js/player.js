@@ -41,12 +41,12 @@ const initHomepage = async () => {
         let photo = await fetch(`${imagesUrl}${player.code}.png`);
         let photoBlob = await photo.blob();
         let imageObjectUrl = URL.createObjectURL(photoBlob);
-        console.log(imageObjectUrl.substr(26));
+        console.log(imageObjectUrl.substr(0));
 
         // blob:http://localhost:3000/d9a99c5f-bfed-4bea-aafb-fb90af04b768
 
         let img = document.querySelector('.player-img')
-        img.setAttribute('src', `${imageObjectUrl.substr(0)}`);
+        img.setAttribute('src', imageObjectUrl);
 
 
 
