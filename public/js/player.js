@@ -1,51 +1,56 @@
+const playerSummary = document.querySelector('.player-summary');
+
 const initHomepage = async () => {
     try {
-        let playerId = renderedPlayer.id;
+        let playerId = renderedPlayer.id || 1;
 
-        const query = `
-        {
-            players{
-              first_name
-              second_name
-              id
-            }
-            player(id: ${playerId}){
-              code
-              web_name
-              pastFixtures{
-                total_points
-                value
-                selected
-                was_home
-              }
-              UpcomingFixtures{
-                team_h
-                team_a
-                is_home
-                difficulty
-              }
-            }
-          }
-        `
-        // desctructure graphql responsey
+        const query = ` { players { first_name second_name id } player(id: ${playerId}) { web_name team element_type first_name second_name now_cost cost_change_event total_points event_points selected_by_percent form ict_index pastFixtures { total_points value selected was_home } UpcomingFixtures { team_h team_a is_home difficulty } } }`
+        // desctructure graphql response
         const graphQlResponse = await graphQlQueryFetch(query);
         let players = graphQlResponse.data.players;
         let player = graphQlResponse.data.player;
+        console.log(player)
         let pastFixtures = graphQlResponse.data.pastFixtures;
         let UpcomingFixtures = graphQlResponse.data.UpcomingFixtures;
 
         playerNames = players.map(player => `${player.first_name} ${player.second_name}` )
 
 
-        // load player img
-        // let photo = await fetch(`${imagesUrl}${player.code}.png`, {
-        //     mode: 'cors'
-        // });
-        // let photoBlob = await photo.blob();
-        // let imageObjectUrl = URL.createObjectURL(photoBlob); // blob:http://localhost:3000/d9a99c5f-bfed-4bea-aafb-fb90af04b768
-        // // append image to document
-        // let img = document.querySelector('.player-img')
-        // img.setAttribute('src', imageObjectUrl);
+        // load player header information
+        playerSummary.innerHTML = `
+        <div class="player-name">
+                    <p class="caption player-team">${evaluateTeam(player.team)}</p>
+                    <p class="mini-txt accent player-position">${evaluatePosition(player.element_type)}</p>
+                    <h1 class="sub-heading"> ${player.first_name} ${player.second_name}</h1>
+                </div>
+    
+                <div class="player-price"> 
+                    <p class="sub-heading">${player.now_cost/10}<span class="mini-txt">m</span></p> </p>
+                    <div class="price-indicator ${evalutePriceChange(player.cost_change_event)}"></div>
+                </div>
+
+                <div class="player-meta">
+                    <div class="stat1">
+                        <p class="">pts</p>
+                        <p class="">${player.total_points}</p>
+                    </div>
+                    <div class="stat1">
+                        <p class="">gw pts</p>
+                        <p class="">${player.event_points}</p>
+                    </div>
+                    <div class="stat2">
+                        <p class="">Own</p>
+                        <p class="">${player.selected_by_percent}</p>
+                    </div>
+                    <div class="stat3">
+                        <p class="">form</p>
+                        <p class="">${player.form}</p>
+                    </div>
+                    <div class="stat4">
+                        <p class="">ict</p>
+                        <p class="">${player.ict_index}</p>
+                    </div>
+                </div>`
 
 
 

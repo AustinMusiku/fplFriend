@@ -31,8 +31,48 @@
 
     <section class="first grid">
         <div class="container">
-            <h1 class="sub-heading"><%= player.first_name %> <%= player.second_name %></h1>
-            <!-- <img src="" alt="" class="player-img"> -->
+            <div class="player-summary"></div>
+        </div>
+    </section>
+
+    <section class="second grid">
+        <div class="container">
+            <div class="section-body">
+
+                <div class="section-block">
+                    <div class="section-block-heading">previous points</div>
+                    <div class="table-container">
+                        <div class="asynchronous">
+                            <div class="loading"></div>
+                        </div>
+                        <table class="previous-points-table"></table>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-block-heading">ownership</div>
+                    <div class="player-points-chart">
+                        <div class="line-chart-legend">
+                            <div class="line-1">
+                                <div class="line"></div>
+                                <p class="mini-txt">owership</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-block">
+                    <div class="section-block-heading">price</div>
+                    <div class="player-price-chart">
+                        <div class="line-chart-legend">
+                            <div class="line-1">
+                                <div class="line"></div>
+                                <p class="mini-txt">price</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 

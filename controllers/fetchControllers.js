@@ -102,7 +102,7 @@ const getPlayer = async (playerId) => {
     try{
         let players = await getAllPlayers();
         let player = players.filter(player => player.id == playerId)
-        let { first_name, second_name, id } = player[0];
+        let { first_name, second_name, id} = player[0];
         return { first_name, second_name, id}
     }catch(err){
         throw err;

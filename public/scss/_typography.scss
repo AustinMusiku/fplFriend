@@ -4,6 +4,7 @@
 /* TYPOGRAPHY */
 *{
     color: $clr-accent2;
+    font-family: $ff-body;
 }
 .section-heading{
     position: relative;
@@ -49,7 +50,7 @@
 }
 .sub-heading{
     font-size: $fs-sub-heading;
-    font-weight: $fw-bold;
+    font-weight: $fw-normal;
     font-family: $ff-heading;
     line-height: 1.2;
 }
