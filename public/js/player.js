@@ -89,7 +89,7 @@ const initHomepage = async () => {
 
         //
         // update player tables
-        //
+        // configure toggle btns
         let historyBtn = document.querySelector('.history-btn');
         let fixturesBtn = document.querySelector('.fixtures-btn');
 
