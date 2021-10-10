@@ -183,7 +183,7 @@ nav{
         th,
         td{
             padding: .25em .5em;
-            min-width: 100px;
+            min-width: 60px;
 
             &.sticky-cell{
                 background-color: white;
@@ -389,7 +389,7 @@ form{
                 justify-content: space-between;
                 width: 40px;
                 height: 21px;
-                align-items: end;
+                align-items: flex-end;
                 z-index: 10;
     
                 .ham-layer{
