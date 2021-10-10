@@ -1,5 +1,9 @@
 @import 'variables';
 
+.invisible{
+    display: none;
+}
+
 body{
     width: 100vw;
     overflow-x: hidden;
@@ -186,16 +190,16 @@ section{
             display: flex;
             flex-direction: column;
             gap: 1em;
-            margin-bottom: 2em;
-
+            
             &.row{
                 width: 100%;
                 flex-direction: row;
                 justify-content: space-between;
             }
-
+            
             .section-block{
                 width: 100%;
+                margin-bottom: 2em;
             }
         }
     }
@@ -213,6 +217,12 @@ footer{
     }
 }
 
+
+.tables{
+    display: grid;
+    grid-template-columns: 1fr;
+
+}
 
 @media screen and (max-width: 768px){
 

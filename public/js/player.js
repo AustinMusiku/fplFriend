@@ -47,6 +47,26 @@ const updatePlayerHeader = async (player) => {
             </div>`
 }
 
+const updateHistoryTable = async (history) => {
+    
+}
+
+const updateFixturesTable = async (fixtures) => {
+
+}
+
+const generateLineChart = async (array) => {
+
+}
+
+const priceChart = async (array) => {
+    generateLineChart(array);
+}
+
+const ownershipChart = async (array) => {
+    generateLineChart(array);
+}
+
 const initHomepage = async () => {
     try {
         let playerId = renderedPlayer.id || 1;
@@ -57,13 +77,48 @@ const initHomepage = async () => {
         let players = graphQlResponse.data.players;
         let player = graphQlResponse.data.player;
         console.log(player)
-        let pastFixtures = graphQlResponse.data.pastFixtures;
-        let UpcomingFixtures = graphQlResponse.data.UpcomingFixtures;
+        let history = graphQlResponse.data.player.pastFixtures;
+        let fixtures = graphQlResponse.data.player.UpcomingFixtures;
 
         playerNames = players.map(player => `${player.first_name} ${player.second_name}` )
 
+        //
         // update player header info
+        // 
         updatePlayerHeader(player)
+
+        //
+        // update player tables
+        //
+        let historyBtn = document.querySelector('.history-btn');
+        let fixturesBtn = document.querySelector('.fixtures-btn');
+
+        historyBtn.addEventListener('click', (e) => {
+            let btn = e.target;
+            console.log(btn)
+            if(!btn.classList.contains('primary')){
+                btn.classList.add('primary')
+                fixturesBtn.classList.remove('primary')
+            }
+        })
+        
+        fixturesBtn.addEventListener('click', (e) => {
+            let btn = e.target;
+            console.log(btn)
+            if(!btn.classList.contains('primary')){
+                btn.classList.add('primary')
+                historyBtn.classList.remove('primary')
+            }
+        })
+        // history table
+
+        // fixtures table
+
+        //
+        // update player charts
+        // price chart
+
+        // ownership chart
 
         function autocomplete(inp, arr) {
             /*the autocomplete function takes two arguments,

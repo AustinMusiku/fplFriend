@@ -99,12 +99,25 @@ nav{
     background: none;
     z-index: 1;
 
+    &.dark{
+        border: 1px solid $clr-accent2;
+        color: $clr-accent2;
+
+        &::before{
+            background: $clr-accent2;
+        }
+        
+        &:hover{
+            color: $clr-light;
+        }
+    }
+
     &::before{
         position: absolute;
         content: '';
         width: 0%;
         height: 101%;
-        top: 0;
+        top: -0.5%;
         left: -0.5%;
         background: $clr-light;
         transform-origin: left;
@@ -117,6 +130,24 @@ nav{
         
         &::before{
             width: 101%;
+        }
+    }
+
+    &.toggle{
+        &::before{
+            display: none;
+        }
+        &:hover{
+            color: unset;
+        }
+
+        &.primary{
+            background-color: $clr-accent2;
+            color: $clr-light;
+        }
+        &.secondary{
+            border: 1px solid $clr-accent2;
+            color: $clr-accent2;
         }
     }
 }
