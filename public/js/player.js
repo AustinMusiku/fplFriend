@@ -38,10 +38,12 @@ const initHomepage = async () => {
 
 
         // load player img
-        let photo = await fetch(`${imagesUrl}${player.code}.png`);
+        let photo = await fetch(`${imagesUrl}${player.code}.png`, {
+            mode: 'cors'
+        });
         let photoBlob = await photo.blob();
         let imageObjectUrl = URL.createObjectURL(photoBlob);
-        console.log(imageObjectUrl.substr(0));
+        console.log(imageObjectUrl);
 
         // blob:http://localhost:3000/d9a99c5f-bfed-4bea-aafb-fb90af04b768
 
