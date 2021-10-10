@@ -1,5 +1,52 @@
 const playerSummary = document.querySelector('.player-summary');
 
+const playerDetailFetch = async (playerID) => {
+    const query = ` { player(id: ${playerId}) { web_name team element_type first_name second_name now_cost cost_change_event total_points event_points selected_by_percent form ict_index pastFixtures { total_points value selected was_home } UpcomingFixtures { team_h team_a is_home difficulty } } }`
+    const graphQlResponse = await graphQlQueryFetch(query);
+    let player = graphQlResponse.data.player;
+    let pastFixtures = graphQlResponse.data.pastFixtures;
+    let UpcomingFixtures = graphQlResponse.data.UpcomingFixtures;
+    return player;
+}
+
+const updatePlayerHeader = async (player) => {
+    // load player header information
+    playerSummary.innerHTML = `
+    <div class="player-name">
+                <p class="caption player-team">${evaluateTeam(player.team)}</p>
+                <p class="mini-txt accent player-position">${evaluatePosition(player.element_type)}</p>
+                <h1 class="sub-heading"> ${player.first_name} ${player.second_name}</h1>
+            </div>
+
+            <div class="player-price"> 
+                <p class="sub-heading">${player.now_cost/10}<span class="mini-txt">m</span></p> </p>
+                <div class="price-indicator ${evalutePriceChange(player.cost_change_event)}"></div>
+            </div>
+
+            <div class="player-meta">
+                <div class="stat1">
+                    <p class="">pts</p>
+                    <p class="">${player.total_points}</p>
+                </div>
+                <div class="stat1">
+                    <p class="">gw pts</p>
+                    <p class="">${player.event_points}</p>
+                </div>
+                <div class="stat2">
+                    <p class="">Own</p>
+                    <p class="">${player.selected_by_percent}</p>
+                </div>
+                <div class="stat3">
+                    <p class="">form</p>
+                    <p class="">${player.form}</p>
+                </div>
+                <div class="stat4">
+                    <p class="">ict</p>
+                    <p class="">${player.ict_index}</p>
+                </div>
+            </div>`
+}
+
 const initHomepage = async () => {
     try {
         let playerId = renderedPlayer.id || 1;
@@ -15,44 +62,8 @@ const initHomepage = async () => {
 
         playerNames = players.map(player => `${player.first_name} ${player.second_name}` )
 
-
-        // load player header information
-        playerSummary.innerHTML = `
-        <div class="player-name">
-                    <p class="caption player-team">${evaluateTeam(player.team)}</p>
-                    <p class="mini-txt accent player-position">${evaluatePosition(player.element_type)}</p>
-                    <h1 class="sub-heading"> ${player.first_name} ${player.second_name}</h1>
-                </div>
-    
-                <div class="player-price"> 
-                    <p class="sub-heading">${player.now_cost/10}<span class="mini-txt">m</span></p> </p>
-                    <div class="price-indicator ${evalutePriceChange(player.cost_change_event)}"></div>
-                </div>
-
-                <div class="player-meta">
-                    <div class="stat1">
-                        <p class="">pts</p>
-                        <p class="">${player.total_points}</p>
-                    </div>
-                    <div class="stat1">
-                        <p class="">gw pts</p>
-                        <p class="">${player.event_points}</p>
-                    </div>
-                    <div class="stat2">
-                        <p class="">Own</p>
-                        <p class="">${player.selected_by_percent}</p>
-                    </div>
-                    <div class="stat3">
-                        <p class="">form</p>
-                        <p class="">${player.form}</p>
-                    </div>
-                    <div class="stat4">
-                        <p class="">ict</p>
-                        <p class="">${player.ict_index}</p>
-                    </div>
-                </div>`
-
-
+        // update player header info
+        updatePlayerHeader(player)
 
         function autocomplete(inp, arr) {
             /*the autocomplete function takes two arguments,
