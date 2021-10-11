@@ -1,3 +1,5 @@
+const playerSearchForm = document.querySelector('.player-search');
+const playerSearchFormField = document.querySelector('#playerAutoComplete');
 const playerSummary = document.querySelector('.player-summary');
 let historyTable = document.querySelector('.history-table');
 let fixturesTable = document.querySelector('.fixtures-table');
@@ -12,10 +14,8 @@ const playerDetailFetch = async (playerId) => {
         UpcomingFixtures { team_h team_a event kickoff_time is_home difficulty } 
         } }`
     const graphQlResponse = await graphQlQueryFetch(query);
-    let player = graphQlResponse.data.player;
-    let pastFixtures = graphQlResponse.data.pastFixtures;
-    let UpcomingFixtures = graphQlResponse.data.UpcomingFixtures;
-    return player;
+    const data = graphQlResponse.data;
+    return data;
 }
 
 const updatePlayerHeader = player => {
@@ -57,6 +57,8 @@ const updatePlayerHeader = player => {
 }
 
 const updateHistoryTable = history => {
+    // clear any table data 
+    historyTable.innerHTML = '';
     // table row heads
     let rowHeads = document.createElement('tr');
     rowHeads.innerHTML = ` 
@@ -65,7 +67,7 @@ const updateHistoryTable = history => {
         <th>pts</th>
         <th>mins</th>`
     historyTable.append(rowHeads);
-
+    
     // create a row field for a player
 
     history.reverse().forEach( hist => {
@@ -74,13 +76,15 @@ const updateHistoryTable = history => {
             <td>${hist.round}</td>
             <td class="caption">${evaluateTeam(hist.opponent_team)}(${hist.was_home ? "H" : "A"})  <span class="${hist.was_home ? "accent-font" : ""}">${hist.team_h_score}</span> - <span class="${!hist.was_home ? "accent-font" : ""}" >${hist.team_a_score}</span></td>
             <td>${hist.total_points}</td>
-            <td>${hist.minutes}</td>
-        `
+            <td>${hist.minutes}</td>`
         historyTable.append(rowfields);
     })
 }
 
-const updateFixturesTable = async (fixtures) => {
+const updateFixturesTable = fixtures => {
+    // clear any table data 
+    fixturesTable.innerHTML = '';
+
     // table row heads
     let rowHeads = document.createElement('tr');
     rowHeads.innerHTML = `
@@ -100,18 +104,21 @@ const updateFixturesTable = async (fixtures) => {
         fixturesTable.append(rowfields);
     })
 }
+const generateLineChart = async (array) => { }
+const priceChart = async (array) => { generateLineChart(array); }
+const ownershipChart = async (array) => { generateLineChart(array); }
 
-const generateLineChart = async (array) => {
-
+const playerSearch = async (e) => {
+    e.preventDefault();
+    const formValue = playerSearchFormField.value;
+    let searchedPlayer = playerArray.find(player => player.playerName == formValue );
+    let player = await playerDetailFetch(searchedPlayer.id)
+    updatePlayerHeader(player.player);
+    updateHistoryTable(player.player.pastFixtures);
+    updateFixturesTable(player.player.UpcomingFixtures)
 }
 
-const priceChart = async (array) => {
-    generateLineChart(array);
-}
-
-const ownershipChart = async (array) => {
-    generateLineChart(array);
-}
+playerSearchForm.addEventListener('submit', playerSearch)
 
 const initHomepage = async () => {
     try {
@@ -124,8 +131,13 @@ const initHomepage = async () => {
         let player = graphQlResponse.data.player;
         let history = graphQlResponse.data.player.pastFixtures;
         let fixtures = graphQlResponse.data.player.UpcomingFixtures;
-        console.log(history)
 
+        playerArray = players.map(player => {
+            return {
+                playerName : `${player.first_name} ${player.second_name}`,
+                id: player.id
+            }
+        })
         playerNames = players.map(player => `${player.first_name} ${player.second_name}` )
 
         //
@@ -141,7 +153,6 @@ const initHomepage = async () => {
 
         historyBtn.addEventListener('click', (e) => {
             let btn = e.target;
-            console.log(btn)
             if(!btn.classList.contains('primary')){
                 btn.classList.add('primary')
                 fixturesBtn.classList.remove('primary')
@@ -153,7 +164,6 @@ const initHomepage = async () => {
         
         fixturesBtn.addEventListener('click', (e) => {
             let btn = e.target;
-            console.log(btn)
             if(!btn.classList.contains('primary')){
                 btn.classList.add('primary')
                 historyBtn.classList.remove('primary')

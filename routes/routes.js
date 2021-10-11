@@ -21,7 +21,6 @@ router.get('/differentials', (req, res) => res.render('pages/differentials'))
 // get player page
 router.get('/player/:id', async (req, res) => { 
     let player = await getPlayer(req.params.id)
-    console.log(player)
     res.render('pages/player', {player}) 
 });
 
@@ -36,7 +35,7 @@ router.get('/players', async (req, res) => { res.json(await getAllPlayers()) });
 router.get('/teams', async (req, res) => { res.json(await getAllTeams()) });
 
 // get player info
-router.get('/player/:id', async (req, res) => { res.json(await getPlayerDataById(req.params.id)) });
+// router.get('/player/:id', async (req, res) => { res.json(await getPlayerDataById(req.params.id)) });
 
 // get player events ( fixtures, history, etc )
 router.get('/playerEvents/:id', async (req, res) => { res.json(await getPlayerEventsById(req.params.id)) });
