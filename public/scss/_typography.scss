@@ -77,6 +77,11 @@ p,a{
     font-family: $ff-body;
     line-height: 1.6;
 }
+a{
+    &.no-underline{
+        text-decoration: none;
+    }
+}
 .mini-txt{
     font-size: $fs-caption;
     font-weight: $fw-normal;

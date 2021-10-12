@@ -6,7 +6,13 @@ let budgetTable = document.querySelector('.budget-table');
 let initHomepage = async () => {
     try{
         // query data from graphql
-        let query = ` { mostTransfered: players(by_transfers: true){ web_name transfers_in_event transfers_out_event } premiums: players(premiums: true, first: 10){ ... playerFields } midRangers: players(mid_rangers: true, trim_extras: true){ ... playerFields } budgets: players(budgets: true, trim_extras: true, first: 20){ ... playerFields } currentGw: gameweek(is_current: true){ id } }         fragment playerFields on Player{ web_name bps now_cost UpcomingFixtures(first: 6){ difficulty is_home team_a team_h} } `
+        let query = ` { 
+            mostTransfered: players(by_transfers: true){ web_name transfers_in_event transfers_out_event } 
+            premiums: players(premiums: true, first: 10){ ... playerFields } 
+            midRangers: players(mid_rangers: true, trim_extras: true){ ... playerFields } 
+            budgets: players(budgets: true, trim_extras: true, first: 40){ ... playerFields } 
+            currentGw: gameweek(is_current: true){ id } } 
+            fragment playerFields on Player{ id web_name bps now_cost UpcomingFixtures(first: 6){ difficulty is_home team_a team_h} } `
         let graphqlResponse = await graphQlQueryFetch(query);
         let mostTransfered = graphqlResponse.data.mostTransfered;
         let premiums = graphqlResponse.data.premiums;
@@ -179,7 +185,8 @@ let initHomepage = async () => {
         // create a row field for a player                
         const generateRowFields = (player) => {
             let rowfields = `
-                        <td class="sticky-cell">${player.web_name} <span class="mini-txt">(${player.now_cost/10}m)</td>
+                        <td class="sticky-cell">
+                        <a href="/player/${player.id}" class=" no-underline">${player.web_name} <span class="mini-txt">(${player.now_cost/10}m)</a></td>
                         <tbody>
                             <td class="fix-${player.fdr1} caption">${evaluateTeam(player.opponent1)}</td>
                             <td class="fix-${player.fdr2} caption">${evaluateTeam(player.opponent2)}</td>

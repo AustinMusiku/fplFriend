@@ -133,7 +133,7 @@ const generateLineChart = async (chart, history) => {
 
     // Add Y axis
     let y = d3.scaleLinear()
-        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.1).toFixed(1) : +gw.selected-100000 ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.1).toFixed(1) : +gw.selected+100000)])
+        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.5) : +gw.selected-100000 ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.5) : +gw.selected+100000)])
         .range([ height, 0 ]);
         svg.append("g")
         .call(d3.axisLeft(y));
