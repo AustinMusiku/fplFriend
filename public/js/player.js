@@ -10,7 +10,7 @@ let priceChart = document.querySelector('.player-price-chart');
 const playerDetailFetch = async (playerId) => {
     const query = ` { 
         player(id: ${playerId}) { 
-        web_name team element_type first_name second_name now_cost cost_change_event total_points 
+        web_name chance_of_playing_next_round news team element_type first_name second_name now_cost cost_change_event total_points 
         event_points selected_by_percent form ict_index
 
         pastFixtures { total_points value selected was_home minutes round team_h_score team_a_score opponent_team } 
@@ -25,8 +25,9 @@ const updatePlayerHeader = player => {
     // load player header information
     playerSummary.innerHTML = `
     <div class="player-name">
-                <p class="caption player-team">${evaluateTeam(player.team)}</p>
-                <p class="mini-txt accent player-position">${evaluatePosition(player.element_type)}</p>
+                <p class="${evaluteAlert(player.chance_of_playing_next_round)} caption">${player.news}</p>
+                <p class="caption">${evaluateTeam(player.team)}</p>
+                <p class="mini-txt accent">${evaluatePosition(player.element_type)}</p>
                 <h1 class="sub-heading"> ${player.first_name} ${player.second_name}</h1>
             </div>
 
@@ -113,7 +114,6 @@ const generateLineChart = async (chart, history) => {
     let margin = {top: 10, right: 10, bottom: 60, left: 45},
     width = sectionBody.scrollWidth - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
-    console.log(chart.getAttribute('class'))
     // append the svg object to the body of the page
     let svg = d3.select(`.${chart.getAttribute('class')}`)
         .append("svg")
@@ -220,15 +220,13 @@ const initHomepage = async () => {
     try {
         let playerId = renderedPlayer.id || 1;
 
-        const query = ` { players { first_name second_name id } player(id: ${playerId}) { web_name team element_type first_name second_name now_cost cost_change_event total_points event_points selected_by_percent form ict_index pastFixtures { total_points value selected was_home minutes round team_h_score team_a_score opponent_team } UpcomingFixtures { team_h team_a event kickoff_time is_home difficulty } } }`
+        const query = ` { players { first_name second_name id } player(id: ${playerId}) { web_name chance_of_playing_next_round news team element_type first_name second_name now_cost cost_change_event total_points event_points selected_by_percent form ict_index pastFixtures { total_points value selected was_home minutes round team_h_score team_a_score opponent_team } UpcomingFixtures { team_h team_a event kickoff_time is_home difficulty } } }`
         // desctructure graphql response
         const graphQlResponse = await graphQlQueryFetch(query);
         let players = graphQlResponse.data.players;
         let player = graphQlResponse.data.player;
         let history = graphQlResponse.data.player.pastFixtures;
         let fixtures = graphQlResponse.data.player.UpcomingFixtures;
-
-        console.log(history, fixtures)
 
         playerArray = players.map(player => {
             return {

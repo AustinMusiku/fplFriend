@@ -40,6 +40,9 @@ body{
             height: -webkit-fill-available;
         }
     }
+    .captain-stats-labels{
+        flex-direction: column-reverse;
+    }
     p{
         margin: 0;
     }
