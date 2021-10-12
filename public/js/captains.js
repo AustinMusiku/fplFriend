@@ -41,7 +41,7 @@ let initHomepage = async () => {
         // populate captains table
         sortedCaptains.forEach(captain => {
             let rowfields = `
-                <td>${captain.web_name}</td>
+                <td><a href="/player/${captain.id}" class=" no-underline">${captain.web_name}</a></td>
                 <td>${captain.captaincy}</td>
                 <td class="fix-${captain.fdr} caption">${evaluateTeam(captain.opponent)}</td>
             `

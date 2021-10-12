@@ -6,7 +6,8 @@ let ppmTable = document.querySelector('.ppm-table')
 let initHomepage = async () => {
     try{
         // query players and gameweeks from graphql
-        let graphqlQuery = `{ players(trim_extras: true, differentials: true) {web_name selected_by_percent form bps now_cost total_points chance_of_playing_next_round minutes} currentGameWeek: gameweek(is_current: true){id}}`
+        let graphqlQuery = `{ players(trim_extras: true, differentials: true) {id web_name selected_by_percent form bps now_cost total_points chance_of_playing_next_round minutes} 
+                            currentGameWeek: gameweek(is_current: true){id}}`
         let graphqlResponse = await graphQlQueryFetch(graphqlQuery)
         let players = graphqlResponse.data.players;
 
@@ -151,7 +152,7 @@ let initHomepage = async () => {
         // append each player to table
         sortedPpm.forEach(player => {
             let rowfields = `
-            <td>${player.web_name} <span class="caption">(${player.now_cost/10} m)</span></td>
+            <td><a href="/player/${player.id}" class=" no-underline">${player.web_name} <span class="caption">(${player.now_cost/10} m)</span></a></td>
             <td>${player.total_points}</td>
             <td>${player.ppm}</td>
             `

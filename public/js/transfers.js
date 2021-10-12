@@ -185,8 +185,7 @@ let initHomepage = async () => {
         // create a row field for a player                
         const generateRowFields = (player) => {
             let rowfields = `
-                        <td class="sticky-cell">
-                        <a href="/player/${player.id}" class=" no-underline">${player.web_name} <span class="mini-txt">(${player.now_cost/10}m)</a></td>
+                        <td class="sticky-cell"><a href="/player/${player.id}" class=" no-underline">${player.web_name} <span class="mini-txt">(${player.now_cost/10}m)</a></td>
                         <tbody>
                             <td class="fix-${player.fdr1} caption">${evaluateTeam(player.opponent1)}</td>
                             <td class="fix-${player.fdr2} caption">${evaluateTeam(player.opponent2)}</td>
