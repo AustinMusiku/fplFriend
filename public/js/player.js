@@ -37,21 +37,21 @@ const updatePlayerHeader = player => {
             </div>
 
             <div class="player-meta">
-                <div class="stat1">
+                <div class="meta-stat stat1">
                     <p class="caption"><strong>pts</strong></p>
-                    <p class="">${player.total_points}</p>
+                    <p class="caption">${player.total_points}</p>
                 </div>
-                <div class="stat2">
+                <div class="meta-stat stat2">
                     <p class="caption"><strong>Own</strong></p>
-                    <p class="">${player.selected_by_percent} %</p>
+                    <p class="caption">${player.selected_by_percent} %</p>
                 </div>
-                <div class="stat3">
+                <div class="meta-stat stat3">
                     <p class="caption"><strong>form</strong></p>
-                    <p class="">${player.form}</p>
+                    <p class="caption">${player.form}</p>
                 </div>
-                <div class="stat4">
+                <div class="meta-stat stat4">
                     <p class="caption"><strong>ict</strong></p>
-                    <p class="">${player.ict_index}</p>
+                    <p class="caption">${player.ict_index}</p>
                 </div>
             </div>`
 }
@@ -129,11 +129,13 @@ const generateLineChart = async (chart, history) => {
         svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x).ticks(history.length));
-        
+        let xz = 450000000000;
+        xz.toPrecision(2);
+        console.log(xz)
 
     // Add Y axis
     let y = d3.scaleLinear()
-        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.5) : +gw.selected-100000 ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.5) : +gw.selected+100000)])
+        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.5) : +gw.selected ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.5) : +gw.selected+100000)])
         .range([ height, 0 ]);
         svg.append("g")
         .call(d3.axisLeft(y));
@@ -199,8 +201,6 @@ const generateLineChart = async (chart, history) => {
     let chartObserver = new IntersectionObserver(chartAnimation)
     chartObserver.observe(chart);
 }
-// const priceChart = async (array) => { generateLineChart(array); }
-// const ownershipChart = async (array) => { generateLineChart(array); }
 
 const playerSearch = async (e) => {
     e.preventDefault();

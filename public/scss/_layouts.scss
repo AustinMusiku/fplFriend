@@ -149,6 +149,16 @@ body{
         justify-content: space-between;
         flex-direction: row;
         align-items: center;
+
+        .meta-stat{
+            padding-left: 1em;
+            width: 25%;
+            border-right: 1px solid $clr-light;
+            
+            &:nth-child(1){
+                border-left: 1px solid $clr-light;
+            }
+        }
     }
 }
 
@@ -205,6 +215,10 @@ section{
             .section-block{
                 width: 100%;
                 margin-bottom: 4em;
+                
+                &:nth-last-of-type(){
+                    margin-bottom: 0;
+                }
             }
         }
     }
