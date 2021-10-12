@@ -129,16 +129,14 @@ const generateLineChart = async (chart, history) => {
         svg.append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x).ticks(history.length));
-        let xz = 450000000000;
-        xz.toPrecision(2);
-        console.log(xz)
-
+    
+    let maxSelected = d3.max(history, gw => gw.selected);
     // Add Y axis
     let y = d3.scaleLinear()
-        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.5) : +gw.selected ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.5) : +gw.selected+100000)])
+        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.2) : (gw.selected)/(evaluatePrefix(gw.selected)) ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.2) : (gw.selected)/(evaluatePrefix(gw.selected)))])
         .range([ height, 0 ]);
         svg.append("g")
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y).ticks(chart == priceChart ? 5 : 10));
 
     // X label
     svg.append('text')
@@ -156,7 +154,7 @@ const generateLineChart = async (chart, history) => {
         .attr('class','axis-label')
         .style('font-family', 'Space Grotesk')
         .style('font-size', 14)
-        .text( chart == priceChart ? 'points' : 'ownerhip');
+        .text( chart == priceChart ? `price(millions)` : `ownership ${((evaluatePrefix(maxSelected)) == 1000000) ? '(millions)' : (evaluatePrefix(maxSelected) == 1000) ? '(thousands)' : ''}`);
     
     // Add horizontal grid lines
     const yAxisGrid = d3.axisLeft(y)
@@ -175,7 +173,7 @@ const generateLineChart = async (chart, history) => {
         .attr("stroke-width", 1)
         .attr("d", d3.line()
             .x(gw => x(gw.round))
-            .y(gw => y(chart == priceChart ? gw.value/10 : gw.selected))
+            .y(gw => y(chart == priceChart ? gw.value/10 : gw.selected/(evaluatePrefix(maxSelected))))
             )
 
     // get length of average points line and highest points line  

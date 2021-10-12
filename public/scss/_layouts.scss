@@ -127,8 +127,8 @@ body{
 .player-summary{
     display: grid;
     grid-template-columns: repeat(6, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-    gap: 2.5em;
+    grid-template-rows: auto min-content;
+    gap: 1.5em;
     
     .player-name{
         grid-column: 1/7;

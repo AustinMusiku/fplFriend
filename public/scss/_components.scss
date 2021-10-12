@@ -109,6 +109,7 @@ nav{
     color: $clr-light;
     background: none;
     z-index: 1;
+    cursor: pointer;
 
     &.dark{
         border: 1px solid $clr-accent2;
