@@ -1,8 +1,11 @@
+let sectionBody = document.querySelector('.section-body');
 const playerSearchForm = document.querySelector('.player-search');
 const playerSearchFormField = document.querySelector('#playerAutoComplete');
 const playerSummary = document.querySelector('.player-summary');
 let historyTable = document.querySelector('.history-table');
 let fixturesTable = document.querySelector('.fixtures-table');
+let ownershipChart = document.querySelector('.player-points-chart');
+let priceChart = document.querySelector('.player-price-chart');
 
 const playerDetailFetch = async (playerId) => {
     const query = ` { 
@@ -34,23 +37,19 @@ const updatePlayerHeader = player => {
 
             <div class="player-meta">
                 <div class="stat1">
-                    <p class="">pts</p>
+                    <p class="caption"><strong>pts</strong></p>
                     <p class="">${player.total_points}</p>
                 </div>
-                <div class="stat1">
-                    <p class="">gw pts</p>
-                    <p class="">${player.event_points}</p>
-                </div>
                 <div class="stat2">
-                    <p class="">Own</p>
-                    <p class="">${player.selected_by_percent}</p>
+                    <p class="caption"><strong>Own</strong></p>
+                    <p class="">${player.selected_by_percent} %</p>
                 </div>
                 <div class="stat3">
-                    <p class="">form</p>
+                    <p class="caption"><strong>form</strong></p>
                     <p class="">${player.form}</p>
                 </div>
                 <div class="stat4">
-                    <p class="">ict</p>
+                    <p class="caption"><strong>ict</strong></p>
                     <p class="">${player.ict_index}</p>
                 </div>
             </div>`
@@ -69,7 +68,6 @@ const updateHistoryTable = history => {
     historyTable.append(rowHeads);
     
     // create a row field for a player
-
     history.reverse().forEach( hist => {
         let rowfields = document.createElement('tr');
         rowfields.innerHTML = `
@@ -79,6 +77,9 @@ const updateHistoryTable = history => {
             <td>${hist.minutes}</td>`
         historyTable.append(rowfields);
     })
+
+    // reset history array to normal order; reverse history array
+    history.reverse();
 }
 
 const updateFixturesTable = fixtures => {
@@ -104,9 +105,102 @@ const updateFixturesTable = fixtures => {
         fixturesTable.append(rowfields);
     })
 }
-const generateLineChart = async (array) => { }
-const priceChart = async (array) => { generateLineChart(array); }
-const ownershipChart = async (array) => { generateLineChart(array); }
+const generateLineChart = async (chart, history) => {
+    // clear any chart data 
+    chart.innerHTML = '';
+
+    // set the dimensions and margins of the graph
+    let margin = {top: 10, right: 10, bottom: 60, left: 45},
+    width = sectionBody.scrollWidth - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+    console.log(chart.getAttribute('class'))
+    // append the svg object to the body of the page
+    let svg = d3.select(`.${chart.getAttribute('class')}`)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform","translate(" + margin.left + "," + margin.top + ")");
+    
+    // Add X axis
+    let x = d3.scaleLinear()
+        .domain([1, d3.max(history, gw => gw.round)])
+        .range([ 0, width ]);
+        svg.append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).ticks(history.length));
+        
+
+    // Add Y axis
+    let y = d3.scaleLinear()
+        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.1).toFixed(1) : +gw.selected-100000 ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.1).toFixed(1) : +gw.selected+100000)])
+        .range([ height, 0 ]);
+        svg.append("g")
+        .call(d3.axisLeft(y));
+
+    // X label
+    svg.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('transform', 'translate('+ (width/2) +',' + (height+30) + ')')
+        .attr('class','axis-label')
+        .style('font-family', 'Space Grotesk')
+        .style('font-size', 14)
+        .text('gameweek');
+
+    // Y label
+    svg.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('transform', 'translate(-35,' + height/2 + ')rotate(-90)')
+        .attr('class','axis-label')
+        .style('font-family', 'Space Grotesk')
+        .style('font-size', 14)
+        .text( chart == priceChart ? 'points' : 'ownerhip');
+    
+    // Add horizontal grid lines
+    const yAxisGrid = d3.axisLeft(y)
+        .tickSize( -(width) )
+        .tickFormat('')
+        .ticks(10);
+    svg.append('g')
+        .attr('class', 'y axis-grid')
+        .call(yAxisGrid);
+
+    // Add the avg points line
+    const path = svg.append("path")
+        .datum(history)
+        .attr("fill", "none")
+        .attr("stroke", "rgba(255, 23, 81, 0.8)")
+        .attr("stroke-width", 1)
+        .attr("d", d3.line()
+            .x(gw => x(gw.round))
+            .y(gw => y(chart == priceChart ? gw.value/10 : gw.selected))
+            )
+
+    // get length of average points line and highest points line  
+    const pathLength = path.node().getTotalLength();
+
+    // set stroke-dashoffset and stroke-dasharray for both lines
+    path
+        .attr('stroke-dashoffset', pathLength)
+        .attr('stroke-dasharray', pathLength);
+    
+    // animate lines upon scrollig into view
+    let chartAnimation = (entries) => {
+        if(entries[0].intersectionRatio > 0){
+            // animate avg and highest points line
+            svg.selectAll('path')
+                .transition()
+                .ease(d3.easeExpInOut)
+                .duration(3000)
+                .attr('stroke-dashoffset', 0)
+        
+        }
+    }
+    let chartObserver = new IntersectionObserver(chartAnimation)
+    chartObserver.observe(chart);
+}
+// const priceChart = async (array) => { generateLineChart(array); }
+// const ownershipChart = async (array) => { generateLineChart(array); }
 
 const playerSearch = async (e) => {
     e.preventDefault();
@@ -115,7 +209,9 @@ const playerSearch = async (e) => {
     let player = await playerDetailFetch(searchedPlayer.id)
     updatePlayerHeader(player.player);
     updateHistoryTable(player.player.pastFixtures);
-    updateFixturesTable(player.player.UpcomingFixtures)
+    updateFixturesTable(player.player.UpcomingFixtures);
+    generateLineChart(priceChart, player.player.pastFixtures);
+    generateLineChart(ownershipChart, player.player.pastFixtures);
 }
 
 playerSearchForm.addEventListener('submit', playerSearch)
@@ -131,6 +227,8 @@ const initHomepage = async () => {
         let player = graphQlResponse.data.player;
         let history = graphQlResponse.data.player.pastFixtures;
         let fixtures = graphQlResponse.data.player.UpcomingFixtures;
+
+        console.log(history, fixtures)
 
         playerArray = players.map(player => {
             return {
@@ -181,8 +279,9 @@ const initHomepage = async () => {
         //
         // update player charts
         // price chart
-
+        generateLineChart(priceChart, history)
         // ownership chart
+        generateLineChart(ownershipChart, history)
 
         function autocomplete(inp, arr) {
             /*the autocomplete function takes two arguments,
