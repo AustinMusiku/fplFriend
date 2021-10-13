@@ -133,7 +133,7 @@ const generateLineChart = async (chart, history) => {
     let maxSelected = d3.max(history, gw => gw.selected);
     // Add Y axis
     let y = d3.scaleLinear()
-        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.2) : (gw.selected)/(evaluatePrefix(gw.selected)) ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.2) : (gw.selected)/(evaluatePrefix(gw.selected)))])
+        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.2) : (gw.selected)/(evaluatePrefix(maxSelected)) ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.2) : (gw.selected)/(evaluatePrefix(maxSelected)))])
         .range([ height, 0 ]);
         svg.append("g")
         .call(d3.axisLeft(y).ticks(chart == priceChart ? 5 : 10));
@@ -208,7 +208,6 @@ const playerSearch = async (e) => {
     playerSearchForm.setAttribute('action', `/player/${searchedPlayer.id}`);
     console.log(playerSearchForm.getAttribute('action'));
     playerSearchForm.submit();
-
 }
 
 playerSearchForm.addEventListener('submit', playerSearch)
