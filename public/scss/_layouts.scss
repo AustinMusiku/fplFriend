@@ -41,7 +41,9 @@ body{
         }
     }
     .captain-stats-labels{
-        flex-direction: column-reverse;
+        .column-heading{
+            visibility: hidden;
+        }
     }
     p{
         margin: 0;
@@ -321,4 +323,12 @@ footer{
             }
         }
     }
+}
+
+
+
+@media screen and (max-width: 320px){
+    .cards{
+        grid-template-columns: repeat(1, 1fr);
+    } 
 }

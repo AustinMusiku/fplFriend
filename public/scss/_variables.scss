@@ -1,6 +1,6 @@
 $fs-super-heading: 6em;
-$fs-heading: 3em;
-$fs-sub-heading: 2.4em;
+$fs-heading: 2.6em;
+$fs-sub-heading: 2.2em;
 $fs-title: 1.25em;
 $fs-body: 1.125em;
 $fs-caption: .8em;
@@ -32,6 +32,15 @@ $marquee-element-width: calc($marquee-content-width/$marquee-elements-displayed)
     $fs-super-heading: 4em;
     $fs-heading: 2.4em;
     $fs-sub-heading: 2em;
+    $fs-title: 1.2em;
+    $fs-body: 1em;
+    $fs-caption: .8em;
+}
+
+@media screen and (max-width: 320px){
+    $fs-super-heading: 4em;
+    $fs-heading: 2em;
+    $fs-sub-heading: 1.8em;
     $fs-title: 1.2em;
     $fs-body: 1em;
     $fs-caption: .8em;
