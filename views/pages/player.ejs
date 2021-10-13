@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <%- include('../partials/heading')%>
-    <title>home | fplFriend</title>
-    <meta name="description" content="Fpl friend - A handy guide to fpl team management">
+    <title>Fpl friend | <%= player.first_name %> <%= player.second_name %></title>
+    <meta name="description" content="Fpl friend - <%= player.web_name %>">
     <meta name="keywords" content="fpl bar-chart ronaldo github sensible transfers premium assets budget mid-range">
 </head>
 <body>
@@ -12,11 +12,11 @@
         <div class="landing grid">
             <div class="container small">
 
-                <form action="" method="get" class="player-search" autocomplete="off">
+                <form method="get" class="player-search" autocomplete="off">
 
                     <div class="input-box">
                         <div class="autocomplete">
-                            <input id="playerAutoComplete" type="text" name="playerAutoComplete" placeholder="player name">
+                            <input id="playerAutoComplete" type="text" name="search_player" placeholder="player name">
                             <!-- <input id="myInput" type="text" name="myCountry" placeholder="Country"> -->
                         </div>
 

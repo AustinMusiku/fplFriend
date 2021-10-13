@@ -204,12 +204,11 @@ const playerSearch = async (e) => {
     e.preventDefault();
     const formValue = playerSearchFormField.value;
     let searchedPlayer = playerArray.find(player => player.playerName == formValue );
-    let player = await playerDetailFetch(searchedPlayer.id)
-    updatePlayerHeader(player.player);
-    updateHistoryTable(player.player.pastFixtures);
-    updateFixturesTable(player.player.UpcomingFixtures);
-    generateLineChart(priceChart, player.player.pastFixtures);
-    generateLineChart(ownershipChart, player.player.pastFixtures);
+    // let player = await playerDetailFetch(searchedPlayer.id)
+    playerSearchForm.setAttribute('action', `/player/${searchedPlayer.id}`);
+    console.log(playerSearchForm.getAttribute('action'));
+    playerSearchForm.submit();
+
 }
 
 playerSearchForm.addEventListener('submit', playerSearch)
