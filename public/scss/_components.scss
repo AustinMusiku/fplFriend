@@ -479,3 +479,17 @@ form{
         }
     }
 }
+
+
+@media screen and (max-width: 320px){
+    .table-container{
+        table{
+            tr{
+                th,
+                td{
+                    min-width: 0;
+                }
+            }
+        }
+    }
+}
