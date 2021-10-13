@@ -38,20 +38,20 @@ const updatePlayerHeader = player => {
 
             <div class="player-meta">
                 <div class="meta-stat stat1">
-                    <p class="caption"><strong>pts</strong></p>
-                    <p class="caption">${player.total_points}</p>
+                    <p class="mini-txt">Pts</p>
+                    <p class="">${player.total_points}</p>
                 </div>
                 <div class="meta-stat stat2">
-                    <p class="caption"><strong>Own</strong></p>
-                    <p class="caption">${player.selected_by_percent} %</p>
+                    <p class="mini-txt">Own</p>
+                    <p class="">${player.selected_by_percent} %</p>
                 </div>
                 <div class="meta-stat stat3">
-                    <p class="caption"><strong>form</strong></p>
-                    <p class="caption">${player.form}</p>
+                    <p class="mini-txt">Form</p>
+                    <p class="">${player.form}</p>
                 </div>
                 <div class="meta-stat stat4">
-                    <p class="caption"><strong>ict</strong></p>
-                    <p class="caption">${player.ict_index}</p>
+                    <p class="mini-txt">Ict</p>
+                    <p class="">${player.ict_index}</p>
                 </div>
             </div>`
 }
@@ -133,7 +133,7 @@ const generateLineChart = async (chart, history) => {
     let maxSelected = d3.max(history, gw => gw.selected);
     // Add Y axis
     let y = d3.scaleLinear()
-        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.2) : (gw.selected)/(evaluatePrefix(maxSelected)) ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.2) : (gw.selected)/(evaluatePrefix(maxSelected)))])
+        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.2) : 0 ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.2) : (gw.selected)/(evaluatePrefix(maxSelected)))])
         .range([ height, 0 ]);
         svg.append("g")
         .call(d3.axisLeft(y).ticks(chart == priceChart ? 5 : 10));

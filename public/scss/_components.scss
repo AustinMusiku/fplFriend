@@ -183,7 +183,6 @@ nav{
 
         tr{
             border-bottom: 1px solid $clr-light;
-
         }
         tr:nth-child(even){
             background-color: $clr-light;
@@ -203,8 +202,15 @@ nav{
         }
 
         th{
-            font-weight: 800;
+            font-weight: 400;
             text-align: left;
+            background-color: $clr-accent2;
+            color: $clr-light;
+
+            &.sticky-cell{
+                background-color: $clr-accent2;
+                color: $clr-light;
+            }
         }
     }
 }
@@ -459,7 +465,7 @@ form{
                 th,
                 td{
                     padding: .25em .5em;
-                    max-width: 100px;
+                    max-width: 120px;
                     width: fit-content;
                 }
 
