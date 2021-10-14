@@ -7,12 +7,13 @@ const hamMenu = document.querySelector('.hamburger-menu');
 const hamLayers = document.querySelectorAll('.ham-layer');
 const navLinks = document.querySelector('.nav-links');
 const nav = document.querySelector('nav');
+let isNavToggled = false;
 
 // toggle mobile navigation
 hamMenu.addEventListener('click', () => {
     animateHamMenu();
     navLinks.classList.toggle('active');
-    let isNavToggled = true;
+    isNavToggled = !isNavToggled;
 })
 // animate hamburger menu
 const animateHamMenu = () => {
@@ -28,9 +29,11 @@ document.addEventListener('scroll', () => {
         nav.classList.remove('scroll-up') 
     }
     // scrolling down
-    if(currentScroll > lastScroll && !nav.classList.contains('scroll-down') && !isNavToggled){ 
+    if(currentScroll > lastScroll && !nav.classList.contains('scroll-down')){ 
         nav.classList.remove('scroll-up');
-        nav.classList.add('scroll-down')
+        if(!isNavToggled){
+            nav.classList.add('scroll-down')
+        }
     }
     // scrolling up
     if(currentScroll < lastScroll && nav.classList.contains('scroll-down')){ 
