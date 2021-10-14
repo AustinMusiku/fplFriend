@@ -267,7 +267,6 @@ svg{
       }
 }
 
-
 // radar maps
 .radar-container{
     margin: auto;
@@ -324,12 +323,15 @@ svg{
     }
 }
 
+// fixture difficulty indicators
 .fix-1, .fix-clr-1{ background-color: rgba(55 ,85 ,35 ,0.8); }
 .fix-2, .fix-clr-2{ background-color: rgba(1 ,252 ,122 ,0.8); }
 .fix-3, .fix-clr-3{ background-color: $clr-light; }
 .fix-4, .fix-clr-4{ background-color: rgba(255, 23, 81, 0.8); }
 .fix-5, .fix-clr-5{ background-color: rgba(128 ,7 ,45 ,0.8); }
+ 
 
+// forms
 form{
     width: 100%;
 
@@ -524,16 +526,9 @@ form{
             tr{
                 th,
                 td{
-                    padding: .25em .5em;
+                    padding: .1em .5em;
                     max-width: 120px;
                     width: fit-content;
-                }
-
-                &.tall{
-                    th,
-                    td{
-                        padding: .5em .5em;
-                    }
                 }
             }
         }

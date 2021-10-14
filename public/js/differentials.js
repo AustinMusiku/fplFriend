@@ -152,7 +152,7 @@ let initHomepage = async () => {
         // append each player to table
         sortedPpm.forEach(player => {
             let rowfields = `
-            <td><a href="/player/${player.id}" class=" no-underline">${player.web_name} <span class="caption">(${player.now_cost/10} m)</span></a></td>
+            <td><a href="/player/${player.id}" class="no-underline">${player.web_name} <span class="caption">(${player.now_cost/10} m)</span></a></td>
             <td>${player.total_points}</td>
             <td>${player.ppm}</td>
             `

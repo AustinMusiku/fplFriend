@@ -41,7 +41,7 @@ let initHomepage = async () => {
             <div class="card-body">
                 <div class="card-body-top">
                     <div class="card-stat2"> 
-                        <p>${player.now_cost/10} <span class="mini-txt">m</span></p> </p>
+                        <p class="">${player.now_cost/10} <span class="mini-txt">m</span></p> </p>
                         <div class="price-indicator ${evalutePriceChange(priceChange)}"></div>
                     </div>
                 </div>
