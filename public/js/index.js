@@ -11,7 +11,8 @@ const nav = document.querySelector('nav');
 // toggle mobile navigation
 hamMenu.addEventListener('click', () => {
     animateHamMenu();
-    navLinks.classList.toggle('active') 
+    navLinks.classList.toggle('active');
+    let isNavToggled = true;
 })
 // animate hamburger menu
 const animateHamMenu = () => {
@@ -26,10 +27,12 @@ document.addEventListener('scroll', () => {
     if(currentScroll <= 0){ 
         nav.classList.remove('scroll-up') 
     }
-    if(currentScroll > lastScroll && !nav.classList.contains('scroll-down')){ 
+    // scrolling down
+    if(currentScroll > lastScroll && !nav.classList.contains('scroll-down') && !isNavToggled){ 
         nav.classList.remove('scroll-up');
         nav.classList.add('scroll-down')
     }
+    // scrolling up
     if(currentScroll < lastScroll && nav.classList.contains('scroll-down')){ 
         nav.classList.remove('scroll-down');
         nav.classList.add('scroll-up')

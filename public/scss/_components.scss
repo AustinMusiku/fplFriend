@@ -8,6 +8,25 @@ nav{
     z-index: 100;
     transition: .25s;
 
+
+
+    &.scroll-up,
+    &.scroll-down{
+        .container{
+            .logo{
+                a{
+                    h1{
+                        color: $clr-light;
+                    }
+                }
+            }
+        
+            .nav-links{
+                .nav-link{ color: $clr-light; }
+            }
+        }
+    }
+
     &.scroll-up{
         top: 0;
         background-color: $clr-accent2;
@@ -28,7 +47,7 @@ nav{
             a{
                 text-decoration: none;
                 h1{
-                    color: $clr-light;
+                    color: $clr-accent2;
                 }
             }
         }
@@ -41,7 +60,7 @@ nav{
             .nav-link{
                 font-weight: 100;
                 text-decoration: none;
-                color: $clr-pale;
+                color: $clr-accent2;
                 transition: 0.25s;
     
                 &:hover{
@@ -206,6 +225,7 @@ nav{
             text-align: left;
             background-color: $clr-accent2;
             color: $clr-light;
+            text-transform: capitalize;
 
             &.sticky-cell{
                 background-color: $clr-accent2;
@@ -324,7 +344,8 @@ form{
             input {
                 padding: 10px;
                 border: 1px solid transparent;
-                background-color: $clr-light;
+                background-color: #fff;
+                border: 1px solid $clr-accent2;
             }
             input[type=text] {
                 width: 100%;
@@ -372,6 +393,37 @@ form{
 
     // nav
     nav{
+
+        &.scroll-up,
+        &.scroll-down{
+            .container{
+                .nav-links{
+                    &.active{
+                        left: 0;
+                    }
+        
+                    .nav-link{
+                        text-align: center;
+                        color: $clr-light;
+                    }
+                }
+                .hamburger-menu{
+                    .ham-layer{
+                        background-color: $clr-light;
+
+                        &.long,
+                        &.mid,
+                        &.short{
+        
+                            &.active{
+                                background-color: $clr-light;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         .container{
             .nav-links{
                 position: fixed;
@@ -394,6 +446,7 @@ form{
     
                 .nav-link{
                     text-align: center;
+                    color: $clr-light;
                 }
             }
     
@@ -409,10 +462,19 @@ form{
     
                 .ham-layer{
                     position: absolute;
-                    background-color: $clr-light;
+                    background-color: $clr-accent2;
                     height: 2px;
                     right: 0;
     
+                    &.long,
+                    &.mid,
+                    &.short{
+    
+                        &.active{
+                            background-color: $clr-light;
+                        }
+                    }
+
                     &.long{
                         width: 100%;
                         
@@ -443,8 +505,6 @@ form{
                             transform: translateY(-50%) rotate(45deg);
                         }
                     }
-    
-    
                 }
             }
         }
