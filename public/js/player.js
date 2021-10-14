@@ -106,6 +106,7 @@ const updateFixturesTable = fixtures => {
         fixturesTable.append(rowfields);
     })
 }
+
 const generateLineChart = async (chart, history) => {
     // clear any chart data 
     chart.innerHTML = '';
@@ -131,9 +132,12 @@ const generateLineChart = async (chart, history) => {
         .call(d3.axisBottom(x).ticks(history.length));
     
     let maxSelected = d3.max(history, gw => gw.selected);
+    let minDomain = d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.2) : 0 )
+    let maxDomain = d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.2) : (gw.selected)/(evaluatePrefix(maxSelected)))
+
     // Add Y axis
     let y = d3.scaleLinear()
-        .domain([d3.min(history, gw => chart == priceChart ? ((gw.value/10)-0.2) : 0 ), d3.max(history, gw => chart == priceChart ? ((gw.value/10)+0.2) : (gw.selected)/(evaluatePrefix(maxSelected)))])
+        .domain([minDomain, maxDomain])
         .range([ height, 0 ]);
         svg.append("g")
         .call(d3.axisLeft(y).ticks(chart == priceChart ? 5 : 10));

@@ -342,8 +342,9 @@ footer{
                 }
 
                 p{
-                    &:nth-last-child(){
+                    &:nth-of-type(2){
                         font-size: $fs-caption;
+                 
                     }
                 }
             }
