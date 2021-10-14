@@ -330,5 +330,23 @@ footer{
 @media screen and (max-width: 320px){
     .cards{
         grid-template-columns: repeat(1, 1fr);
-    } 
+    }
+
+    .player-summary{
+
+        .player-meta{
+            
+            .meta-stat{
+                &:nth-child(1){
+                    border-left: 1px solid $clr-light;
+                }
+
+                p{
+                    &:nth-last-child(){
+                        font-size: $fs-caption;
+                    }
+                }
+            }
+        }
+    }
 }
