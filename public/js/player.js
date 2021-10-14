@@ -169,7 +169,7 @@ const generateLineChart = async (chart, history) => {
         .attr('class', 'y axis-grid')
         .call(yAxisGrid);
 
-    // Add the avg points line
+    // plot the line
     const path = svg.append("path")
         .datum(history)
         .attr("fill", "none")
@@ -180,7 +180,7 @@ const generateLineChart = async (chart, history) => {
             .y(gw => y(chart == priceChart ? gw.value/10 : gw.selected/(evaluatePrefix(maxSelected))))
             )
 
-    // get length of average points line and highest points line  
+    // get length of the plotted line 
     const pathLength = path.node().getTotalLength();
 
     // set stroke-dashoffset and stroke-dasharray for both lines
