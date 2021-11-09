@@ -6,8 +6,6 @@ dotenv.config({
     path: '../.env'
 });
 
-console.log(process.env.CONSUMER_KEY);
-
 // setup twitter api
 const T = new twit({
   consumer_key: process.env.CONSUMER_KEY,
@@ -18,10 +16,10 @@ const T = new twit({
 
 // send tweet
 const sendTweet = (tweet) => {
-    tweetParameters = {
+    params = {
         status: tweet
     }
-    T.post('statuses/update', tweetParameters, (err, data, response) => {
+    T.post('statuses/update', params, (err, data, response) => {
         if (err) {
         console.log(err);
         } else{
@@ -30,4 +28,18 @@ const sendTweet = (tweet) => {
     });
 };
 
-sendTweet('Testing testing');
+// account info
+const accountInfo = (screen_name) => {
+    params = {
+        screen_name: screen_name
+    }
+    T.get('users/show', params, (err, data, response) => {
+        if (err) {
+        console.log(err);
+        } else{
+        console.log(data);
+        }
+    });
+};
+
+module.exports = { sendTweet, accountInfo }

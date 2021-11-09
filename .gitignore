@@ -28,4 +28,6 @@ node_modules/
 # Serverless directories
 .serverless/
 
+# scratch files
 player.json
+.txt

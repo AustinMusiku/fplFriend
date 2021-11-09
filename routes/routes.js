@@ -12,6 +12,10 @@ const {
     getPlayersByTeam,
     gameWeeks} = require('../controllers/fetchControllers')
 
+const {
+    sendTweet,
+    accountInfo} = require('../controllers/twitterControllers')
+
 // GET ROUTES
 // get pages
 router.get('/', (req, res) => res.render('pages/home'))
@@ -29,7 +33,6 @@ router.get('/fixturesData', async (req, res) => { res.json(await getFixtures()) 
 
 // get all players
 router.get('/players', async (req, res) => { res.json(await getAllPlayers()) });
-
 
 // get all teams info
 router.get('/teams', async (req, res) => { res.json(await getAllTeams()) });
