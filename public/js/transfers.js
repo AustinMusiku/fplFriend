@@ -12,7 +12,7 @@ let initHomepage = async () => {
             midRangers: players(mid_rangers: true, trim_extras: true){ ... playerFields } 
             budgets: players(budgets: true, trim_extras: true, first: 40){ ... playerFields } 
             currentGw: gameweek(is_current: true){ id } } 
-            fragment playerFields on Player{ id web_name bps now_cost UpcomingFixtures(first: 6){ difficulty is_home team_a team_h} } `
+            fragment playerFields on Player{ id web_name form bps minutes points_per_game now_cost UpcomingFixtures(first: 6){ difficulty is_home team_a team_h} } `
         let graphqlResponse = await graphQlQueryFetch(query);
         let mostTransfered = graphqlResponse.data.mostTransfered;
         let premiums = graphqlResponse.data.premiums;
@@ -150,8 +150,11 @@ let initHomepage = async () => {
                 let fdr4 = player.UpcomingFixtures[3].difficulty;
                 let fdr5 = player.UpcomingFixtures[4].difficulty;
                 let fdr6 = player.UpcomingFixtures[5].difficulty;
-                let avgFdr = (fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6;
-                let index = (5 - avgFdr)*20+player.bps*0.1;
+                let history = (player.form*0.3 + player.points_per_game*0.3 + (player.bps/player.minutes)*0.4).toFixed(2);
+                let avgFdr = ((fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6).toFixed(2);
+                let index = ((5 - avgFdr)*0.5 + history*0.5).toFixed(2);
+                console.log(`${player.web_name} - ${history} - ${avgFdr} - ${index}`);
+
                 return {
                     ...player,
                     fdr1: fdr1,
@@ -227,7 +230,7 @@ let initHomepage = async () => {
 
         // BUDGET 0 < X < 6.5
         let computedBudgets = computeIndices(budgets);
-        let sortedBudgets = computedBudgets.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10)       
+        let sortedBudgets = computedBudgets.sort((a,b) => (b.pci) - (a.pci)).slice(0, 10);     
         generateTable(budgetTable, sortedBudgets)
         
     }catch(err){
