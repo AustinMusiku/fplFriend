@@ -153,7 +153,6 @@ let initHomepage = async () => {
                 let history = (player.form*0.3 + player.points_per_game*0.3 + (player.bps/player.minutes)*0.4).toFixed(2);
                 let avgFdr = ((fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6).toFixed(2);
                 let index = ((5 - avgFdr)*0.5 + history*0.5).toFixed(2);
-                console.log(`${player.web_name} - ${history} - ${avgFdr} - ${index}`);
 
                 return {
                     ...player,
