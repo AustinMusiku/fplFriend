@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 
 // setup config files
 dotenv.config({
-    path: '.env'
+    path: '../.env'
 });
 
 // setup twitter api

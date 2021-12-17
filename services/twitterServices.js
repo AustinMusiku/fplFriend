@@ -56,8 +56,8 @@ const sendCaptainPicks = async () => {
             sendTweet(tweet);
     })
 }
-sendTopPlayers();
-// sendCaptainPicks();
+sendCaptainPicks();
+// sendTopPlayers();
 // send differentials
 
 // send price actions

@@ -19,14 +19,14 @@ const app = express()
 app.use(compression({ level: 9 }))
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use('/dist', express.static(path.join(__dirname + '/dist')))
+app.use('/dist', express.static(path.join(__dirname, '/dist')))
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname + '/views'))
 app.use(cors({
     allowedHeaders : 'Content-Type,Authorization'
 }));
 
-// // setup logging write stream for morgan
+// setup logging write stream for morgan
 // let logStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' });
 // app.use(morgan('tiny', { stream: logStream }));
 
