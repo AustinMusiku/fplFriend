@@ -194,11 +194,7 @@ header{
     }
     
     .landing{
-        // border: 1px solid green;
-
-        // position: relative;
-        // top: 50%;
-        // transform: translateY(-50%);
+        margin: calc(50vh - 110px) 0;
 
         .container{
             // padding-top: 16em;
@@ -286,16 +282,19 @@ footer{
                 margin: 18vh 0 6vh;
             }
         }
-    }
 
-    .landing{
-        .container{
-            
-            .landing-text{
-                margin-bottom: 2em;
+        .landing{
+            margin: calc(50vh - 152px) 0;
+    
+            .container{
+                
+                .landing-text{
+                    margin-bottom: 2em;
+                }
             }
         }
     }
+
 
     .player-summary{
         display: flex;
