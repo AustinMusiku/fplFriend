@@ -31,3 +31,4 @@ node_modules/
 # scratch files
 player.json
 .txt
+scratch.js
