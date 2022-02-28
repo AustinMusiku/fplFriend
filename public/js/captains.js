@@ -10,6 +10,8 @@ let initHomepage = async () => {
         let query = `{players(captains:true, trim_extras: true){ id web_name now_cost minutes form points_per_game bps chance_of_playing_next_round assists goals_scored total_points influence threat creativity selected_by_percent element_type UpcomingFixtures(first: 1){ difficulty is_home team_h team_a } } }`
         let graphqlResponse = await graphQlQueryFetch(query);
         let players = graphqlResponse.data.players;
+
+        players.forEach(player => console.log(player))
         //
         // CAPTAINS TABLE
         // create opponent, fdr(fixture difficulty rating), and captaincy field for each player
