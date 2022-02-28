@@ -4,16 +4,16 @@ let captainStats = document.querySelector('.captain-stats');
 let vcaptainStats = document.querySelector('.vcaptain-stats');
 let captainsTable = document.querySelector('.captains-table');
 
-// const fetchFrom = async ()
+const fetchGameweek = async () => {
+    const nextGwQuery = 'gameweek(is_next: true) { ...GameWeekFields deadline_time }';
+    return await graphQlQueryFetch(nextGwQuery).data.gameweek;
+}
 
 let initHomepage = async () => {
     try{
-        const nextGwQuery = 'gameweek(is_next: true) { ...GameWeekFields deadline_time }';
-        let nextGw = 
-            localStorage.getItem('nextGw') ? 
-            JSON.parse(localStorage.getItem('nextGw')) : 
-            await graphQlQueryFetch(nextGwQuery).data.gameweek;
-        console.log(nextGw);
+        // get current gameweek from localStorage or fetch from graphQl endpoint
+        let nextGw = localStorage.getItem('nextGw') ? JSON.parse(localStorage.getItem('nextGw')) : await fetchGameweek();
+
         // query players and gameweek from graphql
         const query = `{
             players(captains:true, trim_extras: true){ 
