@@ -3,6 +3,9 @@ let sectionBody = document.querySelector('.section-body');
     
 let initHomepage = async () => {
     try{
+        console.log('initHomepage');
+        localStorage.setItem('nextGw', 'nextGw');
+
         // query players and curret ad ext gameweek from graphql
         let query = `{ players(by_form: true, first: 6) { id web_name now_cost team element_type cost_change_event total_points form ict_index selected_by_percent } nextGameWeek: gameweek(is_next: true) { ...GameWeekFields deadline_time } currentGameWeek: gameweek(is_current: true) { ...GameWeekFields chip_plays { chip_name num_played } } gameweeks(is_finished: true){ id avg_points highest_score } }  fragment GameWeekFields on Gameweek { id }`
         let response = await graphQlQueryFetch(query);
@@ -11,6 +14,7 @@ let initHomepage = async () => {
         let finishedGws = response.data.gameweeks;
         const currentGw = response.data.currentGameWeek;
         const nextGw = response.data.nextGameWeek;
+        localStorage.setItem('nextGw', JSON.stringify(nextGw));
 
         //
         // DEADLINE BANNER

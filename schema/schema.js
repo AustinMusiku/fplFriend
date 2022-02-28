@@ -60,14 +60,12 @@ const PlayerType = new GraphQLObjectType({
         UpcomingFixtures: {
             type: GraphQLList(UpcomingFixtureType),
             args: {
-                first: {
-                    type: GraphQLInt
-                }
+                gw: { type: GraphQLInt }
             },
             resolve: async (parent, args, { loaders }) => {
                 let playerUpcomingFixtures = loaders.playerEvent.loadMany([parent.id]);
                 let fixs = await playerUpcomingFixtures;
-                return fixs[0].fixtures.slice(0, args.first);
+                return fixs[0].fixtures.filter(fix => fix.event == args.gw);
             }
         },
         pastFixtures: {
@@ -171,33 +169,15 @@ const RootQuery = new GraphQLObjectType({
             type: GraphQLList(PlayerType),
             description: 'All players',
             args: {
-                first: {
-                    type: GraphQLInt
-                },
-                by_form: {
-                    type: GraphQLBoolean
-                },
-                by_transfers: {
-                    type: GraphQLBoolean
-                },
-                trim_extras: {
-                    type: GraphQLBoolean
-                },
-                differentials: {
-                    type: GraphQLBoolean
-                },
-                captains: {
-                    type: GraphQLBoolean
-                },
-                premiums: {
-                    type: GraphQLBoolean
-                },
-                mid_rangers: {
-                    type: GraphQLBoolean
-                },
-                budgets: {
-                    type: GraphQLBoolean
-                }
+                first: { type: GraphQLInt },
+                by_form: { type: GraphQLBoolean },
+                by_transfers: { type: GraphQLBoolean },
+                trim_extras: { type: GraphQLBoolean },
+                differentials: { type: GraphQLBoolean },
+                captains: { type: GraphQLBoolean },
+                premiums: { type: GraphQLBoolean },
+                mid_rangers: { type: GraphQLBoolean },
+                budgets: { type: GraphQLBoolean }
             },
             resolve: async(parent, args) => {
                 let players = await fetchMethods.getAllPlayers();
@@ -239,9 +219,7 @@ const RootQuery = new GraphQLObjectType({
             type: PlayerType,
             description: 'One Player',
             args: {
-                id: {
-                    type: GraphQLInt
-                }
+                id: { type: GraphQLInt }
             },
             resolve: async(parent, args, { loaders }) => {
                 let loaded = loaders.player.load(args.id)
@@ -253,9 +231,7 @@ const RootQuery = new GraphQLObjectType({
             type: GraphQLList(GameWeekType),
             description: 'All gameweeks',
             args: {
-                is_finished: {
-                    type: GraphQLBoolean
-                }
+                is_finished: { type: GraphQLBoolean }
             },
             resolve: async (parent, args) => {
                 let gws = await fetchMethods.gameWeeks()
@@ -269,15 +245,9 @@ const RootQuery = new GraphQLObjectType({
             type: GameWeekType,
             description: 'One gameweek',
             args: {
-                id: { 
-                    type: GraphQLInt 
-                },
-                is_current: { 
-                    type: GraphQLBoolean 
-                },
-                is_next: { 
-                    type: GraphQLBoolean 
-                },
+                id: {  type: GraphQLInt  },
+                is_current: {  type: GraphQLBoolean  },
+                is_next: {  type: GraphQLBoolean  },
             },
             resolve: async (parent, args) => {
                 let gws = await fetchMethods.gameWeeks()

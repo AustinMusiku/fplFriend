@@ -62,8 +62,6 @@ const evaluatePrefix = number => {
         }
         
 }
-let number = 1000000
-console.log(evaluatePrefix(number))
 
 // Fetch methods
 // graphql fetch

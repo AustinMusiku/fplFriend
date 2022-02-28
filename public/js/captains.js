@@ -3,11 +3,24 @@ let radar = document.querySelector('.radar');
 let captainStats = document.querySelector('.captain-stats');
 let vcaptainStats = document.querySelector('.vcaptain-stats');
 let captainsTable = document.querySelector('.captains-table');
-    
+
+// const fetchFrom = async ()
+
 let initHomepage = async () => {
     try{
+        const nextGwQuery = 'gameweek(is_next: true) { ...GameWeekFields deadline_time }';
+        let nextGw = 
+            localStorage.getItem('nextGw') ? 
+            JSON.parse(localStorage.getItem('nextGw')) : 
+            await graphQlQueryFetch(nextGwQuery).data.gameweek;
+        console.log(nextGw);
         // query players and gameweek from graphql
-        let query = `{players(captains:true, trim_extras: true){ id web_name now_cost minutes form points_per_game bps chance_of_playing_next_round assists goals_scored total_points influence threat creativity selected_by_percent element_type UpcomingFixtures(first: 1){ difficulty is_home team_h team_a } } }`
+        const query = `{
+            players(captains:true, trim_extras: true){ 
+                id web_name now_cost minutes form points_per_game bps chance_of_playing_next_round assists goals_scored total_points influence threat creativity selected_by_percent element_type 
+                UpcomingFixtures(gw: ${nextGw.id}){ 
+                    difficulty is_home team_h team_a 
+            } } }`
         let graphqlResponse = await graphQlQueryFetch(query);
         let players = graphqlResponse.data.players;
 
