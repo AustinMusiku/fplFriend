@@ -7,14 +7,15 @@ let captainsTable = document.querySelector('.captains-table');
 const fetchGameweek = async () => {
     const nextGwQuery = 'gameweek(is_next: true) { ...GameWeekFields deadline_time }';
     const response = await graphQlQueryFetch(nextGwQuery);
+    localStorage.setItem('nextGw', JSON.stringify(response.data.gameweek));
     return response.data.gameweek;
 }
 
-const fetchCaptains = async () => {
+const fetchCaptains = async (id) => {
     const query = `{
         players(captains:true, trim_extras: true){ 
             id web_name now_cost minutes form points_per_game bps chance_of_playing_next_round assists goals_scored total_points influence threat creativity selected_by_percent element_type 
-            UpcomingFixtures(gw: 29){ 
+            UpcomingFixtures(gw: ${id}){ 
                 difficulty is_home team_h team_a 
         } } }`
     const response = await graphQlQueryFetch(query)
@@ -24,26 +25,34 @@ const fetchCaptains = async () => {
 let initHomepage = async () => {
     try{
         // get current gameweek from localStorage or fetch from graphQl endpoint
-        let nextGw = localStorage.getItem('nextGw') ? JSON.parse(localStorage.getItem('nextGw')) : await fetchGameweek();
+        const nextGw = localStorage.getItem('nextGw') ? JSON.parse(localStorage.getItem('nextGw')) : await fetchGameweek();
 
         // query players and gameweek from graphql
-        let players = await fetchCaptains()
-        // console.log(players)
+        let players = await fetchCaptains(nextGw.id)
+        console.log(players)
+
         //
         // CAPTAINS TABLE
         // create opponent, fdr(fixture difficulty rating), and captaincy field for each player
         let captains = players
         .filter(player => player.UpcomingFixtures.length > 0)
         .map(captain => {
+            let fdr = () => {
+                if(captain.UpcomingFixtures.length === 1) return captain.UpcomingFixtures[0].difficulty;
+                const fix1 = captain.UpcomingFixtures[0].difficulty;
+                const fix2 = captain.UpcomingFixtures[1].difficulty;
+                return (Math.min(fix1, fix2)*0.9 + Math.max(fix1, fix2)*0.1).toFixed(2);
+            };
             let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
-            let captaincy = (history*0.50 + (5 - captain.UpcomingFixtures[0].difficulty)*0.50).toFixed(2);
-            // console.log(`${captain.web_name} -> ${captain.form}, ${captain.points_per_game}`);
-            console.log(`${captain.web_name} -> ${captaincy}`);
+            let captaincy = (history*0.50 + (5 - fdr())*0.50).toFixed(2);
+            let opponent = captain.UpcomingFixtures[0].is_home? captain.UpcomingFixtures[0].team_a: captain.UpcomingFixtures[0].team_h;
+            
+            console.log(`${captain.web_name} -> ${fdr()}`);
             return {
                 ...captain,
                 history: history,
-                fdr: captain.UpcomingFixtures[0].difficulty,
-                opponent: captain.UpcomingFixtures[0].is_home? captain.UpcomingFixtures[0].team_a: captain.UpcomingFixtures[0].team_h,
+                fdr: fdr(),
+                opponent: opponent,
                 captaincy: captaincy
             }
         })
