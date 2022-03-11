@@ -196,16 +196,10 @@ nav{
         border-collapse: collapse;
         border-spacing: 0;
     
-        *{
-            font-family: $ff-body;
-        }
-
-        tr{
-            border-bottom: 1px solid $clr-light;
-        }
-        tr:nth-child(even){
-            background-color: $clr-light;
-        }
+        *{ font-family: $ff-body; }
+        tr{ border-bottom: 1px solid $clr-light; }
+        tr:nth-child(even){ background-color: $clr-light; }
+        tr:nth-child(odd){ background-color: white; }
         
         th,
         td{
@@ -217,6 +211,27 @@ nav{
                 position: sticky;
                 left: 0;
                 color: $clr-dark;
+            }
+
+            &.double-data-cell{
+                padding: 0;
+                position: relative;
+                .double-data-cell-container{
+                    position: absolute;
+                    display: flex;
+                    flex-direction: row;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+
+                    span{
+                        display: flex;
+                        width: 50%;
+                        padding: .5em .25em;
+                        align-items: center;
+                    }
+                }
             }
         }
 

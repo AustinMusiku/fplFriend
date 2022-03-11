@@ -89,10 +89,10 @@ let initHomepage = async () => {
                 rowfields = `
                 <td><a href="/player/${captain.id}" class=" no-underline">${captain.web_name}</a></td>
                 <td>${captain.captaincy}</td>
-                <td>
-                    <div>
-                        <span class="fix-${captain.opponent[0].fdr} caption">${evaluateTeam(captain.opponent[0].team)}</span>
-                        <span class="fix-${captain.opponent[1].fdr} caption">${evaluateTeam(captain.opponent[1].team)}</span>
+                <td class="double-data-cell">
+                    <div class="double-data-cell-container">
+                        <span class="fix-${captain.opponent[0].fdr}"><p class="caption">${evaluateTeam(captain.opponent[0].team)}</p></span>
+                        <span class="fix-${captain.opponent[1].fdr}"><p class="caption">${evaluateTeam(captain.opponent[1].team)}</p></span>
                     </div>
                 </td>
             `
