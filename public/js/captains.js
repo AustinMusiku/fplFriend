@@ -29,7 +29,7 @@ let initHomepage = async () => {
 
         // query players and gameweek from graphql
         let players = await fetchCaptains(nextGw.id)
-        console.log(players)
+        // console.log(players)
 
         //
         // CAPTAINS TABLE
@@ -44,16 +44,17 @@ let initHomepage = async () => {
                 return (Math.min(fix1, fix2)*0.9 + Math.max(fix1, fix2)*0.1).toFixed(2);
             };
             const opponent = () => {
-                if(captain.UpcomingFixtures.length === 1) return captain.UpcomingFixtures[0].is_home? [captain.UpcomingFixtures[0].team_a]: [captain.UpcomingFixtures[0].team_h];
-                const fix1 = captain.UpcomingFixtures[0].is_home? captain.UpcomingFixtures[0].team_a: captain.UpcomingFixtures[0].team_h;
-                const fix2 = captain.UpcomingFixtures[1].is_home? captain.UpcomingFixtures[1].team_a: captain.UpcomingFixtures[1].team_h;
-                return [fix1, fix2]
+                if(captain.UpcomingFixtures.length === 1) return captain.UpcomingFixtures[0].is_home? {team: captain.UpcomingFixtures[0].team_a, fdr: captain.UpcomingFixtures[0].difficulty }: {team: captain.UpcomingFixtures[0].team_h, fdr: captain.UpcomingFixtures[0].difficulty};
+                const fix1 = captain.UpcomingFixtures[0].is_home? {team: captain.UpcomingFixtures[0].team_a, fdr: captain.UpcomingFixtures[0].difficulty }: {team: captain.UpcomingFixtures[0].team_h, fdr: captain.UpcomingFixtures[0].difficulty};
+                const fix2 = captain.UpcomingFixtures[1].is_home? {team: captain.UpcomingFixtures[1].team_a, fdr: captain.UpcomingFixtures[1].difficulty }: {team: captain.UpcomingFixtures[1].team_h, fdr: captain.UpcomingFixtures[1].difficulty};
+                const opponents =  [fix1, fix2]
+                return opponents;
             }
 
             let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
             let captaincy = (history*0.50 + (5 - fdr())*0.50).toFixed(2);
             
-            console.log(`${captain.web_name} -> ${opponent()}`);
+            console.log(`${captain.web_name} ->`, opponent());
             return {
                 ...captain,
                 history: history,
@@ -76,11 +77,27 @@ let initHomepage = async () => {
         captainsTable.append(rowHeads);
         // populate captains table
         sortedCaptains.forEach(captain => {
-            let rowfields = `
+            let rowfields;
+            if(captain.UpcomingFixtures.length === 1) {
+                rowfields = `
                 <td><a href="/player/${captain.id}" class=" no-underline">${captain.web_name}</a></td>
                 <td>${captain.captaincy}</td>
-                <td class="fix-${captain.fdr} caption">${evaluateTeam(captain.opponent)}</td>
+                <td class="fix-${captain.opponent.fdr} caption">${evaluateTeam(captain.opponent.team)}</td>
             `
+            }
+            else{
+                rowfields = `
+                <td><a href="/player/${captain.id}" class=" no-underline">${captain.web_name}</a></td>
+                <td>${captain.captaincy}</td>
+                <td>
+                    <div>
+                        <span class="fix-${captain.opponent[0].fdr} caption">${evaluateTeam(captain.opponent[0].team)}</span>
+                        <span class="fix-${captain.opponent[1].fdr} caption">${evaluateTeam(captain.opponent[1].team)}</span>
+                    </div>
+                </td>
+            `
+            }
+
             let row = document.createElement('tr');
             row.innerHTML = rowfields;
             document.querySelector('table').appendChild(row);
