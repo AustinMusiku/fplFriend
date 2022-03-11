@@ -37,22 +37,28 @@ let initHomepage = async () => {
         let captains = players
         .filter(player => player.UpcomingFixtures.length > 0)
         .map(captain => {
-            let fdr = () => {
+            const fdr = () => {
                 if(captain.UpcomingFixtures.length === 1) return captain.UpcomingFixtures[0].difficulty;
                 const fix1 = captain.UpcomingFixtures[0].difficulty;
                 const fix2 = captain.UpcomingFixtures[1].difficulty;
                 return (Math.min(fix1, fix2)*0.9 + Math.max(fix1, fix2)*0.1).toFixed(2);
             };
+            const opponent = () => {
+                if(captain.UpcomingFixtures.length === 1) return captain.UpcomingFixtures[0].is_home? [captain.UpcomingFixtures[0].team_a]: [captain.UpcomingFixtures[0].team_h];
+                const fix1 = captain.UpcomingFixtures[0].is_home? captain.UpcomingFixtures[0].team_a: captain.UpcomingFixtures[0].team_h;
+                const fix2 = captain.UpcomingFixtures[1].is_home? captain.UpcomingFixtures[1].team_a: captain.UpcomingFixtures[1].team_h;
+                return [fix1, fix2]
+            }
+
             let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
             let captaincy = (history*0.50 + (5 - fdr())*0.50).toFixed(2);
-            let opponent = captain.UpcomingFixtures[0].is_home? captain.UpcomingFixtures[0].team_a: captain.UpcomingFixtures[0].team_h;
             
-            console.log(`${captain.web_name} -> ${fdr()}`);
+            console.log(`${captain.web_name} -> ${opponent()}`);
             return {
                 ...captain,
                 history: history,
                 fdr: fdr(),
-                opponent: opponent,
+                opponent: opponent(),
                 captaincy: captaincy
             }
         })
