@@ -28,8 +28,7 @@ let initHomepage = async () => {
         const nextGw = localStorage.getItem('nextGw') ? JSON.parse(localStorage.getItem('nextGw')) : await fetchGameweek();
 
         // query players and gameweek from graphql
-        let players = await fetchCaptains(nextGw.id)
-        // console.log(players)
+        let players = await fetchCaptains(nextGw.id);
 
         //
         // CAPTAINS TABLE
@@ -54,7 +53,6 @@ let initHomepage = async () => {
             let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
             let captaincy = (history*0.50 + (5 - fdr())*0.50).toFixed(2);
             
-            console.log(`${captain.web_name} ->`, opponent());
             return {
                 ...captain,
                 history: history,
