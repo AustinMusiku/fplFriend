@@ -6,7 +6,19 @@ let captainsTable = document.querySelector('.captains-table');
 
 const fetchGameweek = async () => {
     const nextGwQuery = 'gameweek(is_next: true) { ...GameWeekFields deadline_time }';
-    return await graphQlQueryFetch(nextGwQuery).data.gameweek;
+    const response = await graphQlQueryFetch(nextGwQuery);
+    return response.data.gameweek;
+}
+
+const fetchCaptains = async () => {
+    const query = `{
+        players(captains:true, trim_extras: true){ 
+            id web_name now_cost minutes form points_per_game bps chance_of_playing_next_round assists goals_scored total_points influence threat creativity selected_by_percent element_type 
+            UpcomingFixtures(gw: 29){ 
+                difficulty is_home team_h team_a 
+        } } }`
+    const response = await graphQlQueryFetch(query)
+    return response.data.players;
 }
 
 let initHomepage = async () => {
@@ -15,24 +27,18 @@ let initHomepage = async () => {
         let nextGw = localStorage.getItem('nextGw') ? JSON.parse(localStorage.getItem('nextGw')) : await fetchGameweek();
 
         // query players and gameweek from graphql
-        const query = `{
-            players(captains:true, trim_extras: true){ 
-                id web_name now_cost minutes form points_per_game bps chance_of_playing_next_round assists goals_scored total_points influence threat creativity selected_by_percent element_type 
-                UpcomingFixtures(gw: ${nextGw.id}){ 
-                    difficulty is_home team_h team_a 
-            } } }`
-        let graphqlResponse = await graphQlQueryFetch(query);
-        let players = graphqlResponse.data.players;
-
-        players.forEach(player => console.log(player))
+        let players = await fetchCaptains()
+        // console.log(players)
         //
         // CAPTAINS TABLE
         // create opponent, fdr(fixture difficulty rating), and captaincy field for each player
-        let captains = players.map(captain => {
+        let captains = players
+        .filter(player => player.UpcomingFixtures.length > 0)
+        .map(captain => {
             let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
             let captaincy = (history*0.50 + (5 - captain.UpcomingFixtures[0].difficulty)*0.50).toFixed(2);
             // console.log(`${captain.web_name} -> ${captain.form}, ${captain.points_per_game}`);
-
+            console.log(`${captain.web_name} -> ${captaincy}`);
             return {
                 ...captain,
                 history: history,
@@ -43,7 +49,7 @@ let initHomepage = async () => {
         })
         
         let sortedCaptains = captains.sort((a,b) => (b.captaincy) - (a.captaincy)).slice(0, 15);
-        console.log()
+
         // append row headings
         let rowHeadFields = `
         <th>Name</th>
