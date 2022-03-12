@@ -8,15 +8,15 @@ let initHomepage = async () => {
     try{
         // query data from graphql
         // get current gameweek from localStorage or fetch from graphQl endpoint
-        const currentGw = localStorage.getItem('currentGw') ? JSON.parse(localStorage.getItem('currentGw')) : await fetchCurrentGameweek();
-        const gwId = currentGw.id;
+        const nextGw = localStorage.getItem('nextGw') ? JSON.parse(localStorage.getItem('nextGw')) : await fetchCurrentGameweek();
+        const gwId = nextGw.id;
 
         let query = ` { 
             mostTransfered: players(by_transfers: true){ web_name transfers_in_event transfers_out_event } 
             premiums: players(premiums: true, first: 10){ ... playerFields } 
             midRangers: players(mid_rangers: true, trim_extras: true){ ... playerFields } 
             budgets: players(budgets: true, trim_extras: true, first: 40){ ... playerFields } }
-            fragment playerFields on Player{ id web_name form bps minutes points_per_game now_cost UpcomingFixtures(first: ${gwId+1}, last: ${gwId+7}){ event difficulty is_home team_a team_h} } `
+            fragment playerFields on Player{ id web_name form bps minutes points_per_game now_cost UpcomingFixtures(first: ${gwId}, last: ${gwId+6}){ event difficulty is_home team_a team_h} } `
         let graphqlResponse = await graphQlQueryFetch(query);
         let mostTransfered = graphqlResponse.data.mostTransfered;
         let premiums = graphqlResponse.data.premiums;
@@ -149,12 +149,29 @@ let initHomepage = async () => {
         // map through each player and calculate an index field based on six upcoming fixtures and players bps(bonus points system)
         const computeIndices = array => {
             return array.map(player => {
-                let fdr1 = player.UpcomingFixtures[0].difficulty;
-                let fdr2 = player.UpcomingFixtures[1].difficulty;
-                let fdr3 = player.UpcomingFixtures[2].difficulty;
-                let fdr4 = player.UpcomingFixtures[3].difficulty;
-                let fdr5 = player.UpcomingFixtures[4].difficulty;
-                let fdr6 = player.UpcomingFixtures[5].difficulty;
+                const calculateFdr = (gwId) => {
+                    let fixs = player.UpcomingFixtures.filter(fix => fix.event === gwId)
+                    // .sort((a,b) => a.event - b.event);
+                    console.log(player.web_name, fixs);
+
+                    if(fixs.length === 0) return 0;
+                    if(fixs.length === 1) return fixs[0].difficulty;
+                    const fix1 = fixs[0].difficulty;
+                    const fix2 = fixs[1].difficulty;
+                    return (Math.min(fix1, fix2)*0.9 + Math.max(fix1, fix2)*0.1).toFixed(2);
+                }
+
+                let fdr1 = calculateFdr(gwId);
+                let fdr2 = calculateFdr(gwId+1);
+                let fdr3 = calculateFdr(gwId+2);
+                let fdr4 = calculateFdr(gwId+3);
+                let fdr5 = calculateFdr(gwId+4);
+                let fdr6 = calculateFdr(gwId+5);
+                // let fdr6 = player.UpcomingFixtures[5].difficulty;
+
+                console.log(`${player.web_name}'s fdr1: ${fdr1}`);
+
+
                 let history = (player.form*0.3 + player.points_per_game*0.3 + (player.bps/player.minutes)*0.4).toFixed(2);
                 let avgFdr = ((fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6).toFixed(2);
                 let index = ((5 - avgFdr)*0.5 + history*0.5).toFixed(2);
