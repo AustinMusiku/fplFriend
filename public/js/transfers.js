@@ -147,30 +147,47 @@ let initHomepage = async () => {
         // 
         // SENSIBLE TRANSFERS
         // map through each player and calculate an index field based on six upcoming fixtures and players bps(bonus points system)
+        const calculateFdr = (gwId, player) => {
+            let fixs = player.UpcomingFixtures.filter(fix => fix.event === gwId)
+            
+            if(fixs.length === 0) return 0;
+            if(fixs.length === 1) return fixs[0].difficulty;
+            const fix1 = fixs[0].difficulty;
+            const fix2 = fixs[1].difficulty;
+            return (Math.min(fix1, fix2)*0.9 + Math.max(fix1, fix2)*0.1).toFixed(2);
+        }
+
+        const getOpponent = (gwId, player) => {
+            let fixs = player.UpcomingFixtures.filter(fix => fix.event === gwId)
+            if(fixs.length === 0) return null;
+            if(fixs.length === 1) return fixs[0].is_home? {team: fixs[0].team_a, fdr: fixs[0].difficulty }: {team: fixs[0].team_h, fdr: fixs[0].difficulty};
+            const fix1 = fixs[0].is_home? {team: fixs[0].team_a, fdr: fixs[0].difficulty }: {team: fixs[0].team_h, fdr: fixs[0].difficulty};
+            const fix2 = fixs[1].is_home? {team: fixs[1].team_a, fdr: fixs[1].difficulty }: {team: fixs[1].team_h, fdr: fixs[1].difficulty};
+            const opponents =  [fix1, fix2]
+            return opponents;
+        }
+
         const computeIndices = array => {
             return array.map(player => {
-                const calculateFdr = (gwId) => {
-                    let fixs = player.UpcomingFixtures.filter(fix => fix.event === gwId)
-                    // .sort((a,b) => a.event - b.event);
-                    console.log(player.web_name, fixs);
 
-                    if(fixs.length === 0) return 0;
-                    if(fixs.length === 1) return fixs[0].difficulty;
-                    const fix1 = fixs[0].difficulty;
-                    const fix2 = fixs[1].difficulty;
-                    return (Math.min(fix1, fix2)*0.9 + Math.max(fix1, fix2)*0.1).toFixed(2);
-                }
+                let fdr1 = calculateFdr(gwId, player);
+                let fdr2 = calculateFdr(gwId+1, player);
+                let fdr3 = calculateFdr(gwId+2, player);
+                let fdr4 = calculateFdr(gwId+3, player);
+                let fdr5 = calculateFdr(gwId+4, player);
+                let fdr6 = calculateFdr(gwId+5, player);
 
-                let fdr1 = calculateFdr(gwId);
-                let fdr2 = calculateFdr(gwId+1);
-                let fdr3 = calculateFdr(gwId+2);
-                let fdr4 = calculateFdr(gwId+3);
-                let fdr5 = calculateFdr(gwId+4);
-                let fdr6 = calculateFdr(gwId+5);
-                // let fdr6 = player.UpcomingFixtures[5].difficulty;
+                let opponent1 = getOpponent(gwId, player);
+                let opponent2 = getOpponent(gwId+1, player);
+                let opponent3 = getOpponent(gwId+2, player);
+                let opponent4 = getOpponent(gwId+3, player);
+                let opponent5 = getOpponent(gwId+4, player);
+                let opponent6 = getOpponent(gwId+5, player);
 
-                console.log(`${player.web_name}'s fdr1: ${fdr1}`);
-
+                // console player's name and opponents
+                let name = player.web_name;
+                let opponents = [opponent1, opponent2, opponent3, opponent4, opponent5, opponent6];
+                console.log(name, opponents);
 
                 let history = (player.form*0.3 + player.points_per_game*0.3 + (player.bps/player.minutes)*0.4).toFixed(2);
                 let avgFdr = ((fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6).toFixed(2);
@@ -184,12 +201,12 @@ let initHomepage = async () => {
                     fdr4: fdr4,
                     fdr5: fdr5,
                     fdr6: fdr6,
-                    opponent1: player.UpcomingFixtures[0].is_home? player.UpcomingFixtures[0].team_a: player.UpcomingFixtures[0].team_h,
-                    opponent2: player.UpcomingFixtures[1].is_home? player.UpcomingFixtures[1].team_a: player.UpcomingFixtures[1].team_h,
-                    opponent3: player.UpcomingFixtures[2].is_home? player.UpcomingFixtures[2].team_a: player.UpcomingFixtures[2].team_h,
-                    opponent4: player.UpcomingFixtures[3].is_home? player.UpcomingFixtures[3].team_a: player.UpcomingFixtures[3].team_h,
-                    opponent5: player.UpcomingFixtures[4].is_home? player.UpcomingFixtures[4].team_a: player.UpcomingFixtures[4].team_h,
-                    opponent6: player.UpcomingFixtures[5].is_home? player.UpcomingFixtures[5].team_a: player.UpcomingFixtures[5].team_h,
+                    opponent1: opponent1,
+                    opponent2: opponent2,
+                    opponent3: opponent3,
+                    opponent4: opponent4,
+                    opponent5: opponent5,
+                    opponent6: opponent6,
                     pci: index
                 }
             })
