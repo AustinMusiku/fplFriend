@@ -3,23 +3,28 @@ let premiumTable = document.querySelector('.premium-table');
 let midRangeTable = document.querySelector('.mid-range-table');
 let budgetTable = document.querySelector('.budget-table');
 
+
 let initHomepage = async () => {
     try{
         // query data from graphql
+        // get current gameweek from localStorage or fetch from graphQl endpoint
+        const currentGw = localStorage.getItem('currentGw') ? JSON.parse(localStorage.getItem('currentGw')) : await fetchCurrentGameweek();
+        const gwId = currentGw.id;
+
         let query = ` { 
             mostTransfered: players(by_transfers: true){ web_name transfers_in_event transfers_out_event } 
             premiums: players(premiums: true, first: 10){ ... playerFields } 
             midRangers: players(mid_rangers: true, trim_extras: true){ ... playerFields } 
-            budgets: players(budgets: true, trim_extras: true, first: 40){ ... playerFields } 
-            currentGw: gameweek(is_current: true){ id } } 
-            fragment playerFields on Player{ id web_name form bps minutes points_per_game now_cost UpcomingFixtures(first: 6){ difficulty is_home team_a team_h} } `
+            budgets: players(budgets: true, trim_extras: true, first: 40){ ... playerFields } }
+            fragment playerFields on Player{ id web_name form bps minutes points_per_game now_cost UpcomingFixtures(first: ${gwId+1}, last: ${gwId+7}){ event difficulty is_home team_a team_h} } `
         let graphqlResponse = await graphQlQueryFetch(query);
         let mostTransfered = graphqlResponse.data.mostTransfered;
         let premiums = graphqlResponse.data.premiums;
         let midRangers = graphqlResponse.data.midRangers;
         let budgets = graphqlResponse.data.budgets;
-        const gwId = graphqlResponse.data.currentGw.id;
 
+        console.log(premiums);
+        
         //
         // MARKET TRENDS
         // map through each of the top transfered players and divide each transfer value by 1000000

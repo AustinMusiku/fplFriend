@@ -4,13 +4,6 @@ let captainStats = document.querySelector('.captain-stats');
 let vcaptainStats = document.querySelector('.vcaptain-stats');
 let captainsTable = document.querySelector('.captains-table');
 
-const fetchGameweek = async () => {
-    const nextGwQuery = 'gameweek(is_next: true) { ...GameWeekFields deadline_time }';
-    const response = await graphQlQueryFetch(nextGwQuery);
-    localStorage.setItem('nextGw', JSON.stringify(response.data.gameweek));
-    return response.data.gameweek;
-}
-
 const fetchCaptains = async (id) => {
     const query = `{
         players(captains:true, trim_extras: true){ 
@@ -25,8 +18,7 @@ const fetchCaptains = async (id) => {
 let initHomepage = async () => {
     try{
         // get current gameweek from localStorage or fetch from graphQl endpoint
-        const nextGw = localStorage.getItem('nextGw') ? JSON.parse(localStorage.getItem('nextGw')) : await fetchGameweek();
-
+        const nextGw = localStorage.getItem('nextGw') ? JSON.parse(localStorage.getItem('nextGw')) : await fetchNextGameweek();
         // query players and gameweek from graphql
         let players = await fetchCaptains(nextGw.id);
 

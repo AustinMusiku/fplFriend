@@ -75,3 +75,17 @@ const graphQlQueryFetch = async (query) => {
     let data = response.json()
     return data;
 }
+
+const fetchCurrentGameweek = async () => {
+    const currGwQuery = '{ gameweek(is_current: true) { id }}';
+    const response = await graphQlQueryFetch(currGwQuery);
+    localStorage.setItem('currentGw', JSON.stringify(response.data.gameweek));
+    return response.data.gameweek;
+}
+
+const fetchNextGameweek = async () => {
+    const nextGwQuery = '{ gameweek(is_next: true) { id deadline_time }}';
+    const response = await graphQlQueryFetch(nextGwQuery);
+    localStorage.setItem('nextGw', JSON.stringify(response.data.gameweek));
+    return response.data.gameweek;
+}

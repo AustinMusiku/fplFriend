@@ -60,12 +60,20 @@ const PlayerType = new GraphQLObjectType({
         UpcomingFixtures: {
             type: GraphQLList(UpcomingFixtureType),
             args: {
-                gw: { type: GraphQLInt }
+                gw: { type: GraphQLInt },
+                first: { type: GraphQLInt },
+                last: { type: GraphQLInt },
             },
             resolve: async (parent, args, { loaders }) => {
                 let playerUpcomingFixtures = loaders.playerEvent.loadMany([parent.id]);
                 let fixs = await playerUpcomingFixtures;
-                return fixs[0].fixtures.filter(fix => fix.event == args.gw);
+                
+                if(args.gw){
+                    return fixs[0].fixtures.filter(fix => fix.event == args.gw);
+                }
+                if(args.first && args.last){
+                    return fixs[0].fixtures.filter(fix => fix.event >= args.first && fix.event < args.last);
+                }
             }
         },
         pastFixtures: {
