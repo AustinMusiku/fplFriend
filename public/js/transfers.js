@@ -22,8 +22,6 @@ let initHomepage = async () => {
         let premiums = graphqlResponse.data.premiums;
         let midRangers = graphqlResponse.data.midRangers;
         let budgets = graphqlResponse.data.budgets;
-
-        console.log(premiums);
         
         //
         // MARKET TRENDS
@@ -187,7 +185,6 @@ let initHomepage = async () => {
                 // console player's name and opponents
                 let name = player.web_name;
                 let opponents = [opponent1, opponent2, opponent3, opponent4, opponent5, opponent6];
-                console.log(name, opponents);
 
                 let history = (player.form*0.3 + player.points_per_game*0.3 + (player.bps/player.minutes)*0.4).toFixed(2);
                 let avgFdr = ((fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6).toFixed(2);
@@ -215,25 +212,39 @@ let initHomepage = async () => {
         // table row heads
         const rowHeads =` <th class="sticky-cell">Name</th>
                         <thead>
+                            <th>gw${gwId}</th>
                             <th>gw${gwId+1}</th>
                             <th>gw${gwId+2}</th>
                             <th>gw${gwId+3}</th>
                             <th>gw${gwId+4}</th>
                             <th>gw${gwId+5}</th>
-                            <th>gw${gwId+6}</th>
                         </thead>`
+        // check if cell is contains two gws
+        const isDbGw = (opponent) => { return Array.isArray(opponent) ? 'double-data-cell': ''; }
 
-        // create a row field for a player                
+        // create a row field for a player 
+        const generateOpponentCell = (opponent, player) => {
+            if(opponent === null) return `<p>-</p>`;
+            if(typeof(opponent) === 'object' && opponent.length > 1){
+                return `
+                <div class="double-data-cell-container">
+                    <span class="fix-${opponent[0].fdr}"><p class="caption">${evaluateTeam(opponent[0].team)}</p></span>
+                    <span class="fix-${opponent[1].fdr}"><p class="caption">${evaluateTeam(opponent[1].team)}</p></span>
+                </div>`;
+            }
+            return `${evaluateTeam(opponent.team)}`;
+        
+        }              
         const generateRowFields = (player) => {
             let rowfields = `
                         <td class="sticky-cell"><a href="/player/${player.id}" class=" no-underline">${player.web_name} <span class="mini-txt">(${player.now_cost/10}m)</a></td>
                         <tbody>
-                            <td class="fix-${player.fdr1} caption">${evaluateTeam(player.opponent1)}</td>
-                            <td class="fix-${player.fdr2} caption">${evaluateTeam(player.opponent2)}</td>
-                            <td class="fix-${player.fdr3} caption">${evaluateTeam(player.opponent3)}</td>
-                            <td class="fix-${player.fdr4} caption">${evaluateTeam(player.opponent4)}</td>
-                            <td class="fix-${player.fdr5} caption">${evaluateTeam(player.opponent5)}</td>
-                            <td class="fix-${player.fdr6} caption">${evaluateTeam(player.opponent6)}</td>
+                            <td class="fix-${player.opponent1?.fdr} ${isDbGw(player.opponent1)} caption">${generateOpponentCell(player.opponent1, player)}</td>
+                            <td class="fix-${player.opponent2?.fdr} ${isDbGw(player.opponent2)} caption">${generateOpponentCell(player.opponent2, player)}</td>
+                            <td class="fix-${player.opponent3?.fdr} ${isDbGw(player.opponent3)} caption">${generateOpponentCell(player.opponent3, player)}</td>
+                            <td class="fix-${player.opponent4?.fdr} ${isDbGw(player.opponent4)} caption">${generateOpponentCell(player.opponent4, player)}</td>
+                            <td class="fix-${player.opponent5?.fdr} ${isDbGw(player.opponent5)} caption">${generateOpponentCell(player.opponent5, player)}</td>
+                            <td class="fix-${player.opponent6?.fdr} ${isDbGw(player.opponent6)} caption">${generateOpponentCell(player.opponent6, player)}</td>
                         </tbody>
                     `
             return rowfields;
