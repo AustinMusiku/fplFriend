@@ -3,23 +3,26 @@ let premiumTable = document.querySelector('.premium-table');
 let midRangeTable = document.querySelector('.mid-range-table');
 let budgetTable = document.querySelector('.budget-table');
 
+
 let initHomepage = async () => {
     try{
         // query data from graphql
+        // get current gameweek from localStorage or fetch from graphQl endpoint
+        const nextGw = localStorage.getItem('nextGw') ? JSON.parse(localStorage.getItem('nextGw')) : await fetchCurrentGameweek();
+        const gwId = nextGw.id;
+
         let query = ` { 
             mostTransfered: players(by_transfers: true){ web_name transfers_in_event transfers_out_event } 
             premiums: players(premiums: true, first: 10){ ... playerFields } 
             midRangers: players(mid_rangers: true, trim_extras: true){ ... playerFields } 
-            budgets: players(budgets: true, trim_extras: true, first: 40){ ... playerFields } 
-            currentGw: gameweek(is_current: true){ id } } 
-            fragment playerFields on Player{ id web_name form bps minutes points_per_game now_cost UpcomingFixtures(first: 6){ difficulty is_home team_a team_h} } `
+            budgets: players(budgets: true, trim_extras: true, first: 40){ ... playerFields } }
+            fragment playerFields on Player{ id web_name form bps minutes points_per_game now_cost UpcomingFixtures(first: ${gwId}, last: ${gwId+6}){ event difficulty is_home team_a team_h} } `
         let graphqlResponse = await graphQlQueryFetch(query);
         let mostTransfered = graphqlResponse.data.mostTransfered;
         let premiums = graphqlResponse.data.premiums;
         let midRangers = graphqlResponse.data.midRangers;
         let budgets = graphqlResponse.data.budgets;
-        const gwId = graphqlResponse.data.currentGw.id;
-
+        
         //
         // MARKET TRENDS
         // map through each of the top transfered players and divide each transfer value by 1000000
@@ -142,14 +145,47 @@ let initHomepage = async () => {
         // 
         // SENSIBLE TRANSFERS
         // map through each player and calculate an index field based on six upcoming fixtures and players bps(bonus points system)
+        const calculateFdr = (gwId, player) => {
+            let fixs = player.UpcomingFixtures.filter(fix => fix.event === gwId)
+            
+            if(fixs.length === 0) return 0;
+            if(fixs.length === 1) return fixs[0].difficulty;
+            const fix1 = fixs[0].difficulty;
+            const fix2 = fixs[1].difficulty;
+            return (Math.min(fix1, fix2)*0.9 + Math.max(fix1, fix2)*0.1).toFixed(2);
+        }
+
+        const getOpponent = (gwId, player) => {
+            let fixs = player.UpcomingFixtures.filter(fix => fix.event === gwId)
+            if(fixs.length === 0) return null;
+            if(fixs.length === 1) return fixs[0].is_home? {team: fixs[0].team_a, fdr: fixs[0].difficulty }: {team: fixs[0].team_h, fdr: fixs[0].difficulty};
+            const fix1 = fixs[0].is_home? {team: fixs[0].team_a, fdr: fixs[0].difficulty }: {team: fixs[0].team_h, fdr: fixs[0].difficulty};
+            const fix2 = fixs[1].is_home? {team: fixs[1].team_a, fdr: fixs[1].difficulty }: {team: fixs[1].team_h, fdr: fixs[1].difficulty};
+            const opponents =  [fix1, fix2]
+            return opponents;
+        }
+
         const computeIndices = array => {
             return array.map(player => {
-                let fdr1 = player.UpcomingFixtures[0].difficulty;
-                let fdr2 = player.UpcomingFixtures[1].difficulty;
-                let fdr3 = player.UpcomingFixtures[2].difficulty;
-                let fdr4 = player.UpcomingFixtures[3].difficulty;
-                let fdr5 = player.UpcomingFixtures[4].difficulty;
-                let fdr6 = player.UpcomingFixtures[5].difficulty;
+
+                let fdr1 = calculateFdr(gwId, player);
+                let fdr2 = calculateFdr(gwId+1, player);
+                let fdr3 = calculateFdr(gwId+2, player);
+                let fdr4 = calculateFdr(gwId+3, player);
+                let fdr5 = calculateFdr(gwId+4, player);
+                let fdr6 = calculateFdr(gwId+5, player);
+
+                let opponent1 = getOpponent(gwId, player);
+                let opponent2 = getOpponent(gwId+1, player);
+                let opponent3 = getOpponent(gwId+2, player);
+                let opponent4 = getOpponent(gwId+3, player);
+                let opponent5 = getOpponent(gwId+4, player);
+                let opponent6 = getOpponent(gwId+5, player);
+
+                // console player's name and opponents
+                let name = player.web_name;
+                let opponents = [opponent1, opponent2, opponent3, opponent4, opponent5, opponent6];
+
                 let history = (player.form*0.3 + player.points_per_game*0.3 + (player.bps/player.minutes)*0.4).toFixed(2);
                 let avgFdr = ((fdr1+fdr2+fdr3+fdr4+fdr5+fdr6)/6).toFixed(2);
                 let index = ((5 - avgFdr)*0.5 + history*0.5).toFixed(2);
@@ -162,12 +198,12 @@ let initHomepage = async () => {
                     fdr4: fdr4,
                     fdr5: fdr5,
                     fdr6: fdr6,
-                    opponent1: player.UpcomingFixtures[0].is_home? player.UpcomingFixtures[0].team_a: player.UpcomingFixtures[0].team_h,
-                    opponent2: player.UpcomingFixtures[1].is_home? player.UpcomingFixtures[1].team_a: player.UpcomingFixtures[1].team_h,
-                    opponent3: player.UpcomingFixtures[2].is_home? player.UpcomingFixtures[2].team_a: player.UpcomingFixtures[2].team_h,
-                    opponent4: player.UpcomingFixtures[3].is_home? player.UpcomingFixtures[3].team_a: player.UpcomingFixtures[3].team_h,
-                    opponent5: player.UpcomingFixtures[4].is_home? player.UpcomingFixtures[4].team_a: player.UpcomingFixtures[4].team_h,
-                    opponent6: player.UpcomingFixtures[5].is_home? player.UpcomingFixtures[5].team_a: player.UpcomingFixtures[5].team_h,
+                    opponent1: opponent1,
+                    opponent2: opponent2,
+                    opponent3: opponent3,
+                    opponent4: opponent4,
+                    opponent5: opponent5,
+                    opponent6: opponent6,
                     pci: index
                 }
             })
@@ -176,25 +212,39 @@ let initHomepage = async () => {
         // table row heads
         const rowHeads =` <th class="sticky-cell">Name</th>
                         <thead>
+                            <th>gw${gwId}</th>
                             <th>gw${gwId+1}</th>
                             <th>gw${gwId+2}</th>
                             <th>gw${gwId+3}</th>
                             <th>gw${gwId+4}</th>
                             <th>gw${gwId+5}</th>
-                            <th>gw${gwId+6}</th>
                         </thead>`
+        // check if cell is contains two gws
+        const isDbGw = (opponent) => { return Array.isArray(opponent) ? 'double-data-cell': ''; }
 
-        // create a row field for a player                
+        // create a row field for a player 
+        const generateOpponentCell = (opponent, player) => {
+            if(opponent === null) return `<p>-</p>`;
+            if(typeof(opponent) === 'object' && opponent.length > 1){
+                return `
+                <div class="double-data-cell-container">
+                    <span class="fix-${opponent[0].fdr}"><p class="caption">${evaluateTeam(opponent[0].team)}</p></span>
+                    <span class="fix-${opponent[1].fdr}"><p class="caption">${evaluateTeam(opponent[1].team)}</p></span>
+                </div>`;
+            }
+            return `${evaluateTeam(opponent.team)}`;
+        
+        }              
         const generateRowFields = (player) => {
             let rowfields = `
                         <td class="sticky-cell"><a href="/player/${player.id}" class=" no-underline">${player.web_name} <span class="mini-txt">(${player.now_cost/10}m)</a></td>
                         <tbody>
-                            <td class="fix-${player.fdr1} caption">${evaluateTeam(player.opponent1)}</td>
-                            <td class="fix-${player.fdr2} caption">${evaluateTeam(player.opponent2)}</td>
-                            <td class="fix-${player.fdr3} caption">${evaluateTeam(player.opponent3)}</td>
-                            <td class="fix-${player.fdr4} caption">${evaluateTeam(player.opponent4)}</td>
-                            <td class="fix-${player.fdr5} caption">${evaluateTeam(player.opponent5)}</td>
-                            <td class="fix-${player.fdr6} caption">${evaluateTeam(player.opponent6)}</td>
+                            <td class="fix-${player.opponent1?.fdr} ${isDbGw(player.opponent1)} caption">${generateOpponentCell(player.opponent1, player)}</td>
+                            <td class="fix-${player.opponent2?.fdr} ${isDbGw(player.opponent2)} caption">${generateOpponentCell(player.opponent2, player)}</td>
+                            <td class="fix-${player.opponent3?.fdr} ${isDbGw(player.opponent3)} caption">${generateOpponentCell(player.opponent3, player)}</td>
+                            <td class="fix-${player.opponent4?.fdr} ${isDbGw(player.opponent4)} caption">${generateOpponentCell(player.opponent4, player)}</td>
+                            <td class="fix-${player.opponent5?.fdr} ${isDbGw(player.opponent5)} caption">${generateOpponentCell(player.opponent5, player)}</td>
+                            <td class="fix-${player.opponent6?.fdr} ${isDbGw(player.opponent6)} caption">${generateOpponentCell(player.opponent6, player)}</td>
                         </tbody>
                     `
             return rowfields;
