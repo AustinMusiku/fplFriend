@@ -187,6 +187,7 @@ const RootQuery = new GraphQLObjectType({
                 first: { type: GraphQLInt },
                 by_form: { type: GraphQLBoolean },
                 by_transfers: { type: GraphQLBoolean },
+                by_points: { type: GraphQLBoolean },
                 trim_extras: { type: GraphQLBoolean },
                 differentials: { type: GraphQLBoolean },
                 captains: { type: GraphQLBoolean },
@@ -202,6 +203,11 @@ const RootQuery = new GraphQLObjectType({
                 if(args.by_transfers){
                     players = players
                         .sort((a,b) => (b.transfers_in_event + b.transfers_out_event) - (a.transfers_in_event + a.transfers_out_event))
+                        .slice(0, 20);
+                }
+                if(args.by_points){
+                    players = players
+                        .sort((a,b) => (b.total_points - a.total_points))
                         .slice(0, 20);
                 }
                 if(args.trim_extras){

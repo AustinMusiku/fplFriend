@@ -12,7 +12,7 @@ let initHomepage = async () => {
     try{
         
         // query players and curret ad ext gameweek from graphql
-        let query = `{ players(by_form: true, first: 6) { id web_name now_cost team element_type cost_change_event total_points form ict_index selected_by_percent } nextGameWeek: gameweek(is_next: true) { ...GameWeekFields deadline_time } currentGameWeek: gameweek(is_current: true) { ...GameWeekFields chip_plays { chip_name num_played } } gameweeks(is_finished: true){ id avg_points highest_score } }  fragment GameWeekFields on Gameweek { id }`
+        let query = `{ players(by_points: true, first: 6) { id web_name now_cost team element_type cost_change_event total_points form ict_index selected_by_percent } nextGameWeek: gameweek(is_next: true) { ...GameWeekFields deadline_time } currentGameWeek: gameweek(is_current: true) { ...GameWeekFields chip_plays { chip_name num_played } } gameweeks(is_finished: true){ id avg_points highest_score } }  fragment GameWeekFields on Gameweek { id }`
         let response = await graphQlQueryFetch(query);
         
         players = response.data.players;
@@ -230,7 +230,7 @@ function updatePointsLineChart() {
         .attr("d", d3.line()
                 .x(gw => x2(gw.id))
                 .y(gw => y2(gw.highest_score))
-                )
+            )
 
     // get length of average points line and highest points line  
     const avgPathLength = avgPath.node().getTotalLength();
@@ -292,9 +292,9 @@ function addHorizontalLines(svg, y) {
 }
 
 function addIntObserver(observer, target){
-    let observer = new IntersectionObserver(observer)
+    let observerNode = new IntersectionObserver(observer)
     let targetNode = document.querySelector(target)
-    observer.observe(target);
+    observerNode.observe(targetNode);
 }
 
 // render charts on screen resize
