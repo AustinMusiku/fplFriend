@@ -1,4 +1,11 @@
-const { GraphQLSchema, GraphQLObjectType, GraphQLList, GraphQLInt, GraphQLString, GraphQLFloat, GraphQLBoolean } = require('graphql')
+const { 
+    GraphQLSchema,
+    GraphQLObjectType, 
+    GraphQLList, 
+    GraphQLInt, 
+    GraphQLString, 
+    GraphQLFloat, 
+    GraphQLBoolean } = require('graphql')
 
 const fetchMethods = require('../controllers/fetchControllers');
 
