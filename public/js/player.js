@@ -210,7 +210,6 @@ const playerSearch = async (e) => {
     let searchedPlayer = playerArray.find(player => player.playerName == formValue );
     // let player = await playerDetailFetch(searchedPlayer.id)
     playerSearchForm.setAttribute('action', `/player/${searchedPlayer.id}`);
-    console.log(playerSearchForm.getAttribute('action'));
     playerSearchForm.submit();
 }
 
@@ -235,7 +234,6 @@ const initHomepage = async () => {
             }
         })
         playerNames = players.map(player => `${player.first_name} ${player.second_name}` )
-        console.log(fixtures);
 
         //
         // update player header info
