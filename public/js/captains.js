@@ -28,10 +28,40 @@ let initHomepage = async () => {
             document.querySelectorAll(".section-body").forEach(sect => sect.style.display = 'none')
         }
 
-        // CAPTAINS TABLE
-        let sortedCaptains;
-        updateCaptainsTable(players);
+        // create opponent, fdr(fixture difficulty rating), and captaincy field for each player
+        let captains = players
+            .filter(player => player.UpcomingFixtures.length > 0)
+            .map(captain => {
+                const fdr = () => {
+                    if(captain.UpcomingFixtures.length === 1) return captain.UpcomingFixtures[0].difficulty;
+                    const fix1 = captain.UpcomingFixtures[0].difficulty;
+                    const fix2 = captain.UpcomingFixtures[1].difficulty;
+                    return (Math.min(fix1, fix2)*0.9 + Math.max(fix1, fix2)*0.1).toFixed(2);
+                };
+                const opponent = () => {
+                    if(captain.UpcomingFixtures.length === 1) return captain.UpcomingFixtures[0].is_home? {team: captain.UpcomingFixtures[0].team_a, fdr: captain.UpcomingFixtures[0].difficulty }: {team: captain.UpcomingFixtures[0].team_h, fdr: captain.UpcomingFixtures[0].difficulty};
+                    const fix1 = captain.UpcomingFixtures[0].is_home? {team: captain.UpcomingFixtures[0].team_a, fdr: captain.UpcomingFixtures[0].difficulty }: {team: captain.UpcomingFixtures[0].team_h, fdr: captain.UpcomingFixtures[0].difficulty};
+                    const fix2 = captain.UpcomingFixtures[1].is_home? {team: captain.UpcomingFixtures[1].team_a, fdr: captain.UpcomingFixtures[1].difficulty }: {team: captain.UpcomingFixtures[1].team_h, fdr: captain.UpcomingFixtures[1].difficulty};
+                    const opponents =  [fix1, fix2]
+                    return opponents;
+                }
 
+                let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
+                let captaincy = (history*0.50 + (5 - fdr())*0.50).toFixed(2);
+                
+                return {
+                    ...captain,
+                    history: history,
+                    fdr: fdr(),
+                    opponent: opponent(),
+                    captaincy: captaincy
+                }
+            })
+            
+        sortedCaptains = captains.sort((a,b) => (b.captaincy) - (a.captaincy)).slice(0, 15);
+
+        // CAPTAINS TABLE
+        updateCaptainsTable(sortedCaptains);
         // CAPTAINS CHART
         updateRadarChart(sortedCaptains);
         
@@ -41,39 +71,7 @@ let initHomepage = async () => {
 }
 initHomepage();
 
-function updateCaptainsTable(players){
-    // create opponent, fdr(fixture difficulty rating), and captaincy field for each player
-    let captains = players
-    .filter(player => player.UpcomingFixtures.length > 0)
-    .map(captain => {
-        const fdr = () => {
-            if(captain.UpcomingFixtures.length === 1) return captain.UpcomingFixtures[0].difficulty;
-            const fix1 = captain.UpcomingFixtures[0].difficulty;
-            const fix2 = captain.UpcomingFixtures[1].difficulty;
-            return (Math.min(fix1, fix2)*0.9 + Math.max(fix1, fix2)*0.1).toFixed(2);
-        };
-        const opponent = () => {
-            if(captain.UpcomingFixtures.length === 1) return captain.UpcomingFixtures[0].is_home? {team: captain.UpcomingFixtures[0].team_a, fdr: captain.UpcomingFixtures[0].difficulty }: {team: captain.UpcomingFixtures[0].team_h, fdr: captain.UpcomingFixtures[0].difficulty};
-            const fix1 = captain.UpcomingFixtures[0].is_home? {team: captain.UpcomingFixtures[0].team_a, fdr: captain.UpcomingFixtures[0].difficulty }: {team: captain.UpcomingFixtures[0].team_h, fdr: captain.UpcomingFixtures[0].difficulty};
-            const fix2 = captain.UpcomingFixtures[1].is_home? {team: captain.UpcomingFixtures[1].team_a, fdr: captain.UpcomingFixtures[1].difficulty }: {team: captain.UpcomingFixtures[1].team_h, fdr: captain.UpcomingFixtures[1].difficulty};
-            const opponents =  [fix1, fix2]
-            return opponents;
-        }
-
-        let history = captain.form*0.3 + captain.points_per_game*0.3 + (captain.bps/captain.minutes)*0.4;
-        let captaincy = (history*0.50 + (5 - fdr())*0.50).toFixed(2);
-        
-        return {
-            ...captain,
-            history: history,
-            fdr: fdr(),
-            opponent: opponent(),
-            captaincy: captaincy
-        }
-    })
-    
-    sortedCaptains = captains.sort((a,b) => (b.captaincy) - (a.captaincy)).slice(0, 15);
-
+function updateCaptainsTable(sortedCaptains){
     // append row headings
     let rowHeadFields = `
     <th>Name</th>
@@ -115,7 +113,7 @@ function updateCaptainsTable(players){
 }
 
 function updateRadarChart(sortedCaptains){
-    // select top two players on the captains table 
+    // select top two players on the captains table
     let topTwo = sortedCaptains.slice(0,2);
     // topId == captains Id == player id of top element in captains table
     const topId = topTwo[0].id;
