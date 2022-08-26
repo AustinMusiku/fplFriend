@@ -81,6 +81,8 @@ const PlayerType = new GraphQLObjectType({
                 if(args.first && args.last){
                     return fixs[0].fixtures.filter(fix => fix.event >= args.first && fix.event < args.last);
                 }
+
+                return fixs[0].fixtures;
             }
         },
         pastFixtures: {

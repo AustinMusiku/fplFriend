@@ -235,6 +235,7 @@ const initHomepage = async () => {
             }
         })
         playerNames = players.map(player => `${player.first_name} ${player.second_name}` )
+        console.log(fixtures);
 
         //
         // update player header info
